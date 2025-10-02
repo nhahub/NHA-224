@@ -1,5 +1,8 @@
+import 'package:depi_final_project/core/theme/colors.dart';
 import 'package:depi_final_project/features/store/widgets/app_bar_icon.dart';
 import 'package:depi_final_project/features/store/widgets/counter_btn.dart';
+import 'package:depi_final_project/features/store/widgets/custom_bottom_sheet.dart';
+import 'package:depi_final_project/features/store/widgets/customize_option.dart';
 import 'package:depi_final_project/features/store/widgets/product_option.dart';
 import 'package:depi_final_project/features/store/widgets/review_card.dart';
 import 'package:flutter/material.dart';
@@ -11,14 +14,14 @@ class ProductPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context).brightness;
+    final themeBrightness = Theme.of(context).brightness;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         leading: Padding(
           padding: const EdgeInsets.only(top: 10, left: 10),
           child: AppBarIcon(
-            icon:theme == Brightness.light? "assets/icons/arrowleft.png":"assets/icons/arrowleft_dark.png",
+            icon:themeBrightness == Brightness.light? "assets/icons/arrowleft.png":"assets/icons/arrowleft_dark.png",
             onTap: (){},
           ),
         ),
@@ -27,7 +30,7 @@ class ProductPage extends StatelessWidget {
           Padding(
           padding: const EdgeInsets.only(top: 10, right: 10),
           child: AppBarIcon(
-            icon: theme == Brightness.light? "assets/icons/heart.png":"assets/icons/heart_dark.png",
+            icon: themeBrightness == Brightness.light? "assets/icons/heart.png":"assets/icons/heart_dark.png",
             onTap: (){},
           ),
         ),
@@ -70,7 +73,35 @@ class ProductPage extends StatelessWidget {
               )),),
           
               ProductOption(
-                onTap: (){},
+                onTap: (){
+                  showModalBottomSheet(
+                    context: context, 
+                    builder: (context){
+                      return CustomBottomSheet(
+                        title: "Size",
+                        options: [
+                          CustomizeOption(
+                            label: "S",
+                            isSelected: true),
+                          CustomizeOption(
+                            label: "M",
+                            isSelected: false),
+                          CustomizeOption(
+                            label: "L",
+                            isSelected: false),
+                          CustomizeOption(
+                            label: "XL",
+                            isSelected: false),
+                          CustomizeOption(
+                            label: "2XL",
+                            isSelected: false),
+                          CustomizeOption(
+                            label: "3XL",
+                            isSelected: false),
+                        ],
+                      );
+                    });
+                },
                 label: "Size",
                 options: [
                   Text("S", style: GoogleFonts.gabarito(textStyle: TextStyle(
@@ -78,11 +109,96 @@ class ProductPage extends StatelessWidget {
                     fontWeight: FontWeight.bold
                   )),),
                   SizedBox(width: 30,),
-                  Image.asset(theme == Brightness.light? "assets/icons/arrowdown.png":"assets/icons/arrowdown_dark.png")
+                  Image.asset(themeBrightness == Brightness.light? "assets/icons/arrowdown.png":"assets/icons/arrowdown_dark.png")
                 ],
               ),
               ProductOption(
-                onTap: (){},
+                onTap: (){
+                  showModalBottomSheet(context: context, 
+                  builder: (context){
+                    return CustomBottomSheet(title: "Color", 
+                    options: [
+                      CustomizeOption(
+                        label: "light green", 
+                        isSelected: true,
+                        selection: Container(
+                          width: 20,
+                          height: 20,
+                          decoration: BoxDecoration(
+                            color: Color(0xffb4b690),
+                            borderRadius: BorderRadius.circular(100),
+                            border: Border.all(width: 2, color: Colors.white)
+                          ),
+                        ),
+                        ),
+                      CustomizeOption(
+                        label: "Orange", 
+                        isSelected: false,
+                        selection: Container(
+                          width: 20,
+                          height: 20,
+                          decoration: BoxDecoration(
+                            color: AppColors.orange,
+                            borderRadius: BorderRadius.circular(100),
+                            border: Border.all(width: 2, color: Colors.white)
+                          ),
+                        ),
+                        ),
+                      CustomizeOption(
+                        label: "black", 
+                        isSelected: false,
+                        selection: Container(
+                          width: 20,
+                          height: 20,
+                          decoration: BoxDecoration(
+                            color: AppColors.black,
+                            borderRadius: BorderRadius.circular(100),
+                            border: Border.all(width: 2, color: Colors.white)
+                          ),
+                        ),
+                        ),
+                      CustomizeOption(
+                        label: "blue", 
+                        isSelected: false,
+                        selection: Container(
+                          width: 20,
+                          height: 20,
+                          decoration: BoxDecoration(
+                            color: Colors.blue,
+                            borderRadius: BorderRadius.circular(100),
+                            border: Border.all(width: 2, color: Colors.white)
+                          ),
+                        ),
+                        ),
+                      CustomizeOption(
+                        label: "Red", 
+                        isSelected: false,
+                        selection: Container(
+                          width: 20,
+                          height: 20,
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(100),
+                            border: Border.all(width: 2, color: Colors.white)
+                          ),
+                        ),
+                        ),
+                      CustomizeOption(
+                        label: "Yellow", 
+                        isSelected: false,
+                        selection: Container(
+                          width: 20,
+                          height: 20,
+                          decoration: BoxDecoration(
+                            color: Colors.yellow,
+                            borderRadius: BorderRadius.circular(100),
+                            border: Border.all(width: 2, color: Colors.white)
+                          ),
+                        ),
+                        ),
+                    ]);
+                  });
+                },
                 label: "Color",
                 options: [
                   Container(
@@ -94,7 +210,7 @@ class ProductPage extends StatelessWidget {
                     ),
                   ),
                   SizedBox(width: 30,),
-                  Image.asset(theme == Brightness.light? "assets/icons/arrowdown.png":"assets/icons/arrowdown_dark.png")
+                  Image.asset(themeBrightness == Brightness.light? "assets/icons/arrowdown.png":"assets/icons/arrowdown_dark.png")
                 ],
               ),
               ProductOption(
