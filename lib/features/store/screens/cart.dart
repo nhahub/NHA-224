@@ -1,5 +1,6 @@
 import 'package:depi_final_project/features/store/widgets/app_bar_icon.dart';
 import 'package:depi_final_project/features/store/widgets/cart_item.dart';
+import 'package:depi_final_project/features/store/widgets/coupon_card.dart';
 import 'package:depi_final_project/features/store/widgets/price_detail.dart';
 import 'package:flutter/material.dart';
 
@@ -65,7 +66,7 @@ class Cart extends StatelessWidget {
             ),
             SizedBox(height: 10,),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.5,
+              height: MediaQuery.of(context).size.height * 0.45,
               child: ListView.builder(
                 itemCount: cartItems.length,
                 itemBuilder: (context, i){
@@ -94,11 +95,26 @@ class Cart extends StatelessWidget {
                   price: 208,
                   isPriceBolded: true,
                 ),
+
+                CouponCard(),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                  onPressed: (){}, 
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: theme.primary,
+                    foregroundColor: theme.secondary,
+                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16)
+                  ),
+                  child: Text("Checkout", style: TextStyle(fontSize: 16),)),
+                )
               ],
-            )
+            ),
           ],
         ),
       ),
+
+      
     );
   }
 }
