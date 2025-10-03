@@ -1,3 +1,4 @@
+import 'package:depi_final_project/features/store/screens/cart.dart';
 import 'package:depi_final_project/features/store/screens/product_page.dart';
 import 'package:flutter/material.dart';
 import 'package:depi_final_project/core/theme/colors.dart';
@@ -44,7 +45,7 @@ class _MyAppState extends State<MyApp> {
             home: child,
         );
       },
-      child: ProductPage(),
+      child: Cart(),
     );
   }
 }
