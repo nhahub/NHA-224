@@ -1,9 +1,10 @@
 // ignore: depend_on_referenced_packages
 import 'package:bloc/bloc.dart';
+// import 'package:equatable/flutter pub .dart';
+
 import 'package:depi_final_project/core/theme/app_theme.dart';
 import 'package:depi_final_project/core/theme/theme_cache_helper.dart';
 import 'package:equatable/equatable.dart';
-
 
 part 'theme_event.dart';
 part 'theme_state.dart';
