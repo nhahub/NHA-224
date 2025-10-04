@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:depi_final_project/core/theme/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:depi_final_project/features/store/screens/home.dart';
+import 'package:depi_final_project/core/routes/app_routes.dart'; // لازم تضيف الاستيراد
+
 void main() {
   runApp(const MyApp());
 }
@@ -21,24 +21,24 @@ class _MyAppState extends State<MyApp> {
       splitScreenMode: true,
       builder: (context, child) {
         return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: 'خليها علينا',
-            theme: ThemeData.dark().copyWith(
-              scaffoldBackgroundColor: AppColors.primary,
-              appBarTheme: AppBarTheme(
-                backgroundColor: AppColors.primary,
-                titleTextStyle: TextStyle(
-                  color: AppColors.white,
-                  fontSize: 24.sp,
-                  fontWeight: FontWeight.bold,
-                ),
-                iconTheme: IconThemeData(color: AppColors.white),
-              ),
-            ),
-            home: child,
+          debugShowCheckedModeBanner: false,
+          title: ' Store ',
+          // theme: ThemeData.dark().copyWith(
+          //   scaffoldBackgroundColor: AppColors.primary,
+          //   appBarTheme: AppBarTheme(
+          //     backgroundColor: AppColors.primary,
+          //     titleTextStyle: TextStyle(
+          //       color: AppColors.white,
+          //       fontSize: 24.sp,
+          //       fontWeight: FontWeight.bold,
+          //     ),
+          //     iconTheme: IconThemeData(color: AppColors.white),
+          //   ),
+          // ),
+          onGenerateRoute: AppRoutes.generateRoute,
+          initialRoute: AppRoutes.search,
         );
       },
-      child: HomeView(),
     );
   }
 }
