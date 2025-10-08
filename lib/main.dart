@@ -1,4 +1,7 @@
+import 'package:depi_final_project/features/store/screens/cart.dart';
+import 'package:depi_final_project/features/store/screens/checkout_screen.dart';
 import 'package:depi_final_project/features/store/screens/product_page.dart';
+import 'package:depi_final_project/features/store/screens/successful_order.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:depi_final_project/core/theme/colors.dart'; // تأكد إن الملف ده موجود
@@ -30,6 +33,7 @@ class _MyAppState extends State<MyApp> {
           home: child,
         );
       },
+
       child: const ProductPage(),
     );
   }
