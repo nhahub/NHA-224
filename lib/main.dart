@@ -1,3 +1,5 @@
+import 'package:depi_final_project/features/layout/BottomNavLayout.dart';
+import 'package:depi_final_project/features/notifications/Screens/notifications_screen.dart';
 import 'package:depi_final_project/features/store/screens/cart.dart';
 import 'package:depi_final_project/features/store/screens/checkout_screen.dart';
 import 'package:depi_final_project/features/store/screens/product_page.dart';
@@ -34,7 +36,7 @@ class _MyAppState extends State<MyApp> {
         );
       },
 
-      child: const ProductPage(),
+      child: const BottomNavLayout(),
     );
   }
 }

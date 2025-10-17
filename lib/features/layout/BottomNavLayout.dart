@@ -2,6 +2,8 @@
 
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:depi_final_project/core/theme/colors.dart';
+import 'package:depi_final_project/features/notifications/Screens/notifications_screen.dart';
+import 'package:depi_final_project/features/notifications/Screens/orders_screen.dart';
 import 'package:depi_final_project/features/store/screens/home.dart';
 import 'package:flutter/material.dart';
 
@@ -15,10 +17,12 @@ class BottomNavLayout extends StatefulWidget {
 class _BottomNavLayoutState extends State<BottomNavLayout> {
   int currentIndex = 0;
 
-  final List<Widget> _pages = const [
+  final List<Widget> _pages = [
     HomeView(),
     // FavoritesPage(),
     // CartPage(),
+    NotificationsScreen(),
+    OrdersScreen(),
   ];
 
   @override
