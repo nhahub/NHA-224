@@ -1,12 +1,8 @@
-import 'package:depi_final_project/features/layout/BottomNavLayout.dart';
-import 'package:depi_final_project/features/notifications/Screens/notifications_screen.dart';
-import 'package:depi_final_project/features/store/screens/cart.dart';
-import 'package:depi_final_project/features/store/screens/checkout_screen.dart';
-import 'package:depi_final_project/features/store/screens/product_page.dart';
-import 'package:depi_final_project/features/store/screens/successful_order.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:depi_final_project/core/routes/app_routes.dart';
 import 'package:depi_final_project/core/theme/colors.dart'; // تأكد إن الملف ده موجود
+
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,11 +28,11 @@ class _MyAppState extends State<MyApp> {
           title: 'خليها علينا',
           theme: lightMode,
           darkTheme: darkMode,
-          home: child,
+          initialRoute: AppRoutes.splash,
+          onGenerateRoute: AppRoutes.generateRoute,
         );
       },
 
-      child: const BottomNavLayout(),
     );
   }
 }
