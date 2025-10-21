@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:depi_final_project/core/routes/app_routes.dart';
 import 'package:depi_final_project/core/theme/colors.dart'; // تأكد إن الملف ده موجود
 
-
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
@@ -32,7 +31,6 @@ class _MyAppState extends State<MyApp> {
           onGenerateRoute: AppRoutes.generateRoute,
         );
       },
-
     );
   }
 }
