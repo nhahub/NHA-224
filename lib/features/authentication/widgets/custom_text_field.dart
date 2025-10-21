@@ -14,7 +14,11 @@ class CustomTextField extends StatelessWidget {
         fillColor: AppColors.darkSecondary,
         filled: true,
         labelText: labelText,
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+        labelStyle: TextStyle(color: AppColors.darkTextSecondary),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide.none,
+        ),
       ),
     );
   }

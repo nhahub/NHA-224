@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:depi_final_project/features/store/screens/home.dart';
 import 'package:depi_final_project/features/layout/BottomNavLayout.dart';
 import 'package:depi_final_project/features/store/screens/search_page.dart';
 import 'package:depi_final_project/features/authentication/screens/signin_email.dart';
 import 'package:depi_final_project/features/authentication/screens/splash_screen.dart';
+import 'package:depi_final_project/features/authentication/screens/signin_password.dart';
 
 class AppRoutes {
   static const String layout = '/';
@@ -16,6 +18,7 @@ class AppRoutes {
   static const String forgetPassword = '/forgetPassword';
   static const String sentEmail = '/sentEmail';
   static const String tellUsAboutYou = '/tellUsAboutYou';
+  static const String home = '/home';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -28,7 +31,11 @@ class AppRoutes {
       case signInEmail:
         return MaterialPageRoute(builder: (_) => SignInEmail());
       case signInPassword:
+        return MaterialPageRoute(builder: (_) => SignInPassword());
+      case signUp:
         return MaterialPageRoute(builder: (_) => SignInEmail());
+      case home:
+        return MaterialPageRoute(builder: (_) => const HomeView());
       default:
         return _errorRoute("Route not found: ${settings.name}");
     }
