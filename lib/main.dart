@@ -1,10 +1,16 @@
+import 'package:depi_final_project/firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:depi_final_project/core/routes/app_routes.dart';
 import 'package:depi_final_project/core/theme/colors.dart'; // تأكد إن الملف ده موجود
 
-void main() {
+void main() async{
   WidgetsFlutterBinding.ensureInitialized();
+   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
