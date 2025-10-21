@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:depi_final_project/features/store/screens/home.dart';
 import 'package:depi_final_project/features/layout/BottomNavLayout.dart';
 import 'package:depi_final_project/features/store/screens/search_page.dart';
+import 'package:depi_final_project/features/authentication/screens/email_sent.dart';
 import 'package:depi_final_project/features/authentication/screens/signin_email.dart';
 import 'package:depi_final_project/features/authentication/screens/splash_screen.dart';
+import 'package:depi_final_project/features/authentication/screens/create_account.dart';
+import 'package:depi_final_project/features/authentication/screens/forgot_password.dart';
 import 'package:depi_final_project/features/authentication/screens/signin_password.dart';
 
 class AppRoutes {
@@ -19,6 +22,7 @@ class AppRoutes {
   static const String sentEmail = '/sentEmail';
   static const String tellUsAboutYou = '/tellUsAboutYou';
   static const String home = '/home';
+  static const String emailSent = '/emailSent';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -33,9 +37,13 @@ class AppRoutes {
       case signInPassword:
         return MaterialPageRoute(builder: (_) => SignInPassword());
       case signUp:
-        return MaterialPageRoute(builder: (_) => SignInEmail());
+        return MaterialPageRoute(builder: (_) => CreateAccount());
       case home:
-        return MaterialPageRoute(builder: (_) => const HomeView());
+        return MaterialPageRoute(builder: (_) => const BottomNavLayout());
+      case forgetPassword:
+        return MaterialPageRoute(builder: (_) => const ForgotPassword());
+      case emailSent:
+        return MaterialPageRoute(builder: (_) => const EmailSent());
       default:
         return _errorRoute("Route not found: ${settings.name}");
     }
