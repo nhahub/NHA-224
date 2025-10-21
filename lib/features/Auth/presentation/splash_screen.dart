@@ -8,7 +8,7 @@ class SplashScreen extends StatelessWidget {
 @override
 Widget build(BuildContext context) {
 // ignore: use_build_context_synchronously
-Future.delayed(Duration(milliseconds: 900), () => Navigator.pushReplacementNamed(context, AppRoutes.signInEmail));
+Future.delayed(Duration(milliseconds: 900), () => Navigator.pushReplacementNamed(context, AppRoutes.login));
 
 
 return Scaffold(

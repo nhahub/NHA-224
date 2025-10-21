@@ -12,7 +12,7 @@ abstract class AppTextStyles {
   static TextStyle font17BlackMedium = TextStyle(
     fontSize: 17.sp,
     fontWeight: FontWeightHelper.medium,
-    color: AppColors.white,
+    color: AppColors.black,
   );
   static TextStyle font17BlackRegular = TextStyle(
     fontSize: 17.sp,

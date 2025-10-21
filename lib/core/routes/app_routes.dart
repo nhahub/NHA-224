@@ -1,14 +1,10 @@
+import 'package:depi_final_project/features/Auth/presentation/login_page.dart';
+import 'package:depi_final_project/features/Auth/presentation/resgister_page.dart';
+import 'package:depi_final_project/features/Auth/presentation/splash_screen.dart';
+import 'package:depi_final_project/features/admin/admin_page.dart';
 import 'package:flutter/material.dart';
-import 'package:depi_final_project/features/store/screens/home.dart';
 import 'package:depi_final_project/features/layout/BottomNavLayout.dart';
 import 'package:depi_final_project/features/store/screens/search_page.dart';
-import 'package:depi_final_project/features/authentication/screens/email_sent.dart';
-import 'package:depi_final_project/features/authentication/screens/signin_email.dart';
-import 'package:depi_final_project/features/authentication/screens/splash_screen.dart';
-import 'package:depi_final_project/features/authentication/screens/create_account.dart';
-import 'package:depi_final_project/features/authentication/screens/about_your_self.dart';
-import 'package:depi_final_project/features/authentication/screens/forgot_password.dart';
-import 'package:depi_final_project/features/authentication/screens/signin_password.dart';
 
 class AppRoutes {
   static const String layout = '/';
@@ -16,36 +12,30 @@ class AppRoutes {
   static const String productDetails = '/productDetails';
   static const String cart = '/cart';
   static const String splash = '/splash';
-  static const String signInEmail = '/signInEmail';
-  static const String signInPassword = '/signInPassword';
-  static const String signUp = '/signUp';
   static const String forgetPassword = '/forgetPassword';
   static const String tellUsAboutYou = '/tellUsAboutYou';
   static const String home = '/home';
-  static const String emailSent = '/emailSent';
+  static const String login = '/login';
+  static const String adminPage = '/adminPage';
+  static const String registerPage = '/registerPage';
+
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case layout:
         return MaterialPageRoute(builder: (_) => const BottomNavLayout());
+      case login:
+        return MaterialPageRoute(builder: (_) => const LoginPage());
+        case registerPage:
+        return MaterialPageRoute(builder: (_) => const RegisterPage());
+      case adminPage:
+        return MaterialPageRoute(builder: (_) => const AdminPage());
       case search:
         return MaterialPageRoute(builder: (_) => const SearchPage());
       case splash:
         return MaterialPageRoute(builder: (_) => const SplashScreen());
-      case signInEmail:
-        return MaterialPageRoute(builder: (_) => SignInEmail());
-      case signInPassword:
-        return MaterialPageRoute(builder: (_) => SignInPassword());
-      case signUp:
-        return MaterialPageRoute(builder: (_) => CreateAccount());
       case home:
         return MaterialPageRoute(builder: (_) => const BottomNavLayout());
-      case forgetPassword:
-        return MaterialPageRoute(builder: (_) => const ForgotPassword());
-      case emailSent:
-        return MaterialPageRoute(builder: (_) => const EmailSent());
-      case tellUsAboutYou:
-        return MaterialPageRoute(builder: (_) => const AboutYourselfScreen());
       default:
         return _errorRoute("Route not found: ${settings.name}");
     }
@@ -60,4 +50,3 @@ class AppRoutes {
     );
   }
 }
-
