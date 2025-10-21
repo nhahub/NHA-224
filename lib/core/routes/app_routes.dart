@@ -6,6 +6,7 @@ import 'package:depi_final_project/features/authentication/screens/email_sent.da
 import 'package:depi_final_project/features/authentication/screens/signin_email.dart';
 import 'package:depi_final_project/features/authentication/screens/splash_screen.dart';
 import 'package:depi_final_project/features/authentication/screens/create_account.dart';
+import 'package:depi_final_project/features/authentication/screens/about_your_self.dart';
 import 'package:depi_final_project/features/authentication/screens/forgot_password.dart';
 import 'package:depi_final_project/features/authentication/screens/signin_password.dart';
 
@@ -19,7 +20,6 @@ class AppRoutes {
   static const String signInPassword = '/signInPassword';
   static const String signUp = '/signUp';
   static const String forgetPassword = '/forgetPassword';
-  static const String sentEmail = '/sentEmail';
   static const String tellUsAboutYou = '/tellUsAboutYou';
   static const String home = '/home';
   static const String emailSent = '/emailSent';
@@ -44,6 +44,8 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const ForgotPassword());
       case emailSent:
         return MaterialPageRoute(builder: (_) => const EmailSent());
+      case tellUsAboutYou:
+        return MaterialPageRoute(builder: (_) => const AboutYourselfScreen());
       default:
         return _errorRoute("Route not found: ${settings.name}");
     }
@@ -58,3 +60,4 @@ class AppRoutes {
     );
   }
 }
+

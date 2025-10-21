@@ -56,8 +56,10 @@ class CreateAccount extends StatelessWidget {
                 verticaalSpacing(24),
                 CustomButton(
                   textButton: 'Continue',
-                  onPressed: () =>
-                      Navigator.pushReplacementNamed(context, AppRoutes.home),
+                  onPressed: () => Navigator.pushReplacementNamed(
+                    context,
+                    AppRoutes.tellUsAboutYou,
+                  ),
                 ),
                 SizedBox(height: 8),
                 Row(
