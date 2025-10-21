@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "661720149477",
+    "project_id": "nha-224",
+    "storage_bucket": "nha-224.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:661720149477:android:9426f357b61d7eac6c930c",
+        "android_client_info": {
+          "package_name": "com.example.depi_final_project"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANacDiw2V76Jubyq00R_phLIQC6gf7Lyg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
