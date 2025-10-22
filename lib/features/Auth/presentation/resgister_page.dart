@@ -1,3 +1,4 @@
+import 'package:depi_final_project/features/Auth/cubit/auth_cubit.dart';
 import 'package:depi_final_project/features/Auth/presentation/widgets/google_widget.dart';
 import 'package:depi_final_project/features/Auth/presentation/widgets/or_widgets.dart';
 import 'package:depi_final_project/features/Auth/presentation/widgets/title_auth_page.dart';
@@ -30,6 +31,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   final GlobalKey<FormState> formKey = GlobalKey();
   final AuthService authService = AuthService();
+  final AuthCubit authCubit = AuthCubit();
 
   @override
   Widget build(BuildContext context) {
@@ -96,12 +98,12 @@ class _RegisterPageState extends State<RegisterPage> {
                     onTap: () async {
                       if (formKey.currentState!.validate()) {
                         setState(() => isLoading = true);
-                        await authService.registerUser(
-                          context: context,
+                        await authCubit.registerUser(
+                          context: context, 
                           email: email!,
                           password: password!,
-                          name: name!,
-                          profileImageUrl: profileImageUrl,
+                          name: name??"Guest-user",
+                          photoURL: profileImageUrl??"https://imgs.search.brave.com/r8_rpLtbGMxU9_hP_eV66IWtpYYaUuj62TaONvbGyA8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly91cy4x/MjNyZi5jb20vNDUw/d20vYmxpbmtibGlu/azEvYmxpbmtibGlu/azEyMDA1L2JsaW5r/YmxpbmsxMjAwNTAw/MDE1LzE0Njk3OTQ2/NC1hdmF0YXItbWFu/bi1zeW1ib2wuanBn/P3Zlcj02"
                         );
                         setState(() => isLoading = false);
                       }

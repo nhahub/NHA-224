@@ -1,16 +1,19 @@
 // ignore_for_file: use_build_context_synchronously
 
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:depi_final_project/core/errors/failures.dart';
 import 'package:depi_final_project/core/routes/app_routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 // import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  
 
   // تسجيل خروج
   Future<void> signOut(BuildContext context) async {
@@ -23,7 +26,7 @@ class AuthService {
   }
 
   // تسجيل دخول مع التحقق من الدور
-  Future<void> loginUser({
+  Future<User?> loginUser({
     required BuildContext context,
     required String email,
     required String password,
@@ -38,40 +41,45 @@ class AuthService {
 
       if (user != null && user.emailVerified) {
         // جلب بيانات المستخدم من Firestore
-        DocumentSnapshot userDoc = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(user.uid)
-            .get();
+        // DocumentSnapshot userDoc = await FirebaseFirestore.instance
+        //     .collection('users')
+        //     .doc(user.uid)
+        //     .get();
 
-        String role = userDoc['role'] ?? 'user';
+        // String role = userDoc['role'] ?? 'user';
 
-        if (role == 'admin') {
-          // لو الأدمن
-          Navigator.pushReplacementNamed(context, AppRoutes.adminPage);
-        } else {
-          // لو مستخدم عادي
-          Navigator.pushReplacementNamed(
-            context,
-            AppRoutes.layout,
-            arguments: email,
-          );
-        }
+        // if (role == 'admin') {
+        //   // لو الأدمن
+        //   Navigator.pushReplacementNamed(context, AppRoutes.adminPage);
+        // } else {
+        //   // لو مستخدم عادي
+        //   Navigator.pushReplacementNamed(
+        //     context,
+        //     AppRoutes.layout,
+        //     arguments: email,
+        //   );
+        // }
+        return userCredential.user;
       } else {
         // لو الإيميل مش متحقق
-        showSnackBar(context, 'Please verify your email first.');
+        // showSnackBar(context, 'Please verify your email first.');
+
         await _auth.signOut();
+        throw FirebaseAuthException(code: "email-not-verified", message: "Email Not verified");
       }
     } on FirebaseAuthException catch (e) {
-      showSnackBar(context, e.message ?? 'Login error.');
+      // showSnackBar(context, e.message ?? 'Login error.');
+      rethrow;
     } catch (e) {
-      showSnackBar(context, 'An unexpected error occurred: $e');
+      // showSnackBar(context, 'An unexpected error occurred: $e');
       print('An unexpected error occurred: $e');
+      rethrow;
       // print('Login error: $e');
     }
   }
 
   // تسجيل مستخدم جديد مع حفظ الاسم والصورة
-  Future<void> registerUser({
+  Future<User?> registerUser({
     required BuildContext context,
     required String email,
     required String password,
@@ -97,6 +105,7 @@ class AuthService {
 
         showSnackBar(context, 'Verification email sent! Check your inbox.');
         Navigator.pushReplacementNamed(context, AppRoutes.login);
+        return user;
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
@@ -108,13 +117,15 @@ class AuthService {
       showSnackBar(context, 'Unexpected error: $e');
       // print('Unexpected error: $e');
     }
+    return null;
   }
 
    Future<UserCredential> loginWithGoogle({required BuildContext context}) async {
     try {
 
+      final String serverClientId = dotenv.env['server_client_id']??"no id";
       //initialize google sign in
-      await GoogleSignIn.instance.initialize(serverClientId: "661720149477-3fq4avjj9h77o9oikhlhqhd177jgkdt5.apps.googleusercontent.com");
+      await GoogleSignIn.instance.initialize(serverClientId: serverClientId);
 
       final GoogleSignInAccount? googleUser = await GoogleSignIn.instance.authenticate();
 
