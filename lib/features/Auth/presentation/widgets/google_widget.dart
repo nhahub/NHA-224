@@ -1,5 +1,6 @@
 
 import 'package:depi_final_project/core/theme/text_style.dart';
+import 'package:depi_final_project/features/Auth/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -22,18 +23,19 @@ class GoogleBottom extends StatelessWidget {
         ),
       ),
       onPressed: () async {
-        // try {
-        //   await authService.signInWithGoogle();
-        //   ScaffoldMessenger.of(context).showSnackBar(
-        //     const SnackBar(
-        //       content: Text('تم تسجيل الحساب بنجاح!'),
-        //     ),
-        //   );
-        // } catch (e) {
-        //   ScaffoldMessenger.of(context).showSnackBar(
-        //     SnackBar(content: Text('خطأ: $e')),
-        //   );
-        // }
+        final AuthService authService = AuthService();
+        try {
+          await authService.loginWithGoogle(context: context);
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('تم تسجيل الحساب بنجاح!'),
+            ),
+          );
+        } catch (e) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('خطأ: $e')),
+          );
+        }
       },
       icon: Image.asset('assets/images/google.png', height: 24.h),
       label: Text(

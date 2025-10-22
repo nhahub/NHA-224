@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:depi_final_project/features/Auth/cubit/auth_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -48,4 +49,6 @@ class AuthCubit extends Cubit<AuthState> {
       emit(AuthFailure("Unexpected error"));
     }
   }
+
+  
 }

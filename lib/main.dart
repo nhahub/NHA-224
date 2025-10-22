@@ -7,7 +7,6 @@ import 'package:depi_final_project/core/theme/colors.dart'; // تأكد إن ا�
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

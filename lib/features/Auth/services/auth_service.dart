@@ -110,6 +110,56 @@ class AuthService {
     }
   }
 
+   Future<UserCredential> loginWithGoogle({required BuildContext context}) async {
+    try {
+
+      //initialize google sign in
+      await GoogleSignIn.instance.initialize(serverClientId: "661720149477-3fq4avjj9h77o9oikhlhqhd177jgkdt5.apps.googleusercontent.com");
+
+      final GoogleSignInAccount? googleUser = await GoogleSignIn.instance.authenticate();
+
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication googleAuth = googleUser!.authentication;
+
+      // Create a new credential
+      final credential = GoogleAuthProvider.credential(
+        idToken: googleAuth.idToken,
+      );
+
+      final userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+      final user = userCredential.user;
+      await _firestore.collection('users').doc(user!.uid).set({
+          'uid': user.uid,
+          'name': user.displayName??"Guest",
+          'email': user.email??"No Email",
+          'profileImageUrl': user.photoURL??"https://imgs.search.brave.com/r8_rpLtbGMxU9_hP_eV66IWtpYYaUuj62TaONvbGyA8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly91cy4x/MjNyZi5jb20vNDUw/d20vYmxpbmtibGlu/azEvYmxpbmtibGlu/azEyMDA1L2JsaW5r/YmxpbmsxMjAwNTAw/MDE1LzE0Njk3OTQ2/NC1hdmF0YXItbWFu/bi1zeW1ib2wuanBn/P3Zlcj02",
+          'role': 'user',
+        });
+        
+        DocumentSnapshot userDoc = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .get();
+
+        String role = userDoc['role'] ?? 'user';
+        if(role == 'admin'){
+          Navigator.pushReplacementNamed(context, AppRoutes.adminPage);
+        }else{
+          Navigator.pushReplacementNamed(
+            context,
+            AppRoutes.layout,
+            arguments: user.email,
+          );
+        }
+      
+      // Once signed in, return the UserCredential
+      return userCredential;
+    } catch (e) {
+      print('Google sign-in error: $e');
+      rethrow;
+    }
+  }
+
 // Future<UserCredential> signInWithGoogle() async {
 //   // إعداد GoogleSignIn بالـ clientId
 //   final GoogleSignIn googleSignIn = GoogleSignIn(
