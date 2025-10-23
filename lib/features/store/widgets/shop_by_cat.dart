@@ -1,6 +1,5 @@
-import 'package:depi_final_project/core/theme/text_style.dart';
-import 'package:depi_final_project/features/store/widgets/cart_of_cat.dart';
 import 'package:flutter/material.dart';
+import 'package:depi_final_project/features/store/widgets/cart_of_cat.dart';
 
 class ShopByCatWidget extends StatelessWidget {
   const ShopByCatWidget({super.key});

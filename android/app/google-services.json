@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "661720149477",
+    "project_id": "nha-224",
+    "storage_bucket": "nha-224.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:661720149477:android:9426f357b61d7eac6c930c",
+        "android_client_info": {
+          "package_name": "com.example.depi_final_project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "661720149477-3fq4avjj9h77o9oikhlhqhd177jgkdt5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANacDiw2V76Jubyq00R_phLIQC6gf7Lyg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "661720149477-3fq4avjj9h77o9oikhlhqhd177jgkdt5.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "661720149477-4nokj13c6kb9r8dhguvvkv18fjeeauh0.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.depiFinalProject"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

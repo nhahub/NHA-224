@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 // import 'package:flutter/cupertino.dart';
 
 // abstract class AppColors {
@@ -10,8 +11,6 @@
 //   static const Color orange = Color(0xffFFA235);
 // }
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 
 abstract class AppColors {
   // 🌞 Light Theme Colors

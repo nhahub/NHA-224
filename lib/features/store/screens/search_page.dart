@@ -1,10 +1,9 @@
-import 'package:depi_final_project/core/theme/colors.dart';
-import 'package:depi_final_project/features/store/widgets/empity_widget.dart';
-import 'package:depi_final_project/features/store/widgets/filter_bottom.dart';
-import 'package:depi_final_project/features/store/widgets/filter_bottom_sheat.dart';
-import 'package:depi_final_project/features/store/widgets/search_widget.dart';
-import 'package:depi_final_project/features/store/widgets/shop_by_cat.dart';
 import 'package:flutter/material.dart';
+import 'package:depi_final_project/core/theme/colors.dart';
+import 'package:depi_final_project/features/store/widgets/shop_by_cat.dart';
+import 'package:depi_final_project/features/store/widgets/filter_bottom.dart';
+import 'package:depi_final_project/features/store/widgets/search_widget.dart';
+import 'package:depi_final_project/features/store/widgets/filter_bottom_sheat.dart';
 
 class SearchPage extends StatelessWidget {
   const SearchPage({super.key});

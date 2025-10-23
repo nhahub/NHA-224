@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 
 abstract class Failures {
   final String errorMessage;
@@ -46,3 +47,11 @@ class CacheFailure extends Failures {
     return CacheFailure(errorMessage: e.message ?? 'Cache error occurred');
   }
 }
+void showSnackBar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+      ),
+    );
+  }
+
