@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:depi_final_project/core/theme/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:depi_final_project/features/home/home_view.dart';
 import 'package:depi_final_project/features/store/screens/cart.dart';
-import 'package:depi_final_project/features/store/screens/home.dart';
 import 'package:depi_final_project/features/layout/CustomBottomBar.dart';
-import 'package:depi_final_project/features/layout/BottomNavLayout.dart';
 import 'package:depi_final_project/features/notifications/Screens/orders_screen.dart';
 import 'package:depi_final_project/features/notifications/Screens/notifications_screen.dart';
 class BottomNavLayout extends StatefulWidget {
@@ -28,7 +26,7 @@ class _BottomNavLayoutState extends State<BottomNavLayout> {
   void initState() {
     super.initState();
     _pages.addAll([
-      const HomeView(),
+      HomeView(),
       const OrdersScreen(),
       const NotificationsScreen(),
       Cart(),

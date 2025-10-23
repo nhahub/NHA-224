@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:depi_final_project/features/store/screens/home.dart';
 import 'package:depi_final_project/features/layout/BottomNavLayout.dart';
 import 'package:depi_final_project/features/store/screens/search_page.dart';
 import 'package:depi_final_project/features/authentication/screens/email_sent.dart';

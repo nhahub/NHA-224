@@ -11,6 +11,7 @@ class ShopByCatWidget extends StatelessWidget {
       {"title": "Sneakers", "image": "assets/images/Ellipse 5 (2).png"},
       {"title": "T-Shirts", "image": "assets/images/Ellipse 5 (3).png"},
       {"title": "Bags", "image": "assets/images/Ellipse 5.png"},
+      {"title": "Accessories", "image": "assets/images/Ellipse 3.png"},
     ];
 
     return Column(

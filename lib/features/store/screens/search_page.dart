@@ -42,7 +42,6 @@ class SearchPage extends StatelessWidget {
                 FilterButton(
                   title: "Gender",
                   icon: Icons.person,
-
                   onTap: () => showModalBottomSheet(
                     context: context,
                     // isScrollControlled: true,

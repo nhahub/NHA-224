@@ -7,7 +7,7 @@ import 'package:depi_final_project/features/authentication/widgets/custom_button
 import 'package:depi_final_project/features/authentication/widgets/custom_text_field.dart';
 
 class CreateAccount extends StatelessWidget {
-  CreateAccount({super.key});
+  const CreateAccount({super.key});
 
   @override
   Widget build(BuildContext context) {

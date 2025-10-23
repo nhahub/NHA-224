@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:depi_final_project/shared/spacing.dart';
 import 'package:depi_final_project/core/theme/text_style.dart';
 import 'package:depi_final_project/core/routes/app_routes.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:depi_final_project/features/authentication/widgets/custom_button.dart';
-import 'package:depi_final_project/features/authentication/widgets/social_button.dart';
 import 'package:depi_final_project/features/authentication/widgets/custom_text_field.dart';
 
 class SignInPassword extends StatelessWidget {
