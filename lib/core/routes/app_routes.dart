@@ -1,3 +1,4 @@
+import 'package:depi_final_project/features/Auth/cubit/auth_cubit.dart';
 import 'package:depi_final_project/features/Auth/presentation/login_page.dart';
 import 'package:depi_final_project/features/Auth/presentation/resgister_page.dart';
 import 'package:depi_final_project/features/Auth/presentation/splash_screen.dart';
@@ -5,6 +6,7 @@ import 'package:depi_final_project/features/admin/admin_page.dart';
 import 'package:flutter/material.dart';
 import 'package:depi_final_project/features/layout/BottomNavLayout.dart';
 import 'package:depi_final_project/features/store/screens/search_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AppRoutes {
   static const String layout = '/';
@@ -25,9 +27,10 @@ class AppRoutes {
       case layout:
         return MaterialPageRoute(builder: (_) => const BottomNavLayout());
       case login:
-        return MaterialPageRoute(builder: (_) => const LoginPage());
+        return 
+        MaterialPageRoute(builder: (_) => BlocProvider(create: (context) => AuthCubit() ,child: const LoginPage())) ;
         case registerPage:
-        return MaterialPageRoute(builder: (_) => const RegisterPage());
+        return MaterialPageRoute(builder: (_) => BlocProvider(create: (context) => AuthCubit(), child: const RegisterPage(),));
       case adminPage:
         return MaterialPageRoute(builder: (_) => const AdminPage());
       case search:

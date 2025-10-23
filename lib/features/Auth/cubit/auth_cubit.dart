@@ -11,10 +11,10 @@ class AuthCubit extends Cubit<AuthState> {
 
   AuthCubit() : super(AuthInitial());
 
-  Future<void> loginUser({required BuildContext context ,required String email,required String password}) async {
+  Future<void> loginUser({required String email,required String password}) async {
     emit(AuthLoading());
     try {
-      final user = await _authService.loginUser(context: context, email: email, password: password);
+      final user = await _authService.loginUser(email: email, password: password);
       emit(AuthSuccess(user!.uid));
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -36,10 +36,10 @@ class AuthCubit extends Cubit<AuthState> {
 
 
 
-  Future<void> registerUser({required BuildContext context, required String name ,required String email, required String password, required String photoURL}) async {
+  Future<void> registerUser({required String name ,required String email, required String password, required String photoURL}) async {
     emit(AuthLoading());
     try {
-      final user = await _authService.registerUser(context: context,name: name, email: email, password: password, profileImageUrl: photoURL);
+      final user = await _authService.registerUser(name: name, email: email, password: password, profileImageUrl: photoURL);
       emit(AuthSuccess(user!.uid));
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {

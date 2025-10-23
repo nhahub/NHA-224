@@ -12,6 +12,7 @@ import 'package:depi_final_project/features/Auth/presentation/widgets/custom_but
 import 'package:depi_final_project/features/Auth/presentation/widgets/custom_text_field.dart';
 import 'package:depi_final_project/features/Auth/services/auth_service.dart';
 import 'package:depi_final_project/shared/spacing.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -26,13 +27,11 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   bool isLoading = false;
   final GlobalKey<FormState> formKey = GlobalKey();
-  final AuthService authService = AuthService();
-  // final AuthCubit authCubit = AuthCubit();
   String? email, password;
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<AuthCubit>();
+    // final cubit = context.read<AuthCubit>();
 
     return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, state) {
@@ -52,8 +51,8 @@ class _LoginPageState extends State<LoginPage> {
           ).showSnackBar(SnackBar(content: Text(state.message)));
         }
       },
-builder: (context, state){
-
+builder: (parentContext, state){
+final cubit = context.read<AuthCubit>();
 return ModalProgressHUD(
         inAsyncCall: state is AuthLoading,
         color: AppColors.lightPrimary.withOpacity(0.4),
@@ -79,7 +78,7 @@ return ModalProgressHUD(
                         fontSize: 16.sp,
                       ),
                     ),
-                    verticaalSpacing(35),
+                    verticalSpacing(35),
 
                     /// 🔷 Email Field
                     Text("Email", style: AppTextStyles.font17BlackMedium),
@@ -89,7 +88,7 @@ return ModalProgressHUD(
                       onChanged: (data) => email = data,
                       keyboardType: TextInputType.emailAddress,
                     ),
-                    verticaalSpacing(18),
+                    verticalSpacing(18),
 
                     /// 🔷 Password Field
                     Text("Password", style: AppTextStyles.font17BlackMedium),
@@ -131,7 +130,7 @@ return ModalProgressHUD(
                         ),
                       ),
                     ),
-                    verticaalSpacing(20),
+                    verticalSpacing(20),
 
                     /// 🔷 Login Button
                     CustomButton(
@@ -139,23 +138,23 @@ return ModalProgressHUD(
                       onTap: () async {
                         if (formKey.currentState!.validate()) {
                           await cubit.loginUser(
-                            context: context,
+                          //  context: context,
                             email: email!,
                             password: password!,
                           );
                         }
                       },
                     ),
-                    verticaalSpacing(25),
+                    verticalSpacing(25),
 
                     /// 🔷 Divider
                     OrWidget(),
-                    verticaalSpacing(25),
+                    verticalSpacing(25),
 
                     /// 🔷 Google Sign-in
                     GoogleBottom(),
 
-                    verticaalSpacing(25),
+                    verticalSpacing(25),
 
                     /// 🔷 Register Link
                     Row(

@@ -14,13 +14,7 @@ void main() async{
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(
-    MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (context)=>AuthCubit()),
-      ], 
-      child: const MyApp())
-    );
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -32,7 +26,13 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
+    return
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context)=>AuthCubit()),
+      ],
+      child: 
+     ScreenUtilInit(
       designSize: const Size(375, 812),
       minTextAdapt: true,
       splitScreenMode: true,
@@ -46,6 +46,6 @@ class _MyAppState extends State<MyApp> {
           onGenerateRoute: AppRoutes.generateRoute,
         );
       },
-    );
+    ));
   }
 }

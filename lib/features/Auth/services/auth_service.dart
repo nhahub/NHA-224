@@ -27,7 +27,6 @@ class AuthService {
 
   // تسجيل دخول مع التحقق من الدور
   Future<User?> loginUser({
-    required BuildContext context,
     required String email,
     required String password,
   }) async {
@@ -80,7 +79,6 @@ class AuthService {
 
   // تسجيل مستخدم جديد مع حفظ الاسم والصورة
   Future<User?> registerUser({
-    required BuildContext context,
     required String email,
     required String password,
     required String name,
@@ -103,19 +101,13 @@ class AuthService {
           'role': 'user',
         });
 
-        showSnackBar(context, 'Verification email sent! Check your inbox.');
-        Navigator.pushReplacementNamed(context, AppRoutes.login);
         return user;
       }
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'email-already-in-use') {
-        showSnackBar(context, 'Email already in use.');
-      } else {
-        showSnackBar(context, e.message ?? 'Registration error.');
-      }
+      rethrow;
     } catch (e) {
-      showSnackBar(context, 'Unexpected error: $e');
       // print('Unexpected error: $e');
+      rethrow;
     }
     return null;
   }

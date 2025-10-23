@@ -40,12 +40,12 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  verticaalSpacing(30),
+                  verticalSpacing(30),
 
                   /// 🔷 Title
                   TitleAuthPages(text: 'Forget Password'),
 
-                  verticaalSpacing(30),
+                  verticalSpacing(30),
 
                   /// 🔷 Email Input
                   // Text('Email', style: AppTextStyles.font17BlackMedium),
@@ -55,7 +55,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     keyboardType: TextInputType.emailAddress,
                     onChanged: (value) => email = value,
                   ),
-                  verticaalSpacing(25),
+                  verticalSpacing(25),
 
                   /// 🔷 Continue Button
                   CustomButton(
@@ -90,7 +90,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     },
                   ),
 
-                  verticaalSpacing(20),
+                  verticalSpacing(20),
 
                   /// 🔷 Back to Login Link
                   Row(
