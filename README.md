@@ -5,6 +5,8 @@
 It provides a smooth and user-friendly shopping experience for customers.
 
 ---
+## UI 
+https://www.figma.com/design/XFkMvH1QtE2KdcpKXuxDDr/Ecommerce-Mobile-App--Community-?node-id=222-948&t=nXS5Pjb0uoWPOjJ9-0
 
 ## Tech Stack
 The application is built using the following technologies:
