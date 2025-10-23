@@ -1,3 +1,5 @@
+
+import 'package:depi_final_project/features/personalization/ui/screens/profile.dart';
 import 'package:depi_final_project/features/Auth/cubit/auth_cubit.dart';
 import 'package:depi_final_project/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -32,7 +34,7 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(create: (context)=>AuthCubit()),
       ],
       child: 
-     ScreenUtilInit(
+  ScreenUtilInit(
       designSize: const Size(375, 812),
       minTextAdapt: true,
       splitScreenMode: true,
@@ -47,5 +49,6 @@ class _MyAppState extends State<MyApp> {
         );
       },
     ));
+
   }
 }
