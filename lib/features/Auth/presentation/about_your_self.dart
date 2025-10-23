@@ -33,7 +33,7 @@ class _AboutYourselfScreenState extends State<AboutYourselfScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              verticaalSpacing(40),
+              verticalSpacing(40),
               Text(
                 'Tell us About yourself',
                 style: AppTextStyles.font20WitekBold.copyWith(
@@ -106,9 +106,9 @@ class _AboutYourselfScreenState extends State<AboutYourselfScreen> {
                   ),
                 ],
               ),
-              verticaalSpacing(40),
+              verticalSpacing(40),
               Text('How Old are you ?', style: AppTextStyles.font17WhiteMedium),
-              verticaalSpacing(16),
+              verticalSpacing(16),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 decoration: BoxDecoration(
@@ -159,7 +159,7 @@ class _AboutYourselfScreenState extends State<AboutYourselfScreen> {
                   // child: CustomButton(textButton: 'Continue', onPressed: null),
                 ),
               ),
-              verticaalSpacing(20),
+              verticalSpacing(20),
             ],
           ),
         ),

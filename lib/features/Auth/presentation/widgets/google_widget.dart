@@ -1,16 +1,20 @@
 
 import 'package:depi_final_project/core/theme/text_style.dart';
+import 'package:depi_final_project/features/Auth/cubit/auth_cubit.dart';
 import 'package:depi_final_project/features/Auth/services/auth_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class GoogleBottom extends StatelessWidget {
   const GoogleBottom({
-    super.key,
+    super.key, this.onTap,
   });
 
+  final void Function()? onTap;
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<AuthCubit>();
     return ElevatedButton.icon(
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.white,
@@ -22,21 +26,7 @@ class GoogleBottom extends StatelessWidget {
           side: BorderSide(color: Colors.grey.shade300),
         ),
       ),
-      onPressed: () async {
-        final AuthService authService = AuthService();
-        try {
-          await authService.loginWithGoogle(context: context);
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('تم تسجيل الحساب بنجاح!'),
-            ),
-          );
-        } catch (e) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('خطأ: $e')),
-          );
-        }
-      },
+      onPressed: onTap,
       icon: Image.asset('assets/images/google.png', height: 24.h),
       label: Text(
         "Sign up with Google",

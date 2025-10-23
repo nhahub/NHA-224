@@ -18,7 +18,7 @@ class CustomAlertDialog extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Image.asset('assets/images/image 4.png'),
-          verticaalSpacing(30),
+          verticalSpacing(30),
           Text(
             'Check your Email. We sent you an Email to reset your password.',
             style: AppTextStyles.font17BlackRegular.copyWith(
@@ -27,7 +27,7 @@ class CustomAlertDialog extends StatelessWidget {
             ),
             textAlign: TextAlign.center,
           ),
-          verticaalSpacing(20),
+          verticalSpacing(20),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 40.w),
             child: CustomButton(

@@ -49,6 +49,8 @@ dependencies:
   cloud_firestore: ^6.0.3
   google_sign_in: ^7.2.0
   modal_progress_hud_nsn: ^0.5.1
+  flutter_dotenv: ^6.0.0
+  flutter_bloc: ^9.1.1
 
 dev_dependencies:
   flutter_test:
@@ -76,6 +78,7 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - .env
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
