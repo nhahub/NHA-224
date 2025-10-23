@@ -38,7 +38,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     
-    return BlocConsumer(
+    return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, state) {
         if(state is AuthSuccess){
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Verification email sent to your email please check your inbox",)));
@@ -125,12 +125,14 @@ class _RegisterPageState extends State<RegisterPage> {
                     verticalSpacing(30),
       
                     /// 🔷 Divider
-                    OrWidget(),
-                    verticalSpacing(25),
+                    // OrWidget(),
+                    // verticalSpacing(25),
       
-                    /// 🔷 Google Sign-in
-                    GoogleBottom(),
-                    verticalSpacing(25),
+                    // /// 🔷 Google Sign-in
+                    // // GoogleBottom(
+                    // //   onTap: ()async => await cubit.loginWithGoogle(),
+                    // // ),
+                    // verticalSpacing(25),
       
                     /// 🔷 Login Link
                     Row(

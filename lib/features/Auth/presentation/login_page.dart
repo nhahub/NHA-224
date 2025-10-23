@@ -152,7 +152,9 @@ return ModalProgressHUD(
                     verticalSpacing(25),
 
                     /// 🔷 Google Sign-in
-                    GoogleBottom(),
+                    GoogleBottom(
+                      onTap: ()async => await cubit.loginWithGoogle()
+                    ),
 
                     verticalSpacing(25),
 

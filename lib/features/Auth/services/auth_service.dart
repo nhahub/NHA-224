@@ -112,7 +112,7 @@ class AuthService {
     return null;
   }
 
-   Future<UserCredential> loginWithGoogle({required BuildContext context}) async {
+   Future<UserCredential> loginWithGoogle() async {
     try {
 
       final String serverClientId = dotenv.env['server_client_id']??"no id";
@@ -139,21 +139,21 @@ class AuthService {
           'role': 'user',
         });
         
-        DocumentSnapshot userDoc = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(user.uid)
-            .get();
+        // DocumentSnapshot userDoc = await FirebaseFirestore.instance
+        //     .collection('users')
+        //     .doc(user.uid)
+        //     .get();
 
-        String role = userDoc['role'] ?? 'user';
-        if(role == 'admin'){
-          Navigator.pushReplacementNamed(context, AppRoutes.adminPage);
-        }else{
-          Navigator.pushReplacementNamed(
-            context,
-            AppRoutes.layout,
-            arguments: user.email,
-          );
-        }
+        // String role = userDoc['role'] ?? 'user';
+        // if(role == 'admin'){
+        //   Navigator.pushReplacementNamed(context, AppRoutes.adminPage);
+        // }else{
+        //   Navigator.pushReplacementNamed(
+        //     context,
+        //     AppRoutes.layout,
+        //     arguments: user.email,
+        //   );
+        // }
       
       // Once signed in, return the UserCredential
       return userCredential;

@@ -54,5 +54,17 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
+  Future<void> loginWithGoogle() async {
+    emit(AuthLoading());
+    try{
+      final user =await _authService.loginWithGoogle();
+      emit(AuthSuccess(user.user!.uid));
+    }on FirebaseAuthException catch(e){
+      emit(AuthFailure("Google sign-in failed"));
+    }catch(e){
+      emit(AuthFailure("Unexpected error"));
+    }
+  }
+
   
 }
