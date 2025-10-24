@@ -1,5 +1,5 @@
-import 'package:depi_final_project/features/Notifications/Widgets/notification_card_implementation.dart';
 import 'package:flutter/material.dart';
+import 'package:depi_final_project/features/personalization/ui/widget/notification_card_implementation.dart';
 
 class HaveNotifications extends StatelessWidget {
   const HaveNotifications({super.key, required this.message});

@@ -1,5 +1,5 @@
-import 'package:depi_final_project/features/notifications/Screens/details_order_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:depi_final_project/features/personalization/ui/screens/details_order_screen.dart';
 
 class HaveOrdersScreen extends StatelessWidget {
   const HaveOrdersScreen({super.key, required this.orders});

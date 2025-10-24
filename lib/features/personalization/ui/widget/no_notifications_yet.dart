@@ -1,5 +1,6 @@
-import 'package:depi_final_project/features/Notifications/Widgets/button.dart';
 import 'package:flutter/material.dart';
+import 'package:depi_final_project/features/personalization/ui/widget/button.dart';
+
 
 class NoNotificationsYet extends StatelessWidget {
   const NoNotificationsYet({super.key});

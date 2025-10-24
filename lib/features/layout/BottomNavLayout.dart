@@ -5,8 +5,8 @@ import 'package:depi_final_project/features/store/screens/cart.dart';
 import 'package:depi_final_project/features/store/screens/home.dart';
 import 'package:depi_final_project/features/layout/CustomBottomBar.dart';
 import 'package:depi_final_project/features/layout/BottomNavLayout.dart';
-import 'package:depi_final_project/features/notifications/Screens/orders_screen.dart';
-import 'package:depi_final_project/features/notifications/Screens/notifications_screen.dart';
+import 'package:depi_final_project/features/personalization/ui/screens/orders_screen.dart';
+import 'package:depi_final_project/features/personalization/ui/screens/notifications_screen.dart';
 class BottomNavLayout extends StatefulWidget {
   const BottomNavLayout({super.key});
 

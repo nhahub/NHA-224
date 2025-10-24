@@ -1,6 +1,7 @@
-import 'package:depi_final_project/features/Notifications/Widgets/have_notifications.dart';
-import 'package:depi_final_project/features/Notifications/Widgets/no_notifications_yet.dart';
 import 'package:flutter/material.dart';
+import 'package:depi_final_project/features/personalization/ui/widget/have_notifications.dart';
+import 'package:depi_final_project/features/personalization/ui/widget/no_notifications_yet.dart';
+
 
 class NotificationsScreen extends StatelessWidget {
   const NotificationsScreen({super.key});

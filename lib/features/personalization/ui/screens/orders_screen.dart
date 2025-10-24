@@ -1,6 +1,6 @@
-import 'package:depi_final_project/features/notifications/Widgets/have_orders.dart';
-import 'package:depi_final_project/features/notifications/Widgets/no_orders_yet.dart';
 import 'package:flutter/material.dart';
+import 'package:depi_final_project/features/personalization/ui/widget/have_orders.dart';
+import 'package:depi_final_project/features/personalization/ui/widget/no_orders_yet.dart';
 
 class OrdersScreen extends StatelessWidget {
   const OrdersScreen({super.key});
