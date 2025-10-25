@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:depi_final_project/core/theme/colors.dart';
+import 'package:depi_final_project/core/theme/text_style.dart';
 
 class ProductWidget extends StatelessWidget {
   final String image;
   final String title;
   final String price;
   final String? oldPrice;
-  const ProductWidget({super.key, required this.image, required this.title, required this.price, this.oldPrice});
+  const ProductWidget({
+    super.key,
+    required this.image,
+    required this.title,
+    required this.price,
+    this.oldPrice,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +23,7 @@ class ProductWidget extends StatelessWidget {
         width: 159,
         height: 281,
         decoration: BoxDecoration(
-          color: const Color(0xFF1E1A2E),
+          color: AppColors.darkSecondary,
           borderRadius: BorderRadius.circular(16),
         ),
         child: Column(
@@ -36,10 +44,7 @@ class ProductWidget extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               child: Text(
                 title,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: AppTextStyles.font17WiteRegular.copyWith(fontSize: 14),
               ),
             ),
             Padding(
@@ -48,17 +53,15 @@ class ProductWidget extends StatelessWidget {
                 children: [
                   Text(
                     price,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
+                    style: AppTextStyles.font17WiteRegular.copyWith(
+                      fontSize: 14,
                     ),
                   ),
                   if (oldPrice != null) ...[
                     const SizedBox(width: 8),
                     Text(
                       oldPrice!,
-                      style: const TextStyle(
+                      style: AppTextStyles.font17WiteRegular.copyWith(
                         color: Colors.white38,
                         fontSize: 13,
                         decoration: TextDecoration.lineThrough,

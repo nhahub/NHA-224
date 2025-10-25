@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:depi_final_project/core/theme/text_style.dart';
 import 'package:depi_final_project/features/personalization/ui/widget/have_notifications.dart';
 import 'package:depi_final_project/features/personalization/ui/widget/no_notifications_yet.dart';
-
 
 class NotificationsScreen extends StatelessWidget {
   const NotificationsScreen({super.key});
@@ -18,10 +18,7 @@ class NotificationsScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          "Notifications",
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
+        title: Text("Notifications", style: AppTextStyles.font20WitekBold),
         centerTitle: true,
       ),
       body: hasNotifications

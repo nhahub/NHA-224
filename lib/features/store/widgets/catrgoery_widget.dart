@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:depi_final_project/core/theme/colors.dart';
 
 class CatrgoeryWidget extends StatelessWidget {
   final String image;
@@ -13,7 +14,7 @@ class CatrgoeryWidget extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 32,
-            backgroundColor: const Color(0xFF1E1A2E),
+            backgroundColor: AppColors.darkSecondary,
             backgroundImage: AssetImage(image),
           ),
           const SizedBox(height: 8),

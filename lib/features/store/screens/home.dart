@@ -3,6 +3,7 @@ import 'package:depi_final_project/shared/spacing.dart';
 import 'package:depi_final_project/core/theme/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:depi_final_project/core/theme/text_style.dart';
+import 'package:depi_final_project/core/routes/app_routes.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:depi_final_project/features/store/widgets/new_in_list.dart';
 import 'package:depi_final_project/features/store/widgets/section_header.dart';
@@ -20,11 +21,11 @@ class _HomeViewState extends State<HomeView> {
   String? selectedValue;
 
   final List<Map<String, String>> categories = [
-    {'image': 'assets/hoodie.png', 'label': 'Hoodies'},
-    {'image': 'assets/shorts.png', 'label': 'Shorts'},
-    {'image': 'assets/shoes.png', 'label': 'Shoes'},
-    {'image': 'assets/bag.png', 'label': 'Bag'},
-    {'image': 'assets/accessories.png', 'label': 'Accessories'},
+    {'image': 'assets/images/Ellipse 5 (3).png', 'label': 'Hoodies'},
+    {'image': 'assets/images/Ellipse 5 (3).png', 'label': 'Shorts'},
+    {'image': 'assets/images/Ellipse 5 (3).png', 'label': 'Shoes'},
+    {'image': 'assets/images/Ellipse 5 (3).png', 'label': 'Bag'},
+    {'image': 'assets/images/Ellipse 5 (3).png', 'label': 'Accessories'},
   ];
 
   final List<Map<String, String>> topSelling = [
@@ -139,7 +140,11 @@ class _HomeViewState extends State<HomeView> {
 
               verticalSpacing(24),
 
-              SectionHeader(title: 'Categories'),
+              SectionHeader(
+                title: 'Categories',
+                onSeeAllTap: () =>
+                    Navigator.pushNamed(context, AppRoutes.shopByCategory),
+              ),
               verticalSpacing(16),
               CategoriesList(categories: categories),
 

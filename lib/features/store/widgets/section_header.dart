@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:depi_final_project/core/theme/text_style.dart';
+import 'package:depi_final_project/core/routes/app_routes.dart';
 
 class SectionHeader extends StatelessWidget {
   final String title;
   final Color? titleColor;
+  final VoidCallback? onSeeAllTap;
 
-  const SectionHeader({super.key, required this.title, this.titleColor});
+  const SectionHeader({super.key, required this.title, this.titleColor, this.onSeeAllTap});
 
   @override
   Widget build(BuildContext context) {
@@ -21,11 +23,14 @@ class SectionHeader extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        Text(
-          'See All',
-          style: AppTextStyles.font17WhiteMedium.copyWith(
-            color: Colors.white70,
-            fontWeight: FontWeight.w500,
+        InkWell(
+          onTap: onSeeAllTap,
+          child: Text(
+            'See All',
+            style: AppTextStyles.font17WhiteMedium.copyWith(
+              color: Colors.white70,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
       ],
