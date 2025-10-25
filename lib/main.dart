@@ -6,7 +6,6 @@ import 'package:depi_final_project/firebase_options.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:depi_final_project/core/routes/app_routes.dart';
 import 'package:depi_final_project/features/Auth/cubit/auth_cubit.dart';
-import 'package:depi_final_project/features/personalization/ui/screens/profile.dart';
 import 'package:depi_final_project/core/theme/colors.dart'; // تأكد إن الملف ده موجود
 
 
