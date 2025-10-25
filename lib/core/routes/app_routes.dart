@@ -8,6 +8,7 @@ import 'package:depi_final_project/features/Auth/presentation/login_page.dart';
 import 'package:depi_final_project/features/store/screens/shop_by_category.dart';
 import 'package:depi_final_project/features/Auth/presentation/splash_screen.dart';
 import 'package:depi_final_project/features/Auth/presentation/resgister_page.dart';
+import 'package:depi_final_project/features/store/screens/products_by_category.dart';
 
 class AppRoutes {
   static const String layout = '/';
@@ -22,6 +23,7 @@ class AppRoutes {
   static const String adminPage = '/adminPage';
   static const String registerPage = '/registerPage';
   static const String shopByCategory = '/shopByCategory';
+  static const String productsByCategory = '/productsByCategory';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -51,6 +53,8 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const BottomNavLayout());
       case shopByCategory:
         return MaterialPageRoute(builder: (_) => const ShopByCategory());
+      case productsByCategory:
+        return MaterialPageRoute(builder: (_) => const ProductsByCategory());
       default:
         return _errorRoute("Route not found: ${settings.name}");
     }

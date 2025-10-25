@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:depi_final_project/core/theme/colors.dart';
+import 'package:depi_final_project/core/routes/app_routes.dart';
 
 class CatrgoeryWidget extends StatelessWidget {
   final String image;
@@ -10,19 +11,24 @@ class CatrgoeryWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(right: 16),
-      child: Column(
-        children: [
-          CircleAvatar(
-            radius: 32,
-            backgroundColor: AppColors.darkSecondary,
-            backgroundImage: AssetImage(image),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            label,
-            style: const TextStyle(color: Colors.white70, fontSize: 14),
-          ),
-        ],
+      child: InkWell(
+        onTap: () {
+          Navigator.pushNamed(context, AppRoutes.productsByCategory);
+        },
+        child: Column(
+          children: [
+            CircleAvatar(
+              radius: 32,
+              backgroundColor: AppColors.darkSecondary,
+              backgroundImage: AssetImage(image),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              label,
+              style: const TextStyle(color: Colors.white70, fontSize: 14),
+            ),
+          ],
+        ),
       ),
     );
   }
