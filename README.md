@@ -43,7 +43,7 @@ Users can create a wishlist to save and track their favorite or desired products
 
 ---
 
-## 🧠 Author
+## 🧠 Authors
 Developed by 
 **[Ahmed AbdulAziz, Ahmed Khamis, Diaa Ahmed, Moaz Daif, and Youssef Mohamed]**
 
