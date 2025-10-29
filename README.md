@@ -43,11 +43,6 @@ Users can create a wishlist to save and track their favorite or desired products
 
 ---
 
-## Screenshots *(optional)*
-_Add screenshots of your app here to showcase the UI._
-
----
-
 ## 🧠 Author
 Developed by 
 **[Ahmed AbdulAziz, Ahmed Khamis, Diaa Ahmed, Moaz Daif, and Youssef Mohamed]**
