@@ -1,3 +1,4 @@
+import 'package:depi_final_project/features/store/screens/cart.dart';
 import 'package:flutter/material.dart';
 import 'package:depi_final_project/shared/spacing.dart';
 import 'package:depi_final_project/core/theme/colors.dart';
@@ -95,10 +96,10 @@ class _HomeViewState extends State<HomeView> {
                           isExpanded: true,
                           underline: const SizedBox(),
                           items: const [
-                            DropdownMenuItem(value: 'Men', child: Text('Men')),
+                            DropdownMenuItem(value: 'Male', child: Text('Male')),
                             DropdownMenuItem(
-                              value: 'Women',
-                              child: Text('Women'),
+                              value: 'Female',
+                              child: Text('Female'),
                             ),
                           ],
                           onChanged: (value) {
@@ -112,7 +113,9 @@ class _HomeViewState extends State<HomeView> {
                   ),
                   IconButton(
                     icon: const Icon(FontAwesomeIcons.cartFlatbed),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => Cart(),));
+                    },
                   ),
                 ],
               ),

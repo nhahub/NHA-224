@@ -1,6 +1,9 @@
 // ignore_for_file: use_build_context_synchronously
 
 
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:depi_final_project/core/errors/failures.dart';
 import 'package:depi_final_project/core/routes/app_routes.dart';
@@ -8,6 +11,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:http/http.dart' as http;
 // import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService {
@@ -210,29 +214,29 @@ class AuthService {
 
 
   // رفع صورة على Cloudinary
-  // Future<String?> uploadImageToCloudinary(File file) async {
-  //   try {
-  //     String cloudName = 'drlr0etui';       // Cloud Name بتاعك
-  //     String uploadPreset = 'ml_default';   // Upload Preset اللي عملتهللي عملته
+  Future<String?> uploadImageToCloudinary(File file) async {
+    try {
+      String cloudName = 'dp9lb4oie';       // Cloud Name بتاعك
+      String uploadPreset = 'profile_preset';   // Upload Preset اللي عملتهللي عملته
 
-  //     var request = http.MultipartRequest(
-  //       'POST',
-  //       Uri.parse('https://api.cloudinary.com/v1_1/$cloudName/image/upload'),
-  //     );
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse('https://api.cloudinary.com/v1_1/$cloudName/image/upload'),
+      );
 
-  //     request.files.add(await http.MultipartFile.fromPath('file', file.path));
-  //     request.fields['upload_preset'] = uploadPreset;
+      request.files.add(await http.MultipartFile.fromPath('file', file.path));
+      request.fields['upload_preset'] = uploadPreset;
 
-  //     var response = await request.send();
-  //     var resData = await http.Response.fromStream(response);
-  //     var jsonData = json.decode(resData.body);
+      var response = await request.send();
+      var resData = await http.Response.fromStream(response);
+      var jsonData = json.decode(resData.body);
 
-  //     return jsonData['secure_url']; // رابط الصورة النهائي
-  //   } catch (e) {
-  //     print('Cloudinary upload error: $e');
-  //     return null;
-  //   }
-  // }
+      return jsonData['secure_url']; // رابط الصورة النهائي
+    } catch (e) {
+      print('Cloudinary upload error: $e');
+      return null;
+    }
+  }
 
   // ---- Reset Password ----
   Future<void> resetPassword({

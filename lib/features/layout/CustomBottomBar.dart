@@ -46,7 +46,7 @@ class CustomBottomBar extends StatelessWidget {
 
       SalomonBottomBarItem(
         icon: HugeIcon(
-          icon: HugeIcons.strokeRoundedSetting06,
+          icon: HugeIcons.strokeRoundedUser,
           color: AppColors.darkPrimary,
           size: 20,
         ),
