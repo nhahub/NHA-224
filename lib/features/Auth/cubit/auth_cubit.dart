@@ -2,8 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:depi_final_project/features/Auth/cubit/auth_state.dart';
 import 'package:depi_final_project/features/Auth/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthCubit extends Cubit<AuthState> {
 
@@ -60,6 +58,7 @@ class AuthCubit extends Cubit<AuthState> {
       final user =await _authService.loginWithGoogle();
       emit(AuthSuccess(user.user!.uid));
     }on FirebaseAuthException catch(e){
+      print(e);
       emit(AuthFailure("Google sign-in failed"));
     }catch(e){
       emit(AuthFailure("Unexpected error"));

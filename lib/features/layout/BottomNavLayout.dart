@@ -1,3 +1,4 @@
+import 'package:depi_final_project/features/personalization/ui/screens/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:depi_final_project/core/theme/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -31,7 +32,7 @@ class _BottomNavLayoutState extends State<BottomNavLayout> {
       const HomeView(),
       const OrdersScreen(),
       const NotificationsScreen(),
-      Cart(),
+      Profile(),
       //Center(child: Text(S().ContactUs)),
     ]);
     _scrollController.addListener(_updateAppBarHeight);

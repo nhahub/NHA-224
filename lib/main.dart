@@ -1,3 +1,4 @@
+import 'package:depi_final_project/features/personalization/cubit/personalization_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -31,6 +32,7 @@ class _MyAppState extends State<MyApp> {
     MultiBlocProvider(
       providers: [
         BlocProvider(create: (context)=>AuthCubit()),
+        BlocProvider(create: (context)=> PersonalizationCubit())
       ],
       child: 
   ScreenUtilInit(
