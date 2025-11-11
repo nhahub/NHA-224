@@ -1,4 +1,3 @@
-import 'package:depi_final_project/features/store/screens/cart.dart';
 import 'package:flutter/material.dart';
 import 'package:depi_final_project/shared/spacing.dart';
 import 'package:depi_final_project/core/theme/colors.dart';
@@ -6,10 +5,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:depi_final_project/core/theme/text_style.dart';
 import 'package:depi_final_project/core/routes/app_routes.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:depi_final_project/features/store/widgets/new_in_list.dart';
+import 'package:depi_final_project/features/store/screens/cart.dart';
+import 'package:depi_final_project/features/home/widgets/new_in_list.dart';
+import 'package:depi_final_project/features/home/widgets/categories_list.dart';
 import 'package:depi_final_project/features/store/widgets/section_header.dart';
-import 'package:depi_final_project/features/store/widgets/categories_list.dart';
-import 'package:depi_final_project/features/store/widgets/top_selling_List.dart';
+import 'package:depi_final_project/features/home/widgets/top_selling_List.dart';
+
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});

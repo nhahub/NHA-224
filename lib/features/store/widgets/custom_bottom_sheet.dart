@@ -1,6 +1,6 @@
-import 'package:depi_final_project/features/store/widgets/customize_option.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:depi_final_project/features/store/widgets/customize_option.dart';
 
 class CustomBottomSheet extends StatelessWidget {
   const CustomBottomSheet({super.key, required this.title, required this.options});

@@ -28,36 +28,32 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  bloc: ^9.0.1
+  cloud_firestore: ^6.0.3
+  cupertino_icons: ^1.0.8
+  curved_navigation_bar: ^1.0.6
+  dartz: ^0.10.1
+  dio: ^5.9.0
+  equatable: ^2.0.7
+  firebase_auth: ^6.1.1
+  firebase_core: ^4.2.0
   flutter:
     sdk: flutter
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.8
-  flutter_screenutil: ^5.9.3
-  dio: ^5.9.0
-  google_fonts: ^6.3.2
-  shared_preferences: ^2.5.3
-  bloc: ^9.0.1
-  equatable: ^2.0.7
-  curved_navigation_bar: ^1.0.6
-  font_awesome_flutter: ^10.9.1
-  hugeicons: ^1.1.1
-  salomon_bottom_bar: ^3.3.2
-  firebase_core: ^4.2.0
-  firebase_auth: ^6.1.1
-  cloud_firestore: ^6.0.3
-  google_sign_in: ^7.2.0
-  modal_progress_hud_nsn: ^0.5.1
-  flutter_dotenv: ^6.0.0
   flutter_bloc: ^9.1.1
+  flutter_dotenv: ^6.0.0
+  flutter_screenutil: ^5.9.3
+  font_awesome_flutter: ^10.9.1
+  google_fonts: ^6.3.2
+  google_sign_in: ^7.2.0
   http: ^1.5.0
+  hugeicons: ^1.1.1
   image_picker: ^1.2.0
+  modal_progress_hud_nsn: ^0.5.1
   path: ^1.9.1
+  salomon_bottom_bar: ^3.3.2
+  shared_preferences: ^2.5.3
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -65,10 +61,11 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
+  flutter_test:
+    sdk: flutter
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
-
 # The following section is specific to Flutter packages.
 flutter:
   # The following line ensures that the Material Icons font is
@@ -82,13 +79,10 @@ flutter:
     - assets/icons/
     - .env
   #   - images/a_dot_ham.jpeg
-
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
-
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/to/asset-from-package
-
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
   # "family" key with the font family name, and a "fonts" key with a
@@ -98,11 +92,10 @@ flutter:
     - family: cairo
       fonts:
         - asset: assets/fonts/static/Cairo-ExtraBold.ttf
-  #       - asset: assets/fonts/Nunito_Sans/NunitoSans-VariableFont_YTLC,opsz,wdth,wght.ttf
-  #         weight: 600
+        #       - asset: assets/fonts/Nunito_Sans/NunitoSans-VariableFont_YTLC,opsz,wdth,wght.ttf
+        #         weight: 600
         # - asset: assets/fonts/NunitoSans-Bold.ttf
         #   weight: 700
-
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

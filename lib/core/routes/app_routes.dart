@@ -5,10 +5,10 @@ import 'package:depi_final_project/features/Auth/cubit/auth_cubit.dart';
 import 'package:depi_final_project/features/layout/BottomNavLayout.dart';
 import 'package:depi_final_project/features/store/screens/search_page.dart';
 import 'package:depi_final_project/features/Auth/presentation/login_page.dart';
-import 'package:depi_final_project/features/store/screens/shop_by_category.dart';
+import 'package:depi_final_project/features/home/screens/shop_by_category.dart';
 import 'package:depi_final_project/features/Auth/presentation/splash_screen.dart';
 import 'package:depi_final_project/features/Auth/presentation/resgister_page.dart';
-import 'package:depi_final_project/features/store/screens/products_by_category.dart';
+import 'package:depi_final_project/features/home/screens/products_by_category.dart';
 
 class AppRoutes {
   static const String layout = '/';

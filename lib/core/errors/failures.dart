@@ -8,35 +8,35 @@ abstract class Failures {
 }
 
 class ServerFailure extends Failures {
-  ServerFailure({required super.errorMessage});
+  ServerFailure(String string, {required super.errorMessage});
   factory ServerFailure.fromDioException(DioException dioError ) {
     switch (dioError.type) {
       case DioExceptionType.connectionTimeout:
-        return ServerFailure(errorMessage: 'Connection timeout');
+        return ServerFailure('', errorMessage: 'Connection timeout');
       case DioExceptionType.sendTimeout:
-        return ServerFailure(errorMessage: 'Send timeout');
+        return ServerFailure('', errorMessage: 'Send timeout');
       case DioExceptionType.receiveTimeout:
-        return ServerFailure(errorMessage: 'Receive timeout');
+        return ServerFailure('', errorMessage: 'Receive timeout');
       case DioExceptionType.badResponse:
        return ServerFailure.fromBadResponse(dioError.response!.statusCode!, dioError.message!);
       case DioExceptionType.cancel:
-        return ServerFailure(errorMessage: 'Request cancelled');
+        return ServerFailure('', errorMessage: 'Request cancelled');
       default:
-        return ServerFailure(errorMessage: 'Unexpected error occurred');
+        return ServerFailure('', errorMessage: 'Unexpected error occurred');
     }
   }
 
   factory ServerFailure.fromBadResponse(int statusCode, String message) {
     if (statusCode == 404) {
-      return ServerFailure(errorMessage: 'Resource not found');
+      return ServerFailure('', errorMessage: 'Resource not found');
     } else if (statusCode == 500) {
-      return ServerFailure(errorMessage: 'Internal server error');
+      return ServerFailure('', errorMessage: 'Internal server error');
     } else if (statusCode == 403) {
-      return ServerFailure(errorMessage: 'Forbidden access');
+      return ServerFailure('', errorMessage: 'Forbidden access');
     } else if (statusCode == 401) {
-      return ServerFailure(errorMessage: 'Unauthorized access');
+      return ServerFailure('', errorMessage: 'Unauthorized access');
     } else {
-      return ServerFailure(errorMessage: 'Server error $statusCode: $message');
+      return ServerFailure('', errorMessage: 'Server error $statusCode: $message');
     }
   }
 }
