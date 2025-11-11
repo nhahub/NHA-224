@@ -1,6 +1,6 @@
-import 'package:depi_final_project/features/store/widgets/counter_btn.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:depi_final_project/features/store/widgets/counter_btn.dart';
 
 class CartItem extends StatelessWidget {
   const CartItem({super.key, required this.image, required this.price, required this.size, required this.color, required this.title});

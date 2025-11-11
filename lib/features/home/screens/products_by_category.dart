@@ -3,7 +3,7 @@ import 'package:depi_final_project/shared/spacing.dart';
 import 'package:depi_final_project/core/theme/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:depi_final_project/core/theme/text_style.dart';
-import 'package:depi_final_project/features/store/widgets/product_widget.dart';
+import 'package:depi_final_project/features/home/widgets/product_widget.dart';
 
 class ProductsByCategory extends StatelessWidget {
   const ProductsByCategory({super.key});

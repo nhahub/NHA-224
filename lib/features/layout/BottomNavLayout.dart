@@ -1,11 +1,11 @@
-import 'package:depi_final_project/features/personalization/ui/screens/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:depi_final_project/core/theme/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:depi_final_project/features/home/screens/home.dart';
 import 'package:depi_final_project/features/store/screens/cart.dart';
-import 'package:depi_final_project/features/store/screens/home.dart';
 import 'package:depi_final_project/features/layout/CustomBottomBar.dart';
 import 'package:depi_final_project/features/layout/BottomNavLayout.dart';
+import 'package:depi_final_project/features/personalization/ui/screens/profile.dart';
 import 'package:depi_final_project/features/personalization/ui/screens/orders_screen.dart';
 import 'package:depi_final_project/features/personalization/ui/screens/notifications_screen.dart';
 class BottomNavLayout extends StatefulWidget {

@@ -4,8 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:depi_final_project/core/theme/text_style.dart';
 import 'package:depi_final_project/features/store/widgets/cart_item.dart';
 import 'package:depi_final_project/features/store/widgets/coupon_card.dart';
-import 'package:depi_final_project/features/store/widgets/app_bar_icon.dart';
 import 'package:depi_final_project/features/store/widgets/price_detail.dart';
+
 
 class Cart extends StatelessWidget {
   Cart({super.key});

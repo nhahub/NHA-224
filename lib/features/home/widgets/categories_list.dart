@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:depi_final_project/features/store/widgets/catrgoery_widget.dart';
+import 'package:depi_final_project/features/home/widgets/catrgoery_widget.dart';
 
 class CategoriesList extends StatelessWidget {
   const CategoriesList({
