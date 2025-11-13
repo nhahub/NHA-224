@@ -40,7 +40,7 @@ class ShopByCatWidget extends StatelessWidget {
               child: CardOfCat(
                 title: category.name,
                 imageUrl: category.imageUrl,
-                onTap: () => onCategorySelected?.call(category.id),
+                onTap: () { onCategorySelected?.call(category.id); print("category id: ${category.id}");},
               ),
             );
           },

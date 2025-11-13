@@ -1,3 +1,4 @@
+import 'package:depi_final_project/data/models/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:depi_final_project/core/theme/colors.dart';
@@ -10,11 +11,14 @@ import 'package:depi_final_project/features/store/widgets/custom_bottom_sheet.da
 
 
 class ProductPage extends StatelessWidget {
-  const ProductPage({super.key});
+
+  final ProductModel product;
+  const ProductPage({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
     final themeBrightness = Theme.of(context).brightness;
+    // final product = ModalRoute.of(context)!.settings.arguments as ProductModel;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -49,24 +53,24 @@ class ProductPage extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   // TODO: convert to listview builder
                   children: [
-                    Image.asset("assets/images/image1.png"),
+                    Image.network(product.imageUrl),
                     SizedBox(width: 20,),
-                    Image.asset("assets/images/image2.png"),
+                    Image.network(product.imageUrl),
                     SizedBox(width: 20,),
-                    Image.asset("assets/images/image3.png"),
+                    Image.network(product.imageUrl),
                   ],
                 ),
               ),
           
               Padding(
                 padding: const EdgeInsets.only(top: 20),
-                child: Text("Men's Harrington Jacket", style: GoogleFonts.gabarito(
+                child: Text(product.name, style: GoogleFonts.gabarito(
                   fontWeight: FontWeight.bold,
                   fontSize: 16
                 ),),
               ),
               SizedBox(height: 10,),
-              Text("\$148", style: GoogleFonts.gabarito(textStyle: TextStyle(
+              Text("\$${product.price}", style: GoogleFonts.gabarito(textStyle: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
                 color: Color(0xff8E6CEF)
@@ -79,26 +83,9 @@ class ProductPage extends StatelessWidget {
                     builder: (context){
                       return CustomBottomSheet(
                         title: "Size",
-                        options: [
-                          CustomizeOption(
-                            label: "S",
-                            isSelected: true),
-                          CustomizeOption(
-                            label: "M",
-                            isSelected: false),
-                          CustomizeOption(
-                            label: "L",
-                            isSelected: false),
-                          CustomizeOption(
-                            label: "XL",
-                            isSelected: false),
-                          CustomizeOption(
-                            label: "2XL",
-                            isSelected: false),
-                          CustomizeOption(
-                            label: "3XL",
-                            isSelected: false),
-                        ],
+                        options: List.generate(product.sizes.length, (index){
+                         return CustomizeOption(label: product.sizes[index], isSelected: product.selectedSize == product.sizes[index],);
+                        }),
                       );
                     });
                 },
@@ -235,7 +222,7 @@ class ProductPage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(10),
                 child: Text(
-                  "Built for life and made to last, this full-zip corduroy jacket is part of our Nike Life collection. The spacious fit gives you plenty of room to layer underneath, while the soft corduroy keeps it casual and timeless.",
+                  product.description,
                   style: TextStyle(fontSize: 16, color: Color.fromARGB(176, 119, 119, 119)),
                   ),
               ),
@@ -259,7 +246,7 @@ class ProductPage extends StatelessWidget {
                     fontWeight: FontWeight.bold
                   )
                 ),),
-                Text("4.5 Rating", style: GoogleFonts.gabarito(
+                Text("${product.rating} Rating", style: GoogleFonts.gabarito(
                   textStyle: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold
@@ -309,7 +296,7 @@ class ProductPage extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("\$148", style: GoogleFonts.gabarito(textStyle: TextStyle(
+              Text("\$${product.price}", style: GoogleFonts.gabarito(textStyle: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
                 color: Colors.white

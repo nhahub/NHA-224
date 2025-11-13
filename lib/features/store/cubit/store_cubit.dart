@@ -29,7 +29,7 @@ class StoreCubit extends Cubit<StoreState> {
     emit(StoreLoading());
     final result = await homeRepo.fetchCategories();
     result.fold(
-      (failure) => emit(StoreError(failure.errorMessage ?? 'Failed to fetch categories')),
+      (failure) => emit(StoreError(failure.errorMessage)),
       (cats) {
         _categories = cats;
         emit(StoreCategoriesLoaded(cats));
@@ -42,7 +42,7 @@ class StoreCubit extends Cubit<StoreState> {
     emit(StoreLoading());
     final result = await homeRepo.fetchProductsByCategory(categoryId);
     result.fold(
-      (failure) => emit(StoreError(failure.errorMessage ?? 'Failed to fetch products')),
+      (failure) => emit(StoreError("error ${failure.errorMessage}")),
       (products) {
         _allProducts = products;
         _applyFilters();

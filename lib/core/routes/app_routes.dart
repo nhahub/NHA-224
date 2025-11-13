@@ -1,3 +1,5 @@
+import 'package:depi_final_project/data/models/product_model.dart';
+import 'package:depi_final_project/features/store/screens/product_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:depi_final_project/features/admin/admin_page.dart';
@@ -55,6 +57,8 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const ShopByCategory());
       case productsByCategory:
         return MaterialPageRoute(builder: (_) => const ProductsByCategory());
+      case productDetails:
+        return MaterialPageRoute(builder: (_) =>  ProductPage(product: settings.arguments as ProductModel,));
       default:
         return _errorRoute("Route not found: ${settings.name}");
     }

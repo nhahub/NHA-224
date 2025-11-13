@@ -15,6 +15,7 @@ class ProductModel {
   final DateTime createdAt;
   final String gender; // إضافة حقل الـ Gender
   final double? oldPrice; // <- هنا ضفت المتغير الجديد
+  final String selectedSize;
 
   ProductModel({
     required this.id,
@@ -32,6 +33,7 @@ class ProductModel {
     this.oldPrice,
 
     required this.gender, // تعديل الكونستركتور
+    required this.selectedSize,
   });
 
   factory ProductModel.fromFirestore(DocumentSnapshot doc) {
@@ -53,7 +55,9 @@ class ProductModel {
           ? (data['oldPrice'] as num).toDouble()
           : null,
 
-      gender: data['gender'] ?? 'Men', // قيمة افتراضية لو مش موجودة
+      gender: data['gender'] ?? 'Men', 
+      selectedSize: data['selectedSize']??"no sizes", // قيمة افتراضية لو مش موجودة
+      
     );
   }
 
@@ -73,6 +77,7 @@ class ProductModel {
       'oldPrice': oldPrice,
 
       'gender': gender, // إضافة للـ Firestore
+      'selectedSize': selectedSize
     };
   }
 }
