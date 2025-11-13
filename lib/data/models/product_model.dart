@@ -10,7 +10,7 @@ class ProductModel {
   final String productId;
   final List<String> colors;
   final List<String> sizes;
-  final String imageUrl;
+  final List<String> imageUrl;
   final DocumentReference category; // ربط بالفئة (Category)
   final DateTime createdAt;
   final String gender; // إضافة حقل الـ Gender
@@ -48,7 +48,7 @@ class ProductModel {
       productId: data['productId'] ?? '',
       colors: List<String>.from(data['color'] ?? []),
       sizes: List<String>.from(data['size'] ?? []),
-      imageUrl: data['imageUrl'] ?? '',
+      imageUrl:List<String>.from( data['imageUrl'] ?? ''),
       category: data['category'],
       createdAt: (data['createdAt'] as Timestamp).toDate(),
       oldPrice: data['oldPrice'] != null

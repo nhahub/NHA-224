@@ -26,7 +26,7 @@ class ProductPage extends StatelessWidget {
           padding: const EdgeInsets.only(top: 10, left: 10),
           child: AppBarIcon(
             icon:themeBrightness == Brightness.light? "assets/icons/arrowleft.png":"assets/icons/arrowleft_dark.png",
-            onTap: (){},
+            onTap: () => Navigator.pop(context),
           ),
         ),
 
@@ -49,16 +49,13 @@ class ProductPage extends StatelessWidget {
             children: [
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.25,
-                child: ListView(
+                child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  // TODO: convert to listview builder
-                  children: [
-                    Image.network(product.imageUrl),
-                    SizedBox(width: 20,),
-                    Image.network(product.imageUrl),
-                    SizedBox(width: 20,),
-                    Image.network(product.imageUrl),
-                  ],
+                  itemCount: product.imageUrl.length,
+                  itemBuilder: (context, index){
+                    return Image.network(product.imageUrl[index]);
+                  },
+                  
                 ),
               ),
           
@@ -104,86 +101,10 @@ class ProductPage extends StatelessWidget {
                   showModalBottomSheet(context: context, 
                   builder: (context){
                     return CustomBottomSheet(title: "Color", 
-                    options: [
-                      CustomizeOption(
-                        label: "light green", 
-                        isSelected: true,
-                        selection: Container(
-                          width: 20,
-                          height: 20,
-                          decoration: BoxDecoration(
-                            color: Color(0xffb4b690),
-                            borderRadius: BorderRadius.circular(100),
-                            border: Border.all(width: 2, color: Colors.white)
-                          ),
-                        ),
-                        ),
-                      CustomizeOption(
-                        label: "Orange", 
-                        isSelected: false,
-                        selection: Container(
-                          width: 20,
-                          height: 20,
-                          decoration: BoxDecoration(
-                            color: AppColors.orange,
-                            borderRadius: BorderRadius.circular(100),
-                            border: Border.all(width: 2, color: Colors.white)
-                          ),
-                        ),
-                        ),
-                      CustomizeOption(
-                        label: "black", 
-                        isSelected: false,
-                        selection: Container(
-                          width: 20,
-                          height: 20,
-                          decoration: BoxDecoration(
-                            color: AppColors.black,
-                            borderRadius: BorderRadius.circular(100),
-                            border: Border.all(width: 2, color: Colors.white)
-                          ),
-                        ),
-                        ),
-                      CustomizeOption(
-                        label: "blue", 
-                        isSelected: false,
-                        selection: Container(
-                          width: 20,
-                          height: 20,
-                          decoration: BoxDecoration(
-                            color: Colors.blue,
-                            borderRadius: BorderRadius.circular(100),
-                            border: Border.all(width: 2, color: Colors.white)
-                          ),
-                        ),
-                        ),
-                      CustomizeOption(
-                        label: "Red", 
-                        isSelected: false,
-                        selection: Container(
-                          width: 20,
-                          height: 20,
-                          decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(100),
-                            border: Border.all(width: 2, color: Colors.white)
-                          ),
-                        ),
-                        ),
-                      CustomizeOption(
-                        label: "Yellow", 
-                        isSelected: false,
-                        selection: Container(
-                          width: 20,
-                          height: 20,
-                          decoration: BoxDecoration(
-                            color: Colors.yellow,
-                            borderRadius: BorderRadius.circular(100),
-                            border: Border.all(width: 2, color: Colors.white)
-                          ),
-                        ),
-                        ),
-                    ]);
+                    options: List.generate(product.colors.length, 
+                    (index){
+                      return CustomizeOption(label: product.colors[index], isSelected: false);
+                    }));
                   });
                 },
                 label: "Color",

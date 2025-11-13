@@ -172,7 +172,7 @@ class SearchPage extends StatelessWidget {
                                       print("product: "+product.name);
                                      Navigator.pushNamed(context, AppRoutes.productDetails, arguments: product);
                                     },
-                                    imageUrl: product.imageUrl,
+                                    imageUrl: product.imageUrl[0],
                                     title: product.name,
                                     price:
                                         "\$${product.price.toStringAsFixed(2)}",
