@@ -1,3 +1,4 @@
+import 'package:depi_final_project/features/store/screens/search_page.dart';
 import 'package:flutter/material.dart';
 import 'package:depi_final_project/shared/spacing.dart';
 import 'package:depi_final_project/core/theme/colors.dart';
@@ -10,7 +11,6 @@ import 'package:depi_final_project/features/home/widgets/new_in_list.dart';
 import 'package:depi_final_project/features/home/widgets/categories_list.dart';
 import 'package:depi_final_project/features/store/widgets/section_header.dart';
 import 'package:depi_final_project/features/home/widgets/top_selling_List.dart';
-
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -97,7 +97,10 @@ class _HomeViewState extends State<HomeView> {
                           isExpanded: true,
                           underline: const SizedBox(),
                           items: const [
-                            DropdownMenuItem(value: 'Male', child: Text('Male')),
+                            DropdownMenuItem(
+                              value: 'Male',
+                              child: Text('Male'),
+                            ),
                             DropdownMenuItem(
                               value: 'Female',
                               child: Text('Female'),
@@ -115,7 +118,10 @@ class _HomeViewState extends State<HomeView> {
                   IconButton(
                     icon: const Icon(FontAwesomeIcons.cartFlatbed),
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => Cart(),));
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Cart()),
+                      );
                     },
                   ),
                 ],
@@ -123,21 +129,30 @@ class _HomeViewState extends State<HomeView> {
 
               verticalSpacing(24),
 
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                decoration: BoxDecoration(
-                  color: AppColors.darkSecondary,
-                  borderRadius: BorderRadius.circular(25),
-                ),
-                child: TextField(
-                  style: AppTextStyles.font17WiteRegular.copyWith(
-                    fontSize: 16.sp,
+              GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(
+                    context,
+                    AppRoutes.search
+                  );
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  decoration: BoxDecoration(
+                    color: AppColors.darkSecondary,
+                    borderRadius: BorderRadius.circular(25),
                   ),
-                  decoration: const InputDecoration(
-                    icon: Icon(Icons.search, color: Colors.white54),
-                    hintText: 'Search',
-                    hintStyle: TextStyle(color: Colors.white54),
-                    border: InputBorder.none,
+                  child: TextField(
+                    enabled: false, // عشان ما يفتحش الكيبورد
+                    style: AppTextStyles.font17WiteRegular.copyWith(
+                      fontSize: 16.sp,
+                    ),
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.search, color: Colors.white54),
+                      hintText: 'Search',
+                      hintStyle: TextStyle(color: Colors.white54),
+                      border: InputBorder.none,
+                    ),
                   ),
                 ),
               ),

@@ -1,17 +1,19 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:depi_final_project/features/store/widgets/select_filed.dart';
 import 'package:depi_final_project/features/store/widgets/header_bottom_sheat.dart';
-
+import 'package:depi_final_project/features/store/widgets/select_filed.dart';
+import 'package:flutter/material.dart';
 
 class FilterBottomSheet extends StatefulWidget {
   final String title;
   final List<String> options;
+  final ValueChanged<String>? onSelect;
+  final String? initialValue;
 
   const FilterBottomSheet({
     super.key,
     required this.title,
     required this.options,
+    this.onSelect,
+    this.initialValue,
   });
 
   @override
@@ -22,9 +24,15 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
   String? selectedOption;
 
   @override
+  void initState() {
+    super.initState();
+    selectedOption = widget.initialValue;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
-      height: 844.h,
+      height: 844,
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: const BoxDecoration(
@@ -37,7 +45,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
           HeaderBottomSheet(
             text: widget.title,
             onTap: () {
-              //cleare option
+              setState(() => selectedOption = null);
             },
           ),
           const SizedBox(height: 30),
@@ -51,7 +59,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                 return GestureDetector(
                   onTap: () {
                     setState(() => selectedOption = option);
-                    // Navigator.pop(context, option);
+                    if(widget.onSelect != null) widget.onSelect!(option);
                   },
                   child: SelectFiled(isSelected: isSelected, option: option),
                 );

@@ -13,6 +13,8 @@ class ProductModel {
   final String imageUrl;
   final DocumentReference category; // ربط بالفئة (Category)
   final DateTime createdAt;
+  final String gender; // إضافة حقل الـ Gender
+  final double? oldPrice; // <- هنا ضفت المتغير الجديد
 
   ProductModel({
     required this.id,
@@ -27,6 +29,9 @@ class ProductModel {
     required this.imageUrl,
     required this.category,
     required this.createdAt,
+    this.oldPrice,
+
+    required this.gender, // تعديل الكونستركتور
   });
 
   factory ProductModel.fromFirestore(DocumentSnapshot doc) {
@@ -44,6 +49,11 @@ class ProductModel {
       imageUrl: data['imageUrl'] ?? '',
       category: data['category'],
       createdAt: (data['createdAt'] as Timestamp).toDate(),
+      oldPrice: data['oldPrice'] != null
+          ? (data['oldPrice'] as num).toDouble()
+          : null,
+
+      gender: data['gender'] ?? 'Men', // قيمة افتراضية لو مش موجودة
     );
   }
 
@@ -60,6 +70,9 @@ class ProductModel {
       'imageUrl': imageUrl,
       'category': category,
       'createdAt': Timestamp.fromDate(createdAt),
+      'oldPrice': oldPrice,
+
+      'gender': gender, // إضافة للـ Firestore
     };
   }
 }

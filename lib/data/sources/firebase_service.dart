@@ -19,10 +19,26 @@ class FirebaseService {
 
   // جلب منتجات حسب الكاتيجوري
   Future<List<ProductModel>> getProductsByCategory(String categoryId) async {
-    final snapshot = await firestore
+  final snapshot = await firestore
+      .collection('products')
+      .where(
+        'category',
+        isEqualTo: categoryId, // لو مخزن كـ String
+      )
+      .get();
+
+  // لو مفيش نتايج، نجرب Reference
+  if (snapshot.docs.isEmpty) {
+    final ref = firestore.collection('categories').doc(categoryId);
+    final snapshotRef = await firestore
         .collection('products')
-        .where('category', isEqualTo: firestore.collection('categories').doc(categoryId))
+        .where('category', isEqualTo: ref)
         .get();
-    return snapshot.docs.map((doc) => ProductModel.fromFirestore(doc)).toList();
+
+    return snapshotRef.docs.map((doc) => ProductModel.fromFirestore(doc)).toList();
   }
+
+  return snapshot.docs.map((doc) => ProductModel.fromFirestore(doc)).toList();
+}
+
 }
