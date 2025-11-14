@@ -1,7 +1,9 @@
 import 'package:depi_final_project/data/repos/home_repo_implementation.dart';
 import 'package:depi_final_project/data/sources/firebase_service.dart';
 import 'package:depi_final_project/features/personalization/cubit/personalization_cubit.dart';
+import 'package:depi_final_project/features/store/cubit/cart_cubit.dart';
 import 'package:depi_final_project/features/store/cubit/store_cubit.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -16,6 +18,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // await dotenv.load(fileName: ".env");
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  print(FirebaseAuth.instance.currentUser?.uid??"User not registered");
   runApp(const MyApp());
 }
 
@@ -32,6 +35,7 @@ class _MyAppState extends State<MyApp> {
       providers: [
         BlocProvider(create: (context) => AuthCubit()),
         BlocProvider(create: (context) => PersonalizationCubit()),
+        BlocProvider(create: (context) => CartCubit()),
         // BlocProvider(
         // create: (context) => SearchCubit(
         // HomeRepoImplementation(firebaseService: FirebaseService()),

@@ -23,7 +23,7 @@ class CartItem extends StatelessWidget {
       child: Row(
         
         children: [
-        Image.asset(image, width: 100, height: 100,fit: BoxFit.contain,),
+        Image.network(image, width: 100, height: 100,fit: BoxFit.contain,),
         SizedBox(width: 5,),
         Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -36,7 +36,7 @@ class CartItem extends StatelessWidget {
               children: [
                 Text(title),
                 SizedBox(width: 50,),
-                Text("\$148", style: GoogleFonts.gabarito(textStyle: TextStyle(
+                Text("\$$price", style: GoogleFonts.gabarito(textStyle: TextStyle(
                   fontWeight: FontWeight.bold, fontSize: 12
                 )),)
               ],
@@ -50,7 +50,7 @@ class CartItem extends StatelessWidget {
                   text: TextSpan(
                     text: "Size", style: TextStyle(color: Color.fromARGB(96, 39, 39, 128)),
                     children: [TextSpan(
-                      text: size,
+                      text: " - $size",
                       style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black)
                     )]),
                   
@@ -60,7 +60,7 @@ class CartItem extends StatelessWidget {
                   text: TextSpan(
                     text: "Color", style: TextStyle(color: Color.fromARGB(96, 39, 39, 128)),
                     children: [TextSpan(
-                      text: color,
+                      text: " - $color",
                       style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black)
                     )]),
                   

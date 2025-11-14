@@ -8,14 +8,14 @@ class ProductModel {
   final double rating;
   final int stock;
   final String productId;
-  final List<String> colors;
+  final List<Map<String, dynamic>> colors;
   final List<String> sizes;
   final List<String> imageUrl;
   final DocumentReference category; // ربط بالفئة (Category)
   final DateTime createdAt;
   final String gender; // إضافة حقل الـ Gender
   final double? oldPrice; // <- هنا ضفت المتغير الجديد
-  final String selectedSize;
+  
 
   ProductModel({
     required this.id,
@@ -33,7 +33,7 @@ class ProductModel {
     this.oldPrice,
 
     required this.gender, // تعديل الكونستركتور
-    required this.selectedSize,
+
   });
 
   factory ProductModel.fromFirestore(DocumentSnapshot doc) {
@@ -46,7 +46,7 @@ class ProductModel {
       rating: (data['rating'] ?? 0).toDouble(),
       stock: data['stock'] ?? 0,
       productId: data['productId'] ?? '',
-      colors: List<String>.from(data['color'] ?? []),
+      colors: List<Map<String, dynamic>>.from(data['color'] ?? []),
       sizes: List<String>.from(data['size'] ?? []),
       imageUrl:List<String>.from( data['imageUrl'] ?? ''),
       category: data['category'],
@@ -56,7 +56,7 @@ class ProductModel {
           : null,
 
       gender: data['gender'] ?? 'Men', 
-      selectedSize: data['selectedSize']??"no sizes", // قيمة افتراضية لو مش موجودة
+       // قيمة افتراضية لو مش موجودة
       
     );
   }
@@ -77,7 +77,7 @@ class ProductModel {
       'oldPrice': oldPrice,
 
       'gender': gender, // إضافة للـ Firestore
-      'selectedSize': selectedSize
+      
     };
   }
 }
