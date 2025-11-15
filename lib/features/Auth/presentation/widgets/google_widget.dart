@@ -1,20 +1,17 @@
-
-import 'package:depi_final_project/core/theme/text_style.dart';
-import 'package:depi_final_project/features/Auth/cubit/auth_cubit.dart';
-import 'package:depi_final_project/features/Auth/services/auth_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:depi_final_project/core/theme/text_style.dart';
+
+// import 'package:depi_final_project/features/Auth/cubit/auth_cubit.dart';
+// import 'package:depi_final_project/features/Auth/services/auth_service.dart';
+// import 'package:flutter_bloc/flutter_bloc.dart';
 
 class GoogleBottom extends StatelessWidget {
-  const GoogleBottom({
-    super.key, this.onTap,
-  });
+  const GoogleBottom({super.key, this.onTap});
 
   final void Function()? onTap;
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<AuthCubit>();
     return ElevatedButton.icon(
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.white,

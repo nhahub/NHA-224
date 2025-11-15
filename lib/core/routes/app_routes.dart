@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:depi_final_project/features/admin/admin_page.dart';
+import 'package:depi_final_project/features/admin/admin_dashboard.dart';
 import 'package:depi_final_project/features/Auth/cubit/auth_cubit.dart';
+import 'package:depi_final_project/features/admin/add_product_page.dart';
 import 'package:depi_final_project/features/layout/BottomNavLayout.dart';
+import 'package:depi_final_project/features/admin/add_category_page.dart';
+import 'package:depi_final_project/features/admin/view_products_page.dart';
 import 'package:depi_final_project/features/store/screens/search_page.dart';
+import 'package:depi_final_project/features/admin/view_categories_page.dart';
 import 'package:depi_final_project/features/Auth/presentation/login_page.dart';
 import 'package:depi_final_project/features/home/screens/shop_by_category.dart';
 import 'package:depi_final_project/features/Auth/presentation/splash_screen.dart';
@@ -21,6 +26,11 @@ class AppRoutes {
   static const String home = '/home';
   static const String login = '/login';
   static const String adminPage = '/adminPage';
+  static const String adminDashboard = '/admin/dashboard';
+  static const String addCategory = '/admin/addCategory';
+  static const String addProduct = '/admin/addProduct';
+  static const String viewProducts = '/admin/viewProducts';
+  static const String viewCategories = '/admin/viewCategories';
   static const String registerPage = '/registerPage';
   static const String shopByCategory = '/shopByCategory';
   static const String productsByCategory = '/productsByCategory';
@@ -45,6 +55,16 @@ class AppRoutes {
         );
       case adminPage:
         return MaterialPageRoute(builder: (_) => const AdminPage());
+      case adminDashboard:
+        return MaterialPageRoute(builder: (_) => const AdminDashboard());
+      case addCategory:
+        return MaterialPageRoute(builder: (_) => const AddCategoryPage());
+      case addProduct:
+        return MaterialPageRoute(builder: (_) => const AddProductPage());
+      case viewProducts:
+        return MaterialPageRoute(builder: (_) => const ViewProductsPage());
+      case viewCategories:
+        return MaterialPageRoute(builder: (_) => const ViewCategoriesPage());
       case search:
         return MaterialPageRoute(builder: (_) => const SearchPage());
       case splash:
