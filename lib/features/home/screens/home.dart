@@ -1,4 +1,3 @@
-import 'package:depi_final_project/features/store/screens/search_page.dart';
 import 'package:flutter/material.dart';
 import 'package:depi_final_project/shared/spacing.dart';
 import 'package:depi_final_project/core/theme/colors.dart';
@@ -11,6 +10,7 @@ import 'package:depi_final_project/features/home/widgets/new_in_list.dart';
 import 'package:depi_final_project/features/home/widgets/categories_list.dart';
 import 'package:depi_final_project/features/store/widgets/section_header.dart';
 import 'package:depi_final_project/features/home/widgets/top_selling_List.dart';
+// import 'package:depi_final_project/features/store/screens/search_page.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -131,10 +131,7 @@ class _HomeViewState extends State<HomeView> {
 
               GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    AppRoutes.search
-                  );
+                  Navigator.pushNamed(context, AppRoutes.search);
                 },
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
