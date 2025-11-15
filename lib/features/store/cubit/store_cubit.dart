@@ -1,12 +1,13 @@
-import 'package:depi_final_project/data/models/category_model.dart';
-import 'package:depi_final_project/data/models/product_model.dart';
-import 'package:depi_final_project/data/repos/home_repo.dart';
-import 'package:depi_final_project/features/store/cubit/store_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:depi_final_project/data/repos/home_repo.dart';
+import 'package:depi_final_project/data/models/product_model.dart';
+import 'package:depi_final_project/data/models/category_model.dart';
+import 'package:depi_final_project/features/store/cubit/store_state.dart';
 
 class StoreCubit extends Cubit<StoreState> {
   final HomeRepo homeRepo;
-  List<Category> _categories = [];
+  List<CategoryModel> _categories = [];
+  List<CategoryModel> get categories => _categories;
   List<ProductModel> _allProducts = [];
   List<ProductModel> _filteredProducts = [];
 
@@ -29,7 +30,9 @@ class StoreCubit extends Cubit<StoreState> {
     emit(StoreLoading());
     final result = await homeRepo.fetchCategories();
     result.fold(
-      (failure) => emit(StoreError(failure.errorMessage ?? 'Failed to fetch categories')),
+      (failure) {
+        emit(StoreError(failure.errorMessage));
+      },
       (cats) {
         _categories = cats;
         emit(StoreCategoriesLoaded(cats));
@@ -42,7 +45,9 @@ class StoreCubit extends Cubit<StoreState> {
     emit(StoreLoading());
     final result = await homeRepo.fetchProductsByCategory(categoryId);
     result.fold(
-      (failure) => emit(StoreError(failure.errorMessage ?? 'Failed to fetch products')),
+      (failure) {
+        emit(StoreError(failure.errorMessage));
+      },
       (products) {
         _allProducts = products;
         _applyFilters();
@@ -53,7 +58,8 @@ class StoreCubit extends Cubit<StoreState> {
   // البحث
   void searchProducts(String query) {
     _filteredProducts = _allProducts.where((p) {
-      final matchQuery = query.isEmpty || p.name.toLowerCase().contains(query.toLowerCase());
+      final matchQuery =
+          query.isEmpty || p.name.toLowerCase().contains(query.toLowerCase());
       return matchQuery && _matchesFilters(p);
     }).toList();
 
@@ -62,7 +68,12 @@ class StoreCubit extends Cubit<StoreState> {
   }
 
   // تحديث الفلاتر
-  void updateFilters({double? minPrice, double? maxPrice, String? gender, String? sort}) {
+  void updateFilters({
+    double? minPrice,
+    double? maxPrice,
+    String? gender,
+    String? sort,
+  }) {
     _minPrice = minPrice ?? _minPrice;
     _maxPrice = maxPrice ?? _maxPrice;
     _gender = gender ?? _gender;

@@ -74,9 +74,7 @@ class HaveOrdersScreen extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
         decoration: BoxDecoration(
-          color: isActive
-              ? Colors.deepPurple
-              : Colors.grey[100],
+          color: isActive ? Colors.deepPurple : Colors.grey[100],
 
           borderRadius: BorderRadius.circular(20),
         ),
@@ -91,28 +89,28 @@ class HaveOrdersScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBottomNav() {
-    return BottomNavigationBar(
-      currentIndex: 2,
-      selectedItemColor: Colors.deepPurple,
-      unselectedItemColor: Colors.grey,
-      showSelectedLabels: false,
-      showUnselectedLabels: false,
-      items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: 'Home'),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.notifications_none),
-          label: 'Notifications',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.receipt_long_rounded),
-          label: 'Orders',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.person_outline),
-          label: 'Profile',
-        ),
-      ],
-    );
-  }
+  // Widget _buildBottomNav() {
+  //   return BottomNavigationBar(
+  //     currentIndex: 2,
+  //     selectedItemColor: Colors.deepPurple,
+  //     unselectedItemColor: Colors.grey,
+  //     showSelectedLabels: false,
+  //     showUnselectedLabels: false,
+  //     items: const [
+  //       BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: 'Home'),
+  //       BottomNavigationBarItem(
+  //         icon: Icon(Icons.notifications_none),
+  //         label: 'Notifications',
+  //       ),
+  //       BottomNavigationBarItem(
+  //         icon: Icon(Icons.receipt_long_rounded),
+  //         label: 'Orders',
+  //       ),
+  //       BottomNavigationBarItem(
+  //         icon: Icon(Icons.person_outline),
+  //         label: 'Profile',
+  //       ),
+  //     ],
+  //   );
+  // }
 }

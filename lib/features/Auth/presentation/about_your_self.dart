@@ -1,8 +1,8 @@
-import 'package:depi_final_project/features/Auth/presentation/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:depi_final_project/shared/spacing.dart';
 import 'package:depi_final_project/core/theme/colors.dart';
 import 'package:depi_final_project/core/theme/text_style.dart';
+// import 'package:depi_final_project/features/Auth/presentation/widgets/custom_button.dart';
 
 class AboutYourselfScreen extends StatefulWidget {
   const AboutYourselfScreen({super.key});
@@ -155,9 +155,7 @@ class _AboutYourselfScreenState extends State<AboutYourselfScreen> {
                   color: const Color(0xFF9B6BFF),
                   borderRadius: BorderRadius.circular(30),
                 ),
-                child: const Center(
-                  // child: CustomButton(textButton: 'Continue', onPressed: null),
-                ),
+                child: const Center(),
               ),
               verticalSpacing(20),
             ],

@@ -6,9 +6,9 @@ class FirebaseService {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   // جلب كل الكاتيجوريز
-  Future<List<Category>> getCategories() async {
+  Future<List<CategoryModel>> getCategories() async {
     final snapshot = await firestore.collection('categories').get();
-    return snapshot.docs.map((doc) => Category.fromFirestore(doc)).toList();
+    return snapshot.docs.map((doc) => CategoryModel.fromFirestore(doc)).toList();
   }
 
   // جلب كل المنتجات

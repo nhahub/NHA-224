@@ -1,9 +1,9 @@
-// import 'package:depi_final_project/core/theme/colors.dart';
-import 'package:depi_final_project/data/models/category_model.dart';
 import 'package:flutter/material.dart';
+import 'package:depi_final_project/data/models/category_model.dart';
+// import 'package:depi_final_project/core/theme/colors.dart';
 // import 'package:depi_final_project/features/store/widgets/cart_of_cat.dart';
 class ShopByCatWidget extends StatelessWidget {
-  final List<Category> categories;
+  final List<CategoryModel> categories;
   final Function(String categoryId) onCategorySelected;
 
   const ShopByCatWidget({
