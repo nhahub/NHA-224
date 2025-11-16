@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:depi_final_project/core/theme/colors.dart';
+import 'package:depi_final_project/core/theme/spacing.dart';
+import 'package:depi_final_project/core/theme/text_style.dart';
 import 'package:depi_final_project/features/personalization/ui/screens/address.dart';
 import 'package:depi_final_project/features/personalization/ui/screens/payment.dart';
 import 'package:depi_final_project/features/personalization/ui/widget/menuItem.dart';
 import 'package:depi_final_project/features/personalization/ui/screens/favourites.dart';
 import 'package:depi_final_project/features/personalization/cubit/personalization_cubit.dart';
 import 'package:depi_final_project/features/personalization/cubit/personalization_state.dart';
+import 'package:depi_final_project/features/personalization/ui/screens/settings_screen_english.dart';
 // import 'package:depi_final_project/core/errors/failures.dart';
 // import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
@@ -75,10 +78,14 @@ class _ProfileState extends State<Profile> {
 
                   // Info Container
                   Container(
-                    padding: const EdgeInsets.all(12),
+                    padding: EdgeInsets.all(Spacing.md),
                     decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
-                      borderRadius: BorderRadius.circular(12),
+                      color: Theme.of(context).colorScheme.surfaceVariant,
+                      borderRadius: BorderRadius.circular(Spacing.lgRadius),
+                      border: Border.all(
+                        color: Theme.of(context).colorScheme.outline,
+                        width: 1,
+                      ),
                     ),
                     child: Row(
                       children: [
@@ -86,27 +93,39 @@ class _ProfileState extends State<Profile> {
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
+                            children: [
                               Text(
                                 "Gilbert Jones",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
+                                style: AppTextStyles.headline6.copyWith(
+                                  color: Theme.of(context).colorScheme.onSurface,
                                 ),
                               ),
-                              SizedBox(height: 4),
-                              Text("Gilbertjones001@gmail.com"),
-                              SizedBox(height: 2),
-                              Text("121-224-7890"),
+                              SizedBox(height: Spacing.xs),
+                              Text(
+                                "gilbertjones001@gmail.com",
+                                style: AppTextStyles.bodySmall.copyWith(
+                                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                ),
+                              ),
+                              SizedBox(height: Spacing.xs),
+                              Text(
+                                "+1 212-555-1234",
+                                style: AppTextStyles.bodySmall.copyWith(
+                                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                ),
+                              ),
                             ],
                           ),
                         ),
                         // Edit Button
                         TextButton(
                           onPressed: () {},
-                          child: const Text(
-                            "Edit",
-                            style: TextStyle(color: AppColors.lightPrimary),
+                          child: Text(
+                            "Edit Profile",
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
                       ],
@@ -115,6 +134,16 @@ class _ProfileState extends State<Profile> {
                   const SizedBox(height: 20),
 
                   // Menu Items
+                  Menuitem(
+                    context: context,
+                    title: "Settings",
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const SettingsScreen()),
+                      );
+                    },
+                  ),
                   Menuitem(
                     context: context,
                     title: "Address",
@@ -145,7 +174,7 @@ class _ProfileState extends State<Profile> {
                       );
                     },
                   ),
-                  Menuitem(context: context, title: "Help", onTap: () {}),
+                  Menuitem(context: context, title: "Help Center", onTap: () {}),
                   Menuitem(context: context, title: "Support", onTap: () {}),
 
                   const SizedBox(height: 20),

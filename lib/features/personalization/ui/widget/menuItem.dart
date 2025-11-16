@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:depi_final_project/core/theme/spacing.dart';
+import 'package:depi_final_project/core/theme/text_style.dart';
 
 class Menuitem extends StatelessWidget {
   const Menuitem({super.key, required this.context, required this.title, required this.onTap});
@@ -9,39 +11,39 @@ class Menuitem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-     return Padding(
-    padding: const EdgeInsets.only(bottom: 12),
-    child: Container(
-      decoration: BoxDecoration(
-        color: Colors.grey.shade100,
-        borderRadius: BorderRadius.circular(16), 
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12.withOpacity(0.05), 
-            blurRadius: 6,
-            offset: const Offset(0, 2),
+    return Padding(
+      padding: EdgeInsets.only(bottom: Spacing.md),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surfaceVariant,
+          borderRadius: BorderRadius.circular(Spacing.lgRadius),
+          boxShadow: [
+            BoxShadow(
+              color: Theme.of(context).colorScheme.shadow.withOpacity(0.1),
+              blurRadius: 6,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: ListTile(
+          onTap: onTap,
+          title: Text(
+            title,
+            style: AppTextStyles.bodyMedium.copyWith(
+              color: Theme.of(context).colorScheme.onSurface,
+              fontWeight: FontWeight.w500,
+            ),
           ),
-        ],
-      ),
-      child: ListTile(
-        onTap: onTap,
-        title: Text(
-          title,
-          style: const TextStyle(
-            fontWeight: FontWeight.w500,
-            fontSize: 15,
+          trailing: Icon(
+            Icons.arrow_forward_ios,
+            size: 16,
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(Spacing.lgRadius),
           ),
         ),
-        trailing: const Icon(
-          Icons.arrow_forward_ios,
-          size: 16,
-          color: Colors.grey,
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
       ),
-    ),
-  );
+    );
   }
 } 
