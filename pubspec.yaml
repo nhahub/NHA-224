@@ -91,7 +91,7 @@ flutter:
   fonts:
     - family: cairo
       fonts:
-        - asset: assets/fonts/static/Cairo-ExtraBold.ttf
+        - asset: assets/fonts/static/Cairo-Regular.ttf
         #       - asset: assets/fonts/Nunito_Sans/NunitoSans-VariableFont_YTLC,opsz,wdth,wght.ttf
         #         weight: 600
         # - asset: assets/fonts/NunitoSans-Bold.ttf

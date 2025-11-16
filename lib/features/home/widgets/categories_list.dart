@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:depi_final_project/data/models/category_model.dart';
 import 'package:depi_final_project/features/home/widgets/catrgoery_widget.dart';
 
 class CategoriesList extends StatelessWidget {
@@ -7,7 +8,7 @@ class CategoriesList extends StatelessWidget {
     required this.categories,
   });
 
-  final List<Map<String, String>> categories;
+  final List<CategoryModel> categories;
 
   @override
   Widget build(BuildContext context) {
@@ -17,10 +18,11 @@ class CategoriesList extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         itemCount: categories.length,
         itemBuilder: (context, index) {
-          final item = categories[index];
+          final category = categories[index];
           return CatrgoeryWidget(
-            image: item['image']!,
-            label: item['label']!,
+            image: category.imageUrl,
+            label: category.name,
+            categoryId: category.id,
           );
         },
       ),
