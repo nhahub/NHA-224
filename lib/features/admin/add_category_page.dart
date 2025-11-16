@@ -1,6 +1,7 @@
 import 'dart:io';
 import '../../core/config.dart';
 import 'package:flutter/material.dart';
+import '../../core/widgets/app_bar_widget.dart';
 import '../../data/models/category_model.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../data/services/category_service.dart';
@@ -72,7 +73,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Add Category')),
+      appBar: const CustomAppBar(title: 'Add Category'),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(

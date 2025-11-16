@@ -1,6 +1,7 @@
 import 'admin_dashboard.dart';
 import 'package:flutter/material.dart';
 import '../../core/routes/app_routes.dart';
+import '../../core/widgets/app_bar_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -24,7 +25,7 @@ class AdminPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Admin')),
+      appBar: const CustomAppBar(title: 'Admin'),
       body: FutureBuilder<bool>(
         future: _checkIsAdmin(),
         builder: (context, snapshot) {
