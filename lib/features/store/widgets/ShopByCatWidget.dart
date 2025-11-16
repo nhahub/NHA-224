@@ -19,29 +19,57 @@ class ShopByCatWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 30),
-        const Text(
+        Text(
           "Shop by Categories",
-          style: TextStyle(
-            fontFamily: 'cairo',
-            fontWeight: FontWeight.w900,
-            fontSize: 24,
-            color: AppColors.black,
-          ),
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.w700,
+                color: Theme.of(context).colorScheme.onBackground,
+              ),
         ),
         const SizedBox(height: 12),
-        ListView.builder(
-          itemCount: categories.length,
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemBuilder: (context, index) {
-            final category = categories[index];
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
-              child: CardOfCat(
-                title: category.name,
-                imageUrl: category.imageUrl,
-                onTap: () => onCategorySelected?.call(category.id),
+        LayoutBuilder(
+          builder: (context, constraints) {
+            // Switch to grid on wider layouts for better responsiveness
+            final isGrid = constraints.maxWidth >= 600;
+            if (!isGrid) {
+              return ListView.builder(
+                itemCount: categories.length,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  final category = categories[index];
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: CardOfCat(
+                      title: category.name,
+                      imageUrl: category.imageUrl,
+                      onTap: () => onCategorySelected?.call(category.id),
+                    ),
+                  );
+                },
+              );
+            }
+
+            // Grid on tablets / wide screens
+            final crossAxisCount = constraints.maxWidth >= 900 ? 3 : 2;
+            return GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: crossAxisCount,
+                mainAxisSpacing: 8,
+                crossAxisSpacing: 8,
+                childAspectRatio: 3.2,
               ),
+              itemCount: categories.length,
+              itemBuilder: (context, index) {
+                final category = categories[index];
+                return CardOfCat(
+                  title: category.name,
+                  imageUrl: category.imageUrl,
+                  onTap: () => onCategorySelected?.call(category.id),
+                );
+              },
             );
           },
         ),

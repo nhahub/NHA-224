@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:depi_final_project/core/theme/colors.dart';
 import 'package:depi_final_project/core/theme/text_style.dart';
+import 'package:depi_final_project/core/theme/spacing.dart';
 
 class ProductWidget extends StatelessWidget {
   final String image;
@@ -18,20 +19,27 @@ class ProductWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(right: 16),
+      padding: EdgeInsets.only(right: Spacing.lg),
       child: Container(
         width: 159,
         height: 281,
         decoration: BoxDecoration(
-          color: AppColors.darkSecondary,
-          borderRadius: BorderRadius.circular(16),
+          color: Theme.of(context).colorScheme.surfaceVariant,
+          borderRadius: BorderRadius.circular(Spacing.lgRadius),
+          boxShadow: [
+            BoxShadow(
+              color: Theme.of(context).colorScheme.shadow.withOpacity(0.1),
+              blurRadius: 6,
+              offset: const Offset(0, 2),
+            ),
+          ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(16),
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(Spacing.lgRadius),
               ),
               child: Image.asset(
                 image,
@@ -41,29 +49,34 @@ class ProductWidget extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              padding: EdgeInsets.symmetric(
+                horizontal: Spacing.md,
+                vertical: Spacing.sm,
+              ),
               child: Text(
                 title,
-                style: AppTextStyles.font17WiteRegular.copyWith(fontSize: 14),
+                style: AppTextStyles.bodyMedium.copyWith(
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
+              padding: EdgeInsets.symmetric(horizontal: Spacing.md),
               child: Row(
                 children: [
                   Text(
                     price,
-                    style: AppTextStyles.font17WiteRegular.copyWith(
-                      fontSize: 14,
+                    style: AppTextStyles.bodyMedium.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                   if (oldPrice != null) ...[
-                    const SizedBox(width: 8),
+                    SizedBox(width: Spacing.sm),
                     Text(
                       oldPrice!,
-                      style: AppTextStyles.font17WiteRegular.copyWith(
-                        color: Colors.white38,
-                        fontSize: 13,
+                      style: AppTextStyles.bodySmall.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                         decoration: TextDecoration.lineThrough,
                       ),
                     ),
