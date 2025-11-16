@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:depi_final_project/shared/spacing.dart';
 import 'package:depi_final_project/core/theme/colors.dart';
+import 'package:depi_final_project/core/theme/spacing.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:depi_final_project/core/errors/failures.dart';
 import 'package:depi_final_project/core/theme/text_style.dart';
