@@ -37,10 +37,14 @@ class Cart extends StatelessWidget {
                       alignment: Alignment.centerRight,
                       child: TextButton(
                         onPressed: () {},
+                        style: TextButton.styleFrom(
+                          padding: EdgeInsets.zero,
+                          minimumSize: Size.zero,
+                        ),
                         child: Text(
                           "Remove all",
                           style: TextStyle(
-                            color: Colors.redAccent,
+                            color: theme.error,
                             fontSize: 14.sp,
                             fontWeight: FontWeight.w600,
                           ),
@@ -57,7 +61,13 @@ class Cart extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Divider(color: Colors.white24, thickness: 1, height: 24.h),
+                    const SizedBox(height: 24),
+                    Divider(
+                      color: theme.outline.withOpacity(0.3),
+                      thickness: 1,
+                      height: 1,
+                    ),
+                    const SizedBox(height: 16),
                     _buildPriceSection(theme),
                   ],
                 ),
@@ -74,36 +84,45 @@ class Cart extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset("assets/images/bag.png", width: 140.w, height: 140.h),
+            Opacity(
+              opacity: 0.6,
+              child: Image.asset("assets/images/bag.png", width: 140.w, height: 140.h),
+            ),
             SizedBox(height: 24.h),
             Text(
               "Your cart is empty",
               style: TextStyle(
                 fontSize: 22.sp,
-                color: Colors.white,
+                color: theme.onSurface,
                 fontWeight: FontWeight.w600,
               ),
             ),
             SizedBox(height: 12.h),
             Text(
               "Looks like you haven't added anything yet.",
-              style: TextStyle(fontSize: 14.sp, color: Colors.white70),
+              style: TextStyle(
+                fontSize: 14.sp,
+                color: theme.onSurfaceVariant,
+              ),
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 28.h),
-            ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.darkSecondary,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(32.r),
+            SizedBox(
+              width: 200.w,
+              child: ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: theme.primary,
+                  foregroundColor: theme.onPrimary,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 40.w, vertical: 12.h),
                 ),
-                padding: EdgeInsets.symmetric(horizontal: 40.w, vertical: 14.h),
-              ),
-              child: Text(
-                "Explore category",
-                style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w500),
+                child: Text(
+                  "Explore category",
+                  style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w500),
+                ),
               ),
             ),
           ],
@@ -128,16 +147,20 @@ class Cart extends StatelessWidget {
           child: ElevatedButton(
             onPressed: () {},
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.darkSecondary,
-              foregroundColor: Colors.white,
+              backgroundColor: theme.primary,
+              foregroundColor: theme.onPrimary,
+              elevation: 0,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(32.r),
+                borderRadius: BorderRadius.circular(12.r),
               ),
               padding: EdgeInsets.symmetric(vertical: 16.h),
             ),
             child: Text(
               "Checkout",
-              style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 16.sp,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ),

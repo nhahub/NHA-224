@@ -16,65 +16,81 @@ class CartItem extends StatelessWidget {
     final theme = Theme.of(context).colorScheme;
     return Container(
       width: double.infinity,
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        color: theme.secondary
+        borderRadius: BorderRadius.circular(12),
+        color: theme.surface,
+        border: Border.all(color: theme.outline.withOpacity(0.1)),
       ),
       child: Row(
-        
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-        Image.asset(image, width: 100, height: 100,fit: BoxFit.contain,),
-        SizedBox(width: 5,),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Image.asset(image, width: 80, height: 80, fit: BoxFit.cover),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title),
-                SizedBox(width: 50,),
-                Text("\$148", style: GoogleFonts.gabarito(textStyle: TextStyle(
-                  fontWeight: FontWeight.bold, fontSize: 12
-                )),)
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: theme.onSurface,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  "\$${price.toStringAsFixed(2)}",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                    color: theme.primary,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Text(
+                      "Size $size",
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: theme.onSurfaceVariant,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Text(
+                      "Color $color",
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: theme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    CounterBtn(icon: "+"),
+                    const SizedBox(width: 12),
+                    CounterBtn(icon: "-"),
+                  ],
+                ),
               ],
             ),
-            SizedBox(height: 10,),
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                RichText(
-                  text: TextSpan(
-                    text: "Size", style: TextStyle(color: Color.fromARGB(96, 39, 39, 128)),
-                    children: [TextSpan(
-                      text: size,
-                      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black)
-                    )]),
-                  
-                ),
-                SizedBox(width: 10,),
-                RichText(
-                  text: TextSpan(
-                    text: "Color", style: TextStyle(color: Color.fromARGB(96, 39, 39, 128)),
-                    children: [TextSpan(
-                      text: color,
-                      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black)
-                    )]),
-                  
-                ),
-                SizedBox(width: 50,),
-                CounterBtn(icon:"+"),
-                SizedBox(width: 5,),
-                CounterBtn(icon:"-"),
-              ],
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.delete_outline,
+              color: theme.error,
             ),
-          ],
-        )
-      ],)
-
+            onPressed: () {},
+          ),
+        ],
+      ),
     );
   }
 }

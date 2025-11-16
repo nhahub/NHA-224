@@ -9,17 +9,30 @@ class PriceDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-          Text(title, style: TextStyle(fontSize: 16, color: Color.fromARGB(104, 39, 39, 128)),),
-          Text("\$$price", style: TextStyle(fontWeight: isPriceBolded == true? FontWeight.bold :FontWeight.w600, fontSize: 16),)
-        ],),
-        SizedBox(height: 10,)
-      ],
+    final theme = Theme.of(context).colorScheme;
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w400,
+              color: theme.onSurfaceVariant,
+            ),
+          ),
+          Text(
+            "\$${price.toStringAsFixed(2)}",
+            style: TextStyle(
+              fontWeight: isPriceBolded == true ? FontWeight.bold : FontWeight.w600,
+              fontSize: 14,
+              color: isPriceBolded == true ? theme.primary : theme.onSurface,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

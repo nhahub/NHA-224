@@ -69,7 +69,7 @@ class ProductPage extends StatelessWidget {
               Text("\$148", style: GoogleFonts.gabarito(textStyle: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: Color(0xff8E6CEF)
+                color: AppColors.figmaPrimary
               )),),
           
               ProductOption(
