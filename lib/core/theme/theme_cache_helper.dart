@@ -10,11 +10,11 @@ class ThemeCacheHelper {
     await sharedPreferences.setInt(_themeIndexKey, themeIndex);
   }
   
-  /// استرجاع مؤشر الثيم المخزن، وإذا لم يكن موجودًا، يعيد القيمة الافتراضية 0.
+  /// استرجاع مؤشر الثيم المخزن، وإذا لم يكن موجودًا، يعيد القيمة الافتراضية 0 (للثيم الفاتح).
   Future<int> getCachedThemeIndex() async {
     final sharedPreferences = await SharedPreferences.getInstance();
     // استخدام المفتاح _themeIndexKey
     final cachedThemeIndex = sharedPreferences.getInt(_themeIndexKey);
-    return cachedThemeIndex ?? 0;
+    return cachedThemeIndex ?? 0; // 0 corresponds to AppTheme.light
   }
 }

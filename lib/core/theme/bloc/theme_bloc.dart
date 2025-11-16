@@ -19,7 +19,7 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
         // استرجاع مؤشر الثيم المخزن من الكاش
         final themeIndex = await ThemeCacheHelper().getCachedThemeIndex();
         // البحث عن الثيم المناسب بناءً على المؤشر
-        final theme = AppTheme.values.firstWhere((element) => element.index == themeIndex);
+        final theme = AppTheme.values.firstWhere((element) => element.index == themeIndex, orElse: () => AppTheme.light);
         emit(LoadingThemeState(appTheme: theme));
       } 
       // إذا كان الحدث هو تغيير الثيم
