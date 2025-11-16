@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:depi_final_project/data/models/category_model.dart';
 import 'package:depi_final_project/data/sources/firebase_service.dart';
+import 'package:depi_final_project/core/widgets/app_bar_widget.dart';
 
 class ViewCategoriesPage extends StatefulWidget {
   const ViewCategoriesPage({super.key});
@@ -110,11 +111,8 @@ class _ViewCategoriesPageState extends State<ViewCategoriesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('View Categories'),
-        centerTitle: true,
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        foregroundColor: Colors.white,
+      appBar: const CustomAppBar(
+        title: 'View Categories',
       ),
       body: Column(
         children: [

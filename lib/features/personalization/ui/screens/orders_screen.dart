@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:depi_final_project/core/widgets/app_bar_widget.dart';
 import 'package:depi_final_project/features/personalization/ui/widget/have_orders.dart';
 import 'package:depi_final_project/features/personalization/ui/widget/no_orders_yet.dart';
 
@@ -16,9 +17,8 @@ class OrdersScreen extends StatelessWidget {
     final bool hasOrders = dummyOrdersData.isNotEmpty;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Orders", style: TextStyle(fontWeight: FontWeight.bold)),
-        centerTitle: true,
+      appBar:const CustomAppBar(
+        title: "Orders",
       ),
       body: hasOrders
           ? HaveOrdersScreen(orders: dummyOrdersData)

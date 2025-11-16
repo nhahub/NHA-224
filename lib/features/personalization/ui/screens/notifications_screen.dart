@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:depi_final_project/core/theme/spacing.dart';
 import 'package:depi_final_project/core/theme/text_style.dart';
+import 'package:depi_final_project/core/widgets/app_bar_widget.dart';
 import 'package:depi_final_project/features/personalization/ui/widget/have_notifications.dart';
 import 'package:depi_final_project/features/personalization/ui/widget/no_notifications_yet.dart';
 
@@ -17,14 +19,19 @@ class NotificationsScreen extends StatelessWidget {
     final bool hasNotifications = dummyNotificationsData.isNotEmpty;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Notifications", style: AppTextStyles.font20WitekBold),
-        centerTitle: true,
+      appBar: const CustomAppBar(
+        title: "Notifications",
+        automaticallyImplyLeading: false,
       ),
       body: hasNotifications
           ? ListView.separated(
-              separatorBuilder: (context, index) => SizedBox(height: 10),
-              padding: const EdgeInsets.only(top: 30, left: 12, right: 12),
+              separatorBuilder: (context, index) =>
+                  SizedBox(height: Spacing.md),
+              padding: EdgeInsets.only(
+                top: Spacing.xxxl,
+                left: Spacing.md,
+                right: Spacing.md,
+              ),
               itemCount: dummyNotificationsData.length,
               itemBuilder: (context, index) {
                 return HaveNotifications(

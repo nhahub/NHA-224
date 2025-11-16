@@ -1,46 +1,29 @@
-// import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-// class ThemeManager extends ChangeNotifier {
-//   static const _themeKey = 'isDarkMode';
+class ThemeManager {
+  static final ThemeManager _instance = ThemeManager._internal();
+  factory ThemeManager() => _instance;
+  ThemeManager._internal();
 
-//   late ThemeMode _themeMode;
+  static const String _themeModeKey = 'THEME_MODE';
 
-//   ThemeMode get themeMode => _themeMode;
+  /// حفظ وضع الثيم في SharedPreferences
+  Future<void> setThemeMode(ThemeMode mode) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(_themeModeKey, mode.index);
+  }
 
-//   ThemeManager() {
-//     _loadThemeFromPrefs();
-//   }
+  /// استرجاع وضع الثيم المخزن
+  Future<ThemeMode?> getThemeMode() async {
+    final prefs = await SharedPreferences.getInstance();
+    final modeIndex = prefs.getInt(_themeModeKey);
 
-//   // تحميل الثيم المحفوظ من SharedPreferences
-//   void _loadThemeFromPrefs() async {
-//     final prefs = await SharedPreferences.getInstance();
-//     final isDark = prefs.getBool(_themeKey) ?? false;
-//     _themeMode = isDark ? ThemeMode.dark : ThemeMode.light;
-//     notifyListeners();
-//   }
+    if (modeIndex == null) return null;
 
-//   // حفظ الثيم في SharedPreferences
-//   Future<void> _saveThemeToPrefs(bool isDark) async {
-//     final prefs = await SharedPreferences.getInstance();
-//     await prefs.setBool(_themeKey, isDark);
-//   }
+    // التحقق من القيم الصالحة
+    if (modeIndex >= ThemeMode.values.length) return null;
 
-//   // تبديل بين الوضع الليلي والوضع العادي
-//   void toggleTheme() {
-//     if (_themeMode == ThemeMode.light) {
-//       _themeMode = ThemeMode.dark;
-//       _saveThemeToPrefs(true);
-//     } else {
-//       _themeMode = ThemeMode.light;
-//       _saveThemeToPrefs(false);
-//     }
-//     notifyListeners();
-//   }
-
-//   // فرض الوضع الليلي أو العادي
-//   void setTheme(ThemeMode mode) {
-//     _themeMode = mode;
-//     _saveThemeToPrefs(mode == ThemeMode.dark);
-//     notifyListeners();
-//   }
-// }
+    return ThemeMode.values[modeIndex];
+  }
+}

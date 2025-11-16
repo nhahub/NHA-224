@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:depi_final_project/core/theme/spacing.dart';
+import 'package:depi_final_project/core/theme/text_style.dart';
 
 class Button extends StatelessWidget {
   const Button({
@@ -11,15 +13,20 @@ class Button extends StatelessWidget {
     return ElevatedButton(
       onPressed: () {},
       style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(Spacing.lgRadius),
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        padding: EdgeInsets.symmetric(
+          horizontal: Spacing.lgH,
+          vertical: Spacing.md,
+        ),
       ),
       child: Text(
         text,
-        style: TextStyle(color: Colors.white),
+        style: AppTextStyles.button.copyWith(
+          color: Theme.of(context).colorScheme.onPrimary,
+        ),
       ),
     );
   }

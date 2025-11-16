@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:depi_final_project/core/theme/colors.dart';
 import 'package:depi_final_project/core/theme/text_style.dart';
+import 'package:depi_final_project/core/theme/spacing.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class NotificationCardComponent extends StatelessWidget {
@@ -11,17 +12,21 @@ class NotificationCardComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: AppColors.darkSecondary,
-
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      color: Theme.of(context).colorScheme.surfaceVariant,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(Spacing.lgRadius),
+      ),
+      elevation: Spacing.smElevation,
       child: ListTile(
-        leading: const Icon(
+        leading: Icon(
           FontAwesomeIcons.bell,
-          color: AppColors.darkTextPrimary,
+          color: Theme.of(context).colorScheme.primary,
         ),
         title: Text(
           message,
-          style: AppTextStyles.font17WiteRegular.copyWith(fontSize: 14),
+          style: AppTextStyles.bodyMedium.copyWith(
+            color: Theme.of(context).colorScheme.onSurface,
+          ),
         ),
       ),
     );

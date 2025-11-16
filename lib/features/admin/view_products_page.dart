@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:depi_final_project/data/models/product_model.dart';
 import 'package:depi_final_project/data/sources/firebase_service.dart';
+import 'package:depi_final_project/core/widgets/app_bar_widget.dart';
 
 class ViewProductsPage extends StatefulWidget {
   const ViewProductsPage({super.key});
@@ -113,11 +114,8 @@ class _ViewProductsPageState extends State<ViewProductsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('View Products'),
-        centerTitle: true,
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        foregroundColor: Colors.white,
+      appBar: const CustomAppBar(
+        title: 'View Products',
       ),
       body: Column(
         children: [

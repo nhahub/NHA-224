@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:depi_final_project/core/theme/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:depi_final_project/core/theme/text_style.dart';
+import 'package:depi_final_project/core/widgets/app_bar_widget.dart';
 import 'package:depi_final_project/features/store/widgets/cart_item.dart';
 import 'package:depi_final_project/features/store/widgets/coupon_card.dart';
 import 'package:depi_final_project/features/store/widgets/price_detail.dart';
-
 
 class Cart extends StatelessWidget {
   Cart({super.key});
@@ -25,10 +25,7 @@ class Cart extends StatelessWidget {
     final theme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Cart", style: AppTextStyles.font20WitekBold),
-        centerTitle: true,
-      ),
+      appBar: const CustomAppBar(title: "Cart"),
       body: cartItems.isEmpty
           ? _buildEmptyCart(theme)
           : Padding(

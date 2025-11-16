@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:depi_final_project/core/widgets/app_bar_widget.dart';
 
 class OrderDetailsScreen extends StatelessWidget {
   final String orderId;
@@ -15,18 +16,12 @@ class OrderDetailsScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
+      appBar:CustomAppBar(
+        title: "Order $orderId",
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black),
+          icon: const Icon(Icons.arrow_back_ios_new),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text(
-          "Order $orderId",
-          style: const TextStyle(color: Colors.black),
-        ),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        elevation: 0,
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),

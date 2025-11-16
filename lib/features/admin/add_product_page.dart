@@ -1,6 +1,7 @@
 import 'dart:io';
 import '../../core/config.dart';
 import 'package:flutter/material.dart';
+import '../../core/widgets/app_bar_widget.dart';
 import '../../data/models/product_model.dart';
 import '../../data/models/category_model.dart';
 import 'package:image_picker/image_picker.dart';
@@ -137,7 +138,7 @@ class _AddProductPageState extends State<AddProductPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Add Product')),
+      appBar: const CustomAppBar(title: 'Add Product'),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Form(
