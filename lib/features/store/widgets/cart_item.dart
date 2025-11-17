@@ -73,7 +73,7 @@ class CartItem extends StatelessWidget {
                       )]),
                     
                   ),
-                  SizedBox(width: 30,),
+                  SizedBox(width: 10,),
                   TextButton(
                   onPressed: onEdit,
                   child: Text("Edit quantity", style: TextStyle(fontSize: 12),))
