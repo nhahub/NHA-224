@@ -16,7 +16,7 @@ class PriceDetail extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
           Text(title, style: TextStyle(fontSize: 16, color: Color.fromARGB(104, 39, 39, 128)),),
-          Text("\$$price", style: TextStyle(fontWeight: isPriceBolded == true? FontWeight.bold :FontWeight.w600, fontSize: 16),)
+          Text("\$${price.toStringAsFixed(2)}", style: TextStyle(fontWeight: isPriceBolded == true? FontWeight.bold :FontWeight.w600, fontSize: 16),)
         ],),
         SizedBox(height: 10,)
       ],

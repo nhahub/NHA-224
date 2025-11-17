@@ -6,7 +6,7 @@ class CustomBottomSheet extends StatelessWidget {
   const CustomBottomSheet({super.key, required this.title, required this.options});
 
   final String title;
-  final List<CustomizeOption> options;
+  final List options;
 
   @override
   Widget build(BuildContext context) {
