@@ -55,6 +55,7 @@ class ProductWidget extends StatelessWidget {
               ),
               child: Text(
                 title,
+                overflow: TextOverflow.ellipsis,
                 style: AppTextStyles.bodyMedium.copyWith(
                   color: Theme.of(context).colorScheme.onSurface,
                 ),

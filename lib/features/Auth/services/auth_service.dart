@@ -122,7 +122,7 @@ class AuthService {
 
   Future<UserCredential> loginWithGoogle() async {
     try {
-      final String serverClientId = dotenv.env['server_client_id'] ?? "no id";
+      final String serverClientId ="661720149477-3fq4avjj9h77o9oikhlhqhd177jgkdt5.apps.googleusercontent.com";
       //initialize google sign in
       await GoogleSignIn.instance.initialize(serverClientId: serverClientId);
 
@@ -141,36 +141,26 @@ class AuthService {
         credential,
       );
       final user = userCredential.user;
-      await _firestore.collection('users').doc(user!.uid).set({
-        'uid': user.uid,
-        'name': user.displayName ?? "Guest",
-        'email': user.email ?? "No Email",
-        'profileImageUrl':
-            user.photoURL ??
-            "https://imgs.search.brave.com/r8_rpLtbGMxU9_hP_eV66IWtpYYaUuj62TaONvbGyA8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly91cy4x/MjNyZi5jb20vNDUw/d20vYmxpbmtibGlu/azEvYmxpbmtibGlu/azEyMDA1L2JsaW5r/YmxpbmsxMjAwNTAw/MDE1LzE0Njk3OTQ2/NC1hdmF0YXItbWFu/bi1zeW1ib2wuanBn/P3Zlcj02",
-        'role': 'user',
-      });
+      final userDocRef = _firestore.collection('users').doc(user!.uid);
+      final userDoc = await userDocRef.get();
 
-      // DocumentSnapshot userDoc = await FirebaseFirestore.instance
-      //     .collection('users')
-      //     .doc(user.uid)
-      //     .get();
+      if (!userDoc.exists) {
+        // User does not exist, create the doc
+        await userDocRef.set({
+          'uid': user.uid,
+          'name': user.displayName ?? "Guest",
+          'email': user.email ?? "No Email",
+          'profileImageUrl':
+              user.photoURL ??
+              "https://imgs.search.brave.com/r8_rpLtbGMxU9_hP_eV66IWtpYYaUuj62TaONvbGyA8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly91cy4x/MjNyZi5jb20vNDUw/d20vYmxpbmtibGlu/azEvYmxpbmtibGlu/azEyMDA1L2JsaW5r/YmxpbmsxMjAwNTAw/MDE1LzE0Njk3OTQ2/NC1hdmF0YXItbWFu/bi1zeW1ib2wuanBn/P3Zlcj02",
+          'role': 'user',
+        });
+      }
 
-      // String role = userDoc['role'] ?? 'user';
-      // if(role == 'admin'){
-      //   Navigator.pushReplacementNamed(context, AppRoutes.adminPage);
-      // }else{
-      //   Navigator.pushReplacementNamed(
-      //     context,
-      //     AppRoutes.layout,
-      //     arguments: user.email,
-      //   );
-      // }
-
-      // Once signed in, return the UserCredential
       return userCredential;
     } catch (e) {
       // Debug: Google sign-in error occurred
+      print(e.toString());
       rethrow;
     }
   }
