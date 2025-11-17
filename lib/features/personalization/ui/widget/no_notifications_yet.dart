@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:depi_final_project/core/theme/text_style.dart';
+import 'package:depi_final_project/core/theme/spacing.dart';
 import 'package:depi_final_project/features/personalization/ui/widget/button.dart';
 
 
@@ -16,12 +18,14 @@ class NoNotificationsYet extends StatelessWidget {
             width: 100,
             height: 100,
           ),
-          const SizedBox(height: 16),
-          const Text(
+          SizedBox(height: Spacing.lg),
+          Text(
             "No Notification yet",
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+            style: AppTextStyles.headline4.copyWith(
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: Spacing.lg),
           Button(text: "Explore Categories"),
         ],
       ),

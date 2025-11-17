@@ -13,15 +13,15 @@ class HomeCubit extends Cubit<HomeState> {
       final categoriesResult = await homeRepo.fetchCategories();
       final productsResult = await homeRepo.fetchProducts();
 
-      categoriesResult.fold(
-        (failure) => emit(HomeError(failure.toString())),
-        (categories) {
-          productsResult.fold(
-            (failure) => emit(HomeError(failure.toString())),
-            (products) => emit(HomeLoaded(categories: categories, products: products)),
-          );
-        },
-      );
+      categoriesResult.fold((failure) => emit(HomeError(failure.toString())), (
+        categories,
+      ) {
+        productsResult.fold(
+          (failure) => emit(HomeError(failure.toString())),
+          (products) =>
+              emit(HomeLoaded(categories: categories, products: products)),
+        );
+      });
     } catch (e) {
       emit(HomeError(e.toString()));
     }
@@ -33,15 +33,15 @@ class HomeCubit extends Cubit<HomeState> {
       final categoriesResult = await homeRepo.fetchCategories();
       final productsResult = await homeRepo.fetchProductsByCategory(categoryId);
 
-      categoriesResult.fold(
-        (failure) => emit(HomeError(failure.toString())),
-        (categories) {
-          productsResult.fold(
-            (failure) => emit(HomeError(failure.toString())),
-            (products) => emit(HomeLoaded(categories: categories, products: products)),
-          );
-        },
-      );
+      categoriesResult.fold((failure) => emit(HomeError(failure.toString())), (
+        categories,
+      ) {
+        productsResult.fold(
+          (failure) => emit(HomeError(failure.toString())),
+          (products) =>
+              emit(HomeLoaded(categories: categories, products: products)),
+        );
+      });
     } catch (e) {
       emit(HomeError(e.toString()));
     }

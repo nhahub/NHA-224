@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:depi_final_project/core/theme/text_style.dart';
-import 'package:depi_final_project/core/routes/app_routes.dart';
+// import 'package:depi_final_project/core/routes/app_routes.dart';
 
 class SectionHeader extends StatelessWidget {
   final String title;
   final Color? titleColor;
   final VoidCallback? onSeeAllTap;
 
-  const SectionHeader({super.key, required this.title, this.titleColor, this.onSeeAllTap});
+  const SectionHeader({
+    super.key,
+    required this.title,
+    this.titleColor,
+    this.onSeeAllTap,
+  });
 
   @override
   Widget build(BuildContext context) {

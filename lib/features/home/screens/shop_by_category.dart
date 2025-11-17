@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:depi_final_project/shared/spacing.dart';
-import 'package:depi_final_project/core/theme/colors.dart';
+import 'package:depi_final_project/core/theme/spacing.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:depi_final_project/core/theme/text_style.dart';
+import 'package:depi_final_project/core/widgets/app_bar_widget.dart';
 import 'package:depi_final_project/features/home/widgets/category_container.dart';
+// import 'package:depi_final_project/core/theme/colors.dart';
 
 class ShopByCategory extends StatelessWidget {
   const ShopByCategory({super.key});
@@ -11,7 +12,9 @@ class ShopByCategory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar:const CustomAppBar(
+        title: 'Shop by Categories',
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.all(16.0),

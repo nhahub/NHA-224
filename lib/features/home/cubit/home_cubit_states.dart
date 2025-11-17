@@ -8,7 +8,7 @@ abstract class HomeState {}
 class HomeInitial extends HomeState {}
 class HomeLoading extends HomeState {}
 class HomeLoaded extends HomeState {
-  final List<Category> categories;
+  final List<CategoryModel> categories;
   final List<ProductModel> products;
 
   HomeLoaded({required this.categories, required this.products});

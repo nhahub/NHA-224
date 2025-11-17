@@ -4,21 +4,31 @@ import 'package:depi_final_project/features/personalization/cubit/personalizatio
 import 'package:depi_final_project/features/store/cubit/cart_cubit.dart';
 import 'package:depi_final_project/features/store/cubit/store_cubit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:depi_final_project/firebase_options.dart';
+import 'package:depi_final_project/core/theme/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:depi_final_project/core/theme/app_theme.dart';
 import 'package:depi_final_project/core/routes/app_routes.dart';
+import 'package:depi_final_project/core/theme/bloc/theme_bloc.dart';
+import 'package:depi_final_project/data/sources/firebase_service.dart';
 import 'package:depi_final_project/features/Auth/cubit/auth_cubit.dart';
-import 'package:depi_final_project/core/theme/colors.dart'; // تأكد إن الملف ده موجود
+import 'package:depi_final_project/features/store/cubit/store_cubit.dart';
+import 'package:depi_final_project/data/repos/home_repo_implementation.dart';
+import 'package:depi_final_project/core/services/shared_preferences_service.dart';
+import 'package:depi_final_project/features/personalization/cubit/personalization_cubit.dart';
+// import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await dotenv.load(fileName: ".env");
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   print(FirebaseAuth.instance.currentUser?.uid??"User not registered");
+
+  await SharedPreferencesService().init();
+
   runApp(const MyApp());
 }
 
@@ -33,6 +43,9 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider(
+          create: (context) => ThemeBloc()..add(GetCuurrentThemeEvent()),
+        ),
         BlocProvider(create: (context) => AuthCubit()),
         BlocProvider(create: (context) => PersonalizationCubit()),
         BlocProvider(create: (context) => CartCubit()),
@@ -52,13 +65,27 @@ class _MyAppState extends State<MyApp> {
         minTextAdapt: true,
         splitScreenMode: true,
         builder: (context, child) {
-          return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: 'خليها علينا',
-            theme: lightMode,
-            darkTheme: darkMode,
-            initialRoute: AppRoutes.search,
-            onGenerateRoute: AppRoutes.generateRoute,
+          return BlocBuilder<ThemeBloc, ThemeState>(
+            builder: (context, themeState) {
+              // Determine the current theme and theme mode
+              AppTheme currentTheme = AppTheme.light;
+              ThemeMode themeMode = ThemeMode.system;
+
+              if (themeState is LoadingThemeState) {
+                currentTheme = themeState.appTheme;
+                themeMode = currentTheme == AppTheme.light ? ThemeMode.light : ThemeMode.dark;
+              }
+
+              return MaterialApp(
+                debugShowCheckedModeBanner: false,
+                title: 'خليها علينا',
+                theme: appThemeData[AppTheme.light]!,
+                darkTheme: appThemeData[AppTheme.dark]!,
+                themeMode: themeMode,
+                initialRoute: AppRoutes.splash,
+                onGenerateRoute: AppRoutes.generateRoute,
+              );
+            },
           );
         },
       ),

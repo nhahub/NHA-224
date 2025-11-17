@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:depi_final_project/core/theme/spacing.dart';
+import 'package:depi_final_project/core/theme/text_style.dart';
 
 class FavouriteWidget extends StatefulWidget {
   final String imageUrl;
@@ -23,15 +25,15 @@ class _FavouriteWidgetState extends State<FavouriteWidget> {
   Widget build(BuildContext context) {
     return Container(
       width: 160,
-      height: 280,
-      margin: const EdgeInsets.all(15),
-      padding: const EdgeInsets.all(8),
+      height: 300,
+      margin: EdgeInsets.all(Spacing.md),
+      padding: EdgeInsets.all(Spacing.sm),
       decoration: BoxDecoration(
-        color: Colors.grey.shade200,
-        borderRadius: BorderRadius.circular(16),
+        color: Theme.of(context).colorScheme.surfaceVariant,
+        borderRadius: BorderRadius.circular(Spacing.lgRadius),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
+            color: Theme.of(context).colorScheme.shadow.withOpacity(0.1),
             blurRadius: 6,
             offset: const Offset(0, 3),
           ),
@@ -43,9 +45,9 @@ class _FavouriteWidgetState extends State<FavouriteWidget> {
           Stack(
             children: [
               ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(16),
-                  topRight: Radius.circular(16),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(Spacing.lgRadius),
+                  topRight: Radius.circular(Spacing.lgRadius),
                 ),
                 child: Image.asset(
                   widget.imageUrl,
@@ -55,8 +57,8 @@ class _FavouriteWidgetState extends State<FavouriteWidget> {
                 ),
               ),
               Positioned(
-                top: 8,
-                right: 8,
+                top: Spacing.sm,
+                right: Spacing.sm,
                 child: GestureDetector(
                   onTap: () {
                     setState(() {
@@ -68,7 +70,9 @@ class _FavouriteWidgetState extends State<FavouriteWidget> {
                       isFavorite
                           ? Icons.favorite_rounded
                           : Icons.favorite_border_rounded,
-                      color: isFavorite ? Colors.red : Colors.grey[400],
+                      color: isFavorite
+                          ? Theme.of(context).colorScheme.error
+                          : Theme.of(context).colorScheme.onSurfaceVariant,
                       size: 24,
                     ),
                     onPressed: () {},
@@ -77,21 +81,17 @@ class _FavouriteWidgetState extends State<FavouriteWidget> {
               ),
             ],
           ),
-
           Text(
             widget.name,
-            style: const TextStyle(
-              fontWeight: FontWeight.w400,
-              fontSize: 12,
-              color: Colors.black87,
+            style: AppTextStyles.bodySmall.copyWith(
+              color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
           Text(
-            "\$${widget.price.toStringAsFixed(2)}",
-            style: const TextStyle(
-              fontWeight: FontWeight.w800,
-              fontSize: 14,
-              color: Colors.black87,
+            "\${widget.price.toStringAsFixed(2)}",
+            style: AppTextStyles.bodyMedium.copyWith(
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).colorScheme.primary,
             ),
           ),
         ],

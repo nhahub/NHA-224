@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:depi_final_project/shared/spacing.dart';
-import 'package:depi_final_project/core/theme/colors.dart';
+import 'package:depi_final_project/core/theme/spacing.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:depi_final_project/core/theme/text_style.dart';
+import 'package:depi_final_project/core/widgets/app_bar_widget.dart';
 import 'package:depi_final_project/features/home/widgets/product_widget.dart';
+// import 'package:depi_final_project/core/theme/colors.dart';
 
 class ProductsByCategory extends StatelessWidget {
   const ProductsByCategory({super.key});
@@ -54,13 +55,8 @@ class ProductsByCategory extends StatelessWidget {
     ];
 
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        title: Text(
-          'Hoodies',
-          style: AppTextStyles.font20WitekBold.copyWith(fontSize: 22.sp),
-        ),
-        centerTitle: true,
+      appBar: const CustomAppBar(
+        title: 'Hoodies',
       ),
       body: SafeArea(
         child: SingleChildScrollView(

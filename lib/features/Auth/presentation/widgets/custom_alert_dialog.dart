@@ -1,9 +1,9 @@
-import 'package:depi_final_project/core/routes/app_routes.dart';
-import 'package:depi_final_project/core/theme/text_style.dart';
-import 'package:depi_final_project/features/Auth/presentation/widgets/custom_button.dart';
-import 'package:depi_final_project/shared/spacing.dart';
 import 'package:flutter/material.dart';
+import 'package:depi_final_project/core/theme/spacing.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:depi_final_project/core/theme/text_style.dart';
+import 'package:depi_final_project/core/routes/app_routes.dart';
+import 'package:depi_final_project/features/Auth/presentation/widgets/custom_button.dart';
 
 class CustomAlertDialog extends StatelessWidget {
   const CustomAlertDialog({super.key});

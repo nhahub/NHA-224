@@ -1,16 +1,16 @@
-import 'package:depi_final_project/features/Auth/presentation/widgets/custom_alert_dialog.dart';
-import 'package:depi_final_project/features/Auth/presentation/widgets/title_auth_page.dart';
 import 'package:flutter/material.dart';
-import 'package:depi_final_project/core/errors/failures.dart';
-import 'package:depi_final_project/features/Auth/services/auth_service.dart';
-import 'package:depi_final_project/shared/spacing.dart';
 import 'package:depi_final_project/core/theme/colors.dart';
+import 'package:depi_final_project/core/theme/spacing.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:depi_final_project/core/errors/failures.dart';
 import 'package:depi_final_project/core/theme/text_style.dart';
 import 'package:depi_final_project/core/routes/app_routes.dart';
-import 'package:depi_final_project/features/Auth/presentation/widgets/custom_button.dart';
-import 'package:depi_final_project/features/Auth/presentation/widgets/custom_text_field.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:depi_final_project/features/Auth/services/auth_service.dart';
+import 'package:depi_final_project/features/Auth/presentation/widgets/custom_button.dart';
+import 'package:depi_final_project/features/Auth/presentation/widgets/title_auth_page.dart';
+import 'package:depi_final_project/features/Auth/presentation/widgets/custom_text_field.dart';
+import 'package:depi_final_project/features/Auth/presentation/widgets/custom_alert_dialog.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
@@ -71,6 +71,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                               email: email!,
                             );
                             setState(() => isLoading = false);
+                            if (!mounted) return;
                             // Show success dialog
                             showDialog(
                               context: context,
@@ -78,6 +79,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                             );
                           } catch (e) {
                             setState(() => isLoading = false);
+                            if (!mounted) return;
                             showSnackBar(context, 'Error: $e');
                           }
                         } else {

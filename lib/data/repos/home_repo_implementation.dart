@@ -4,6 +4,8 @@ import '../models/product_model.dart';
 import '../models/category_model.dart';
 import '../sources/firebase_service.dart';
 import 'package:depi_final_project/core/errors/failures.dart';
+ 
+
 
 
 class HomeRepoImplementation implements HomeRepo {
@@ -12,7 +14,7 @@ class HomeRepoImplementation implements HomeRepo {
   HomeRepoImplementation({required this.firebaseService});
 
   @override
-  Future<Either<Failures, List<Category>>> fetchCategories() async {
+  Future<Either<Failures, List<CategoryModel>>> fetchCategories() async {
     try {
       final categories = await firebaseService.getCategories();
       return Right(categories);

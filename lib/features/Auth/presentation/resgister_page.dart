@@ -1,19 +1,19 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:depi_final_project/core/theme/colors.dart';
+import 'package:depi_final_project/core/theme/spacing.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:depi_final_project/core/theme/text_style.dart';
+import 'package:depi_final_project/core/routes/app_routes.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:depi_final_project/features/Auth/cubit/auth_cubit.dart';
 import 'package:depi_final_project/features/Auth/cubit/auth_state.dart';
-import 'package:depi_final_project/features/Auth/presentation/widgets/google_widget.dart';
-import 'package:depi_final_project/features/Auth/presentation/widgets/or_widgets.dart';
-import 'package:depi_final_project/features/Auth/presentation/widgets/title_auth_page.dart';
-import 'package:flutter/material.dart';
-import 'package:depi_final_project/core/routes/app_routes.dart';
-import 'package:depi_final_project/core/theme/colors.dart';
-import 'package:depi_final_project/core/theme/text_style.dart';
 import 'package:depi_final_project/features/Auth/presentation/widgets/custom_button.dart';
+import 'package:depi_final_project/features/Auth/presentation/widgets/title_auth_page.dart';
 import 'package:depi_final_project/features/Auth/presentation/widgets/custom_text_field.dart';
-import 'package:depi_final_project/features/Auth/services/auth_service.dart';
-import 'package:depi_final_project/shared/spacing.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+// import 'package:depi_final_project/features/Auth/presentation/widgets/google_widget.dart';
+// import 'package:depi_final_project/features/Auth/presentation/widgets/or_widgets.dart';
+// import 'package:depi_final_project/features/Auth/services/auth_service.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});

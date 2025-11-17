@@ -9,6 +9,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:depi_final_project/core/theme/text_style.dart';
+import 'package:depi_final_project/core/widgets/app_bar_widget.dart';
 import 'package:depi_final_project/features/store/widgets/cart_item.dart';
 import 'package:depi_final_project/features/store/widgets/coupon_card.dart';
 import 'package:depi_final_project/features/store/widgets/price_detail.dart';
