@@ -15,6 +15,8 @@ class CartLoaded extends CartState{
 
 class CartSuccess extends CartState{}
 
+class RemoveAllSuccess extends CartState{}
+
 class CartError extends CartState{
   final String message;
   CartError(this.message);

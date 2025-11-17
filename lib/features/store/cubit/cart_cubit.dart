@@ -29,6 +29,39 @@ class CartCubit extends Cubit<CartState>{
   }
 
 
+  void removeAllCartProducts()async{
+    emit(CartLoading());
+    try{
+      repo.removeAllCartProduct();
+      emit(RemoveAllSuccess());
+    }catch(e){
+      emit(CartError(e.toString()));
+    }
+  }
 
+
+void editProductQuantity(String productId, int quantity, int stock) async{
+  emit(CartLoading());
+  try{
+    repo.editProductQuantity(productId, quantity, stock);
+    final cartProducts = await  repo.loadCartProducts();
+    emit(CartLoaded(cartProducts));
+  }catch(e){
+    emit(CartError(e.toString()));
+  }
 }
+
+void deleteProduct(String productId)async{
+  emit(CartLoading());
+  try{
+    repo.deleteProduct(productId);
+    final cartProducts = await  repo.loadCartProducts();
+    emit(CartLoaded(cartProducts));
+  }catch(e){
+    emit(CartError(e.toString()));
+  }
+}
+
+
+  }
 
