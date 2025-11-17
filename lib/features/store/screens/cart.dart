@@ -1,3 +1,4 @@
+import 'package:depi_final_project/core/routes/app_routes.dart';
 import 'package:depi_final_project/data/models/product_model.dart';
 import 'package:depi_final_project/features/store/cubit/cart_cubit.dart';
 import 'package:depi_final_project/features/store/cubit/cart_state.dart';
@@ -195,7 +196,9 @@ class _CartState extends State<Cart> {
         SizedBox(
           width: double.infinity,
           child: ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, AppRoutes.checkout);
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.darkPrimary,
               foregroundColor: Colors.white,

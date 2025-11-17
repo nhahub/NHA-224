@@ -67,7 +67,7 @@ class _ProductPageState extends State<ProductPage> {
           }
 
           if(state is CartSuccess){
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Product added successfully", style: TextStyle(color: Colors.white),), backgroundColor: Colors.green,));
+            // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Product added successfully", style: TextStyle(color: Colors.white),), backgroundColor: Colors.green,));
             Navigator.pushNamed(context, AppRoutes.cart);
           }
 
@@ -148,7 +148,7 @@ class _ProductPageState extends State<ProductPage> {
                       options: List.generate(widget.product.colors.length, 
                       (index){
                         return CustomizeOption(
-                          label: widget.product.colors[index].keys.first, 
+                          label: widget.product.colors[index], 
                           isSelected: selectedColor == index,
                           onTap: (){
                             setState(() {
@@ -156,27 +156,30 @@ class _ProductPageState extends State<ProductPage> {
                               Navigator.pop(context);
                             });
                           },
-                          selection:  Container(
+                      selection:  
+                      Container(
                       width: 20,
                       height: 20,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(100),
-                        color: Color(int.parse(widget.product.colors[index].values.first))
+                        // color: Color(int.parse(widget.product.colors[index]))
                       ),
-                    ),);
+                    ),
+                    );
                       }));
                     });
                   },
                   label: "Color",
                   options: [
-                    Container(
-                      width: 20,
-                      height: 20,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(100),
-                        color: Color(int.parse(widget.product.colors[selectedColor].values.first)) //first value until user selection TODO: change to user selection
-                      ),
-                    ),
+                    Text(widget.product.colors[selectedColor]),
+                    // Container(
+                    //   width: 20,
+                    //   height: 20,
+                    //   decoration: BoxDecoration(
+                    //     borderRadius: BorderRadius.circular(100),
+                    //     // color: Color(int.parse(widget.product.colors[selectedColor])) //first value until user selection TODO: change to user selection
+                    //   ),
+                    // ),
                     SizedBox(width: 30,),
                     Image.asset(themeBrightness == Brightness.light? "assets/icons/arrowdown.png":"assets/icons/arrowdown_dark.png")
                   ],
@@ -281,7 +284,7 @@ class _ProductPageState extends State<ProductPage> {
           cubit.addProductToCart(CartProduct(
             productId: widget.product.id, 
             selectedSize: widget.product.sizes[selectedSize], 
-            selectedColor: widget.product.colors[selectedColor].keys.first, 
+            selectedColor: widget.product.colors[selectedColor], 
             quantity: count));
         },
         label: Container(

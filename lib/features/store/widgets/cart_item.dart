@@ -34,7 +34,9 @@ class CartItem extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(title),
+                SizedBox(
+                  width: 150,
+                  child: Text(title, overflow: TextOverflow.ellipsis,)),
                 SizedBox(width: 50,),
                 Text("\$$price", style: GoogleFonts.gabarito(textStyle: TextStyle(
                   fontWeight: FontWeight.bold, fontSize: 12

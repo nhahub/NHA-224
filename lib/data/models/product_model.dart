@@ -8,7 +8,8 @@ class ProductModel {
   final double rating;
   final int stock;
   final String productId;
-  final List<Map<String, dynamic>> colors;
+  //final List<Map<String, dynamic>> colors;
+  final List<String> colors;
   final List<String> sizes;
   final List<String> imageUrl;
   final DocumentReference category; // ربط بالفئة (Category)
@@ -46,9 +47,10 @@ class ProductModel {
       rating: (data['rating'] ?? 0).toDouble(),
       stock: data['stock'] ?? 0,
       productId: data['productId'] ?? '',
-      colors: List<Map<String, dynamic>>.from(data['color'] ?? []),
-      sizes: List<String>.from(data['size'] ?? []),
-      imageUrl:List<String>.from( data['imageUrl'] ?? ''),
+      // colors: List<Map<String, dynamic>>.from(data['color'] ?? []),
+      colors: List<String>.from(data['colors'] ?? []),
+      sizes: List<String>.from(data['sizes'] ?? []),
+      imageUrl:List<String>.from( data['imageUrl'] ?? []),
       category: data['category'],
       createdAt: (data['createdAt'] as Timestamp).toDate(),
       oldPrice: data['oldPrice'] != null
@@ -69,8 +71,8 @@ class ProductModel {
       'rating': rating,
       'stock': stock,
       'productId': productId,
-      'color': colors,
-      'size': sizes,
+      'colors': colors,
+      'sizes': sizes,
       'imageUrl': imageUrl,
       'category': category,
       'createdAt': Timestamp.fromDate(createdAt),
