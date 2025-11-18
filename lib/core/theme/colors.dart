@@ -31,6 +31,9 @@ abstract class AppColors {
 
   // 🌙 Dark Theme Colors
   static const Color darkPrimary = Color(0xFF7C3AED); // Purple (same as light)
+
+  // Figma specific color
+  static const Color figmaPrimary = Color(0xFFA78BFA); // Light purple from Figma
   static const Color darkSecondary = Color(0xFF2D2D3D); // Dark grey
   static const Color darkBackground = Color(0xFF0F0F1E); // Very dark navy
   static const Color darkCardBackground = Color(0xFF1A1A2E); // Dark card

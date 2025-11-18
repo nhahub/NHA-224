@@ -23,8 +23,8 @@ class SectionHeader extends StatelessWidget {
         Text(
           title,
           style: AppTextStyles.font17WhiteMedium.copyWith(
-            color: titleColor ?? Colors.white,
-            fontSize: 20.sp,
+            color: titleColor ?? Theme.of(context).colorScheme.onSurface,
+            fontSize: 18.sp,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -33,8 +33,9 @@ class SectionHeader extends StatelessWidget {
           child: Text(
             'See All',
             style: AppTextStyles.font17WhiteMedium.copyWith(
-              color: Colors.white70,
+              color: Theme.of(context).colorScheme.onSurface,
               fontWeight: FontWeight.w500,
+              fontSize: 14.sp,
             ),
           ),
         ),

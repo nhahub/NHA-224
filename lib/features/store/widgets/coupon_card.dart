@@ -16,7 +16,13 @@ class CouponCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(8)),
         child: ListTile(
           leading: Image.asset("assets/icons/coupon_icon.png"),
-          title: Text("Enter coupon code", style: TextStyle(color: Color.fromARGB(92, 39, 39, 128)),),
+          title: Text(
+            "Enter coupon code",
+            style: TextStyle(
+              color: theme.onSurfaceVariant,
+              fontSize: 14,
+            ),
+          ),
           trailing: Container(
             width: 40,
             height: 40,

@@ -16,6 +16,7 @@ import 'package:depi_final_project/core/routes/app_routes.dart';
 import 'package:depi_final_project/core/theme/bloc/theme_bloc.dart';
 import 'package:depi_final_project/data/sources/firebase_service.dart';
 import 'package:depi_final_project/features/Auth/cubit/auth_cubit.dart';
+import 'package:depi_final_project/features/home/cubit/home_cubit.dart';
 import 'package:depi_final_project/features/store/cubit/store_cubit.dart';
 import 'package:depi_final_project/data/repos/home_repo_implementation.dart';
 import 'package:depi_final_project/core/services/shared_preferences_service.dart';
@@ -48,6 +49,11 @@ class _MyAppState extends State<MyApp> {
         ),
         BlocProvider(create: (context) => AuthCubit()),
         BlocProvider(create: (context) => PersonalizationCubit()),
+        BlocProvider(
+          create: (context) => HomeCubit(
+            homeRepo: HomeRepoImplementation(firebaseService: FirebaseService()),
+          ),
+        ),
         BlocProvider(create: (context) => CartCubit()),
         // BlocProvider(
         // create: (context) => SearchCubit(
@@ -69,7 +75,7 @@ class _MyAppState extends State<MyApp> {
             builder: (context, themeState) {
               // Determine the current theme and theme mode
               AppTheme currentTheme = AppTheme.light;
-              ThemeMode themeMode = ThemeMode.system;
+              ThemeMode themeMode = ThemeMode.light; // Default to light to avoid system theme
 
               if (themeState is LoadingThemeState) {
                 currentTheme = themeState.appTheme;
@@ -78,7 +84,6 @@ class _MyAppState extends State<MyApp> {
 
               return MaterialApp(
                 debugShowCheckedModeBanner: false,
-                title: 'خليها علينا',
                 theme: appThemeData[AppTheme.light]!,
                 darkTheme: appThemeData[AppTheme.dark]!,
                 themeMode: themeMode,

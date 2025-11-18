@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:depi_final_project/core/theme/colors.dart';
 import 'package:depi_final_project/core/theme/spacing.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:depi_final_project/core/theme/text_style.dart';
 import 'package:depi_final_project/core/routes/app_routes.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:depi_final_project/core/widgets/app_bar_widget.dart';
 import 'package:depi_final_project/features/store/screens/cart.dart';
+import 'package:depi_final_project/features/home/cubit/home_cubit.dart';
 import 'package:depi_final_project/features/home/widgets/new_in_list.dart';
+import 'package:depi_final_project/features/home/widgets/section_header.dart';
 import 'package:depi_final_project/features/home/widgets/categories_list.dart';
-import 'package:depi_final_project/features/store/widgets/section_header.dart';
+import 'package:depi_final_project/features/home/cubit/home_cubit_states.dart';
 import 'package:depi_final_project/features/home/widgets/top_selling_List.dart';
-import 'package:depi_final_project/features/personalization/ui/screens/settings_screen_english.dart';
-// import 'package:depi_final_project/features/store/screens/search_page.dart';
+import 'package:depi_final_project/core/services/shared_preferences_service.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -22,164 +20,296 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  String? selectedValue;
-
-  final List<Map<String, String>> categories = [
-    {'image': 'assets/images/Ellipse 5 (3).png', 'label': 'Hoodies'},
-    {'image': 'assets/images/Ellipse 5 (3).png', 'label': 'Shorts'},
-    {'image': 'assets/images/Ellipse 5 (3).png', 'label': 'Shoes'},
-    {'image': 'assets/images/Ellipse 5 (3).png', 'label': 'Bag'},
-    {'image': 'assets/images/Ellipse 5 (3).png', 'label': 'Accessories'},
-  ];
-
-  final List<Map<String, String>> topSelling = [
-    {
-      'image': 'assets/images/Rectangle 8.png',
-      'title': "Men's Harrington Jacket",
-      'price': '\$148.00',
-    },
-    {
-      'image': 'assets/images/Rectangle 8.png',
-      'title': "Max Cirro Men's Slides",
-      'price': '\$55.00',
-      'oldPrice': '\$100.97',
-    },
-    {
-      'image': 'assets/images/Rectangle 8.png',
-      'title': "Men's Tech Pants",
-      'price': '\$66.00',
-    },
-  ];
-
-  final List<Map<String, String>> newIn = [
-    {
-      'image': 'assets/images/Rectangle 8.png',
-      'title': "Men's T-shirt",
-      'price': '\$35.00',
-    },
-    {
-      'image': 'assets/images/Rectangle 8.png',
-      'title': "Running Sneakers",
-      'price': '\$80.00',
-    },
-  ];
+  String selectedGender =
+      'Unspecified'; // Default to show all products initially
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const CustomAppBar(
-        title: 'Home',
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const CircleAvatar(
-                    backgroundImage: AssetImage('assets/images/avatar1.png'),
-                    radius: 25,
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 60),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        decoration: BoxDecoration(
-                          color: AppColors.darkSecondary,
-                          borderRadius: BorderRadius.circular(32),
-                        ),
-                        child: DropdownButton<String>(
-                          value: selectedValue,
-                          hint: Text(
-                            'Select Gender',
-                            style: AppTextStyles.font17WiteRegular.copyWith(
-                              fontSize: 16.sp,
-                            ),
-                          ),
-                          isExpanded: true,
-                          underline: const SizedBox(),
-                          items: const [
-                            DropdownMenuItem(
-                              value: 'Male',
-                              child: Text('Male'),
-                            ),
-                            DropdownMenuItem(
-                              value: 'Female',
-                              child: Text('Female'),
-                            ),
-                          ],
-                          onChanged: (value) {
-                            setState(() {
-                              selectedValue = value;
-                            });
-                          },
-                        ),
+    return BlocConsumer<HomeCubit, HomeState>(
+      listener: (context, state) {
+        if (state is HomeError) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(state.message)));
+        }
+      },
+      builder: (context, state) {
+        if (state is HomeLoading || state is HomeInitial) {
+          context.read<HomeCubit>().loadHome();
+          return const Scaffold(
+            body: SafeArea(child: Center(child: CircularProgressIndicator())),
+          );
+        }
+
+        if (state is HomeError) {
+          return const Scaffold(
+            body: SafeArea(child: Center(child: Text('Error loading home'))),
+          );
+        }
+
+        if (state is HomeLoaded) {
+          // Simple filtering by gender - in a real app, this might be server-side
+          final filteredProducts = state.products
+              .where(
+                (product) => selectedGender == 'Men'
+                    ? product.gender != 'Women'
+                    : selectedGender == 'Women'
+                    ? product.gender == 'Women'
+                    : true, // Unspecified shows all
+              )
+              .toList();
+
+          return Scaffold(
+            body: SafeArea(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    // Custom header row
+                    _HomeHeader(
+                      onGenderChanged: (gender) {
+                        setState(() {
+                          selectedGender = gender;
+                        });
+                      },
+                    ),
+                    verticalSpacing(18),
+                    // Search bar
+                    const _SearchBar(),
+                    verticalSpacing(18),
+                    // Categories
+                    SectionHeader(
+                      title: 'Categories',
+                      onSeeAllTap: () => Navigator.pushNamed(
+                        context,
+                        AppRoutes.shopByCategory,
                       ),
                     ),
-                  ),
-                  IconButton(
-                    icon: const Icon(FontAwesomeIcons.cartFlatbed),
-                    onPressed: () {
-                      Navigator.push(
+                    verticalSpacing(12),
+                    CategoriesList(categories: state.categories),
+
+                    // Top Selling
+                    SectionHeader(
+                      title: 'Top Selling',
+                      onSeeAllTap: () => Navigator.pushNamed(
                         context,
-                        MaterialPageRoute(builder: (context) => Cart()),
-                      );
-                    },
-                  ),
-                ],
-              ),
-
-              verticalSpacing(24),
-
-              GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(context, AppRoutes.search);
-                },
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  decoration: BoxDecoration(
-                    color: AppColors.darkSecondary,
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  child: TextField(
-                    enabled: false, // عشان ما يفتحش الكيبورد
-                    style: AppTextStyles.font17WiteRegular.copyWith(
-                      fontSize: 16.sp,
+                        AppRoutes.allTopSelling,
+                      ),
                     ),
-                    decoration: const InputDecoration(
-                      icon: Icon(Icons.search, color: Colors.white54),
-                      hintText: 'Search',
-                      hintStyle: TextStyle(color: Colors.white54),
-                      border: InputBorder.none,
+                    verticalSpacing(12),
+                    TopSellingList(products: filteredProducts.take(3).toList()),
+                    verticalSpacing(18),
+                    // New In
+                    SectionHeader(
+                      title: 'New In',
+                      titleColor: AppColors.figmaPrimary,
+                      onSeeAllTap: () => Navigator.pushNamed(
+                        context,
+                        AppRoutes.allNewIn,
+                      ),
                     ),
-                  ),
+                    verticalSpacing(12),
+                    TopSellingList(
+                      products: filteredProducts.skip(3).take(3).toList(),
+                    ),
+                  ],
                 ),
               ),
+            ),
+          );
+        }
 
-              verticalSpacing(24),
+        return const Scaffold(
+          body: SafeArea(child: Center(child: Text('Unknown state'))),
+        );
+      },
+    );
+  }
+}
 
-              SectionHeader(
-                title: 'Categories',
-                onSeeAllTap: () =>
-                    Navigator.pushNamed(context, AppRoutes.shopByCategory),
+class _HomeHeader extends StatefulWidget {
+  const _HomeHeader({required this.onGenderChanged});
+
+  final void Function(String) onGenderChanged;
+
+  @override
+  State<_HomeHeader> createState() => _HomeHeaderState();
+}
+
+class _HomeHeaderState extends State<_HomeHeader> {
+  final SharedPreferencesService _prefs = SharedPreferencesService();
+
+  @override
+  Widget build(BuildContext context) {
+    final profileImageUrl = _prefs.profileImageUrl;
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        InkWell(
+          onTap: () {
+            Navigator.pushNamed(context, AppRoutes.profile);
+          },
+          child: CircleAvatar(
+            backgroundImage: profileImageUrl.isNotEmpty
+                ? NetworkImage(profileImageUrl)
+                : null,
+            radius: 22,
+            onBackgroundImageError: (exception, stackTrace) {
+              // Fallback to asset image if network image fails
+            },
+          ),
+        ),
+        _GenderSelector(onGenderChanged: widget.onGenderChanged),
+        const _CartButton(),
+      ],
+    );
+  }
+}
+
+class _GenderSelector extends StatefulWidget {
+  const _GenderSelector({required this.onGenderChanged});
+
+  final void Function(String) onGenderChanged;
+
+  @override
+  State<_GenderSelector> createState() => _GenderSelectorState();
+}
+
+class _GenderSelectorState extends State<_GenderSelector> {
+  String selectedValue = 'Men';
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        _showGenderPopupMenu(context);
+      },
+      child: Container(
+        height: 40,
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surfaceVariant,
+          borderRadius: BorderRadius.circular(30),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              selectedValue,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurface,
+                fontSize: 14,
               ),
-              verticalSpacing(16),
-              CategoriesList(categories: categories),
+            ),
+            const SizedBox(width: 8),
+            Icon(
+              Icons.keyboard_arrow_down,
+              size: 16,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
-              verticalSpacing(24),
+  void _showGenderPopupMenu(BuildContext context) async {
+    final RenderBox button = context.findRenderObject() as RenderBox;
+    final RenderBox overlay =
+        Overlay.of(context).context.findRenderObject() as RenderBox;
 
-              SectionHeader(title: 'Top Selling'),
-              verticalSpacing(16),
-              TopSellingList(topSelling: topSelling),
+    final result = await showMenu(
+      context: context,
+      position: RelativeRect.fromLTRB(
+        button.localToGlobal(Offset.zero, ancestor: overlay).dx,
+        button.localToGlobal(Offset.zero, ancestor: overlay).dy,
+        overlay.size.width -
+            button
+                .localToGlobal(
+                  button.size.bottomRight(Offset.zero),
+                  ancestor: overlay,
+                )
+                .dx,
+        overlay.size.height -
+            button
+                .localToGlobal(
+                  button.size.bottomRight(Offset.zero),
+                  ancestor: overlay,
+                )
+                .dy,
+      ),
+      items: [
+        const PopupMenuItem(value: 'Men', child: Text('Men')),
+        const PopupMenuItem(value: 'Women', child: Text('Women')),
+        const PopupMenuItem(value: 'Unspecified', child: Text('Neutral')),
+      ],
+    );
 
-              verticalSpacing(24),
-              SectionHeader(title: 'New In', titleColor: AppColors.darkPrimary),
-              verticalSpacing(16),
-              NewInList(newIn: newIn),
-            ],
+    if (result != null && result != selectedValue) {
+      setState(() {
+        selectedValue = result;
+      });
+      widget.onGenderChanged(result);
+    }
+  }
+}
+
+class _CartButton extends StatelessWidget {
+  const _CartButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Cart()),
+        );
+      },
+      child: Container(
+        height: 40,
+        width: 40,
+        decoration: BoxDecoration(
+          color: AppColors.figmaPrimary,
+          borderRadius: BorderRadius.circular(30),
+        ),
+        child: const Icon(Icons.shopping_bag, color: Colors.white),
+      ),
+    );
+  }
+}
+
+class _SearchBar extends StatelessWidget {
+  const _SearchBar();
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, AppRoutes.search);
+      },
+      child: SizedBox(
+        height: 50,
+        width: double.infinity,
+        child: TextField(
+          enabled: false,
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: Theme.of(context).colorScheme.surface,
+            prefixIcon: Icon(
+              Icons.search,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+            hintText: 'Search',
+            hintStyle: TextStyle(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(30),
+              borderSide: BorderSide.none,
+            ),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16),
           ),
         ),
       ),

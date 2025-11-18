@@ -117,7 +117,7 @@ class _CartState extends State<Cart> {
                         child: Text(
                           "Remove all",
                           style: TextStyle(
-                            color: Colors.redAccent,
+                            color: theme.error,
                             fontSize: 14.sp,
                             fontWeight: FontWeight.w600,
                           ),
@@ -329,7 +329,10 @@ class _CartState extends State<Cart> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset("assets/images/bag.png", width: 140.w, height: 140.h),
+            Opacity(
+              opacity: 0.6,
+              child: Image.asset("assets/images/bag.png", width: 140.w, height: 140.h),
+            ),
             SizedBox(height: 24.h),
             Text(
               "Your cart is empty",
@@ -351,11 +354,6 @@ class _CartState extends State<Cart> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(32.r),
                 ),
-                padding: EdgeInsets.symmetric(horizontal: 40.w, vertical: 14.h),
-              ),
-              child: Text(
-                "Explore category",
-                style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w500),
               ),
             ),
           ],
@@ -397,7 +395,10 @@ class _CartState extends State<Cart> {
             ),
             child: Text(
               "Checkout",
-              style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 16.sp,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ),

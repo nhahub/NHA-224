@@ -1,16 +1,16 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:depi_final_project/core/routes/app_routes.dart';
 import 'package:depi_final_project/core/theme/colors.dart';
 import 'package:depi_final_project/features/store/cubit/store_cubit.dart';
 import 'package:depi_final_project/features/store/cubit/store_state.dart';
+import 'package:depi_final_project/features/store/widgets/filter_bottom.dart';
+import 'package:depi_final_project/features/store/widgets/search_widget.dart';
 import 'package:depi_final_project/features/store/widgets/Product_Widget.dart';
 import 'package:depi_final_project/features/store/widgets/ShopByCatWidget.dart';
-import 'package:depi_final_project/features/store/widgets/filter_bottom.dart';
 import 'package:depi_final_project/features/store/widgets/filter_bottom_sheat.dart';
 // import 'package:depi_final_project/features/store/widgets/filter_bottom.dart';
 // import 'package:depi_final_project/features/store/widgets/filter_bottom_sheat.dart';
-import 'package:depi_final_project/features/store/widgets/search_widget.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SearchPage extends StatelessWidget {
   const SearchPage({super.key});
@@ -20,7 +20,7 @@ class SearchPage extends StatelessWidget {
     context.read<StoreCubit>().fetchCategories();
 
     return Scaffold(
-      backgroundColor: AppColors.lightBackground,
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(

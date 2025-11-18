@@ -7,12 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:depi_final_project/core/theme/colors.dart';
+import 'package:depi_final_project/data/models/product_model.dart';
 import 'package:depi_final_project/features/store/widgets/counter_btn.dart';
 import 'package:depi_final_project/features/store/widgets/review_card.dart';
 import 'package:depi_final_project/features/store/widgets/app_bar_icon.dart';
 import 'package:depi_final_project/features/store/widgets/product_option.dart';
 import 'package:depi_final_project/features/store/widgets/customize_option.dart';
-import 'package:depi_final_project/features/store/widgets/custom_bottom_sheet.dart';  
+import 'package:depi_final_project/features/store/widgets/custom_bottom_sheet.dart';
 
 
 class ProductPage extends StatefulWidget {

@@ -38,6 +38,9 @@ class AppRoutes {
   static const String registerPage = '/registerPage';
   static const String shopByCategory = '/shopByCategory';
   static const String productsByCategory = '/productsByCategory';
+  static const String allTopSelling = '/allTopSelling';
+  static const String allNewIn = '/allNewIn';
+  static const String profile = '/profile';
   static const String checkout= '/checkout';
 
 
@@ -81,6 +84,22 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const ShopByCategory());
       case productsByCategory:
         return MaterialPageRoute(builder: (_) => const ProductsByCategory());
+      case allTopSelling:
+        return MaterialPageRoute(
+          builder: (_) => const ProductsByCategory(),
+          settings: const RouteSettings(
+            arguments: {'categoryName': 'Top Selling', 'categoryId': ''},
+          ),
+        );
+      case allNewIn:
+        return MaterialPageRoute(
+          builder: (_) => const ProductsByCategory(),
+          settings: const RouteSettings(
+            arguments: {'categoryName': 'New In', 'categoryId': ''},
+          ),
+        );
+      case profile:
+        return MaterialPageRoute(builder: (_) => const BottomNavLayout());
       case productDetails:
         return MaterialPageRoute(builder: (_) =>  ProductPage(product: settings.arguments as ProductModel,));
       case cart:

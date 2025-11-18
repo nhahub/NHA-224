@@ -1,28 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:depi_final_project/core/theme/colors.dart';
-import 'package:depi_final_project/core/theme/text_style.dart';
 import 'package:depi_final_project/core/theme/spacing.dart';
+import 'package:depi_final_project/core/theme/text_style.dart';
 
 class ProductWidget extends StatelessWidget {
   final String image;
   final String title;
   final String price;
   final String? oldPrice;
+  final bool isFavorite;
+  final VoidCallback? onTap;
+  final VoidCallback? onFavoritePressed;
   const ProductWidget({
     super.key,
     required this.image,
     required this.title,
     required this.price,
     this.oldPrice,
+    this.isFavorite = false,
+    this.onTap,
+    this.onFavoritePressed,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(right: Spacing.lg),
+    return GestureDetector(
+      onTap: onTap,
       child: Container(
-        width: 159,
-        height: 281,
+        width: double.infinity,
+        margin: EdgeInsets.all(Spacing.sm),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surfaceVariant,
           borderRadius: BorderRadius.circular(Spacing.lgRadius),
@@ -36,17 +42,42 @@ class ProductWidget extends StatelessWidget {
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(Spacing.lgRadius),
-              ),
-              child: Image.asset(
-                image,
-                height: 180,
-                width: double.infinity,
-                fit: BoxFit.cover,
-              ),
+            Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(Spacing.lgRadius),
+                  ),
+                  child: AspectRatio(
+                    aspectRatio: 2.4 / 3, // Adjust this ratio as needed
+                    child: Image.network(image, fit: BoxFit.cover),
+                  ),
+                ),
+                Positioned(
+                  top: Spacing.sm,
+                  right: Spacing.sm,
+                  child: CircleAvatar(
+                    radius: 16,
+                    backgroundColor: Theme.of(
+                      context,
+                    ).colorScheme.surface.withOpacity(0.8),
+                    child: IconButton(
+                      onPressed: onFavoritePressed,
+                      icon: Icon(
+                        isFavorite ? Icons.favorite : Icons.favorite_border,
+                        color: isFavorite
+                            ? AppColors.figmaPrimary
+                            : Theme.of(context).colorScheme.onSurface,
+                        size: 16,
+                      ),
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
+                    ),
+                  ),
+                ),
+              ],
             ),
             Padding(
               padding: EdgeInsets.symmetric(
@@ -55,6 +86,7 @@ class ProductWidget extends StatelessWidget {
               ),
               child: Text(
                 title,
+                maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: AppTextStyles.bodyMedium.copyWith(
                   color: Theme.of(context).colorScheme.onSurface,
@@ -67,7 +99,7 @@ class ProductWidget extends StatelessWidget {
                 children: [
                   Text(
                     price,
-                    style: AppTextStyles.bodyMedium.copyWith(
+                    style: AppTextStyles.labelLarge.copyWith(
                       color: Theme.of(context).colorScheme.primary,
                       fontWeight: FontWeight.bold,
                     ),

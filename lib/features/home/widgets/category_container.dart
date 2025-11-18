@@ -6,7 +6,16 @@ import 'package:depi_final_project/core/theme/text_style.dart';
 import 'package:depi_final_project/core/routes/app_routes.dart';
 
 class CategoryContainer extends StatelessWidget {
-  const CategoryContainer({super.key});
+  const CategoryContainer({
+    super.key,
+    required this.image,
+    required this.label,
+    required this.categoryId,
+  });
+
+  final String image;
+  final String label;
+  final String categoryId;
 
   @override
   Widget build(BuildContext context) {
@@ -14,27 +23,36 @@ class CategoryContainer extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: InkWell(
         onTap: () {
-          Navigator.pushNamed(context, AppRoutes.productsByCategory);
+          Navigator.pushNamed(context, AppRoutes.productsByCategory, arguments: {
+            'categoryId': categoryId,
+            'categoryName': label,
+          });
         },
         child: Container(
           height: 64.h,
           decoration: BoxDecoration(
-            color: AppColors.darkSecondary,
+            color: Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(8.r),
+            border: Border.all(
+              color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
+            ),
           ),
           child: Row(
             children: [
               horizontalSpacing(12),
               CircleAvatar(
                 radius: 24,
-                backgroundColor: AppColors.darkSecondary,
-                backgroundImage: AssetImage('assets/images/Ellipse 5 (1).png'),
+                backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+                backgroundImage: AssetImage(image),
               ),
               horizontalSpacing(12),
-              Text(
-                'Shorts',
-                style: AppTextStyles.font17WiteRegular.copyWith(
-                  fontSize: 16.sp,
+              Expanded(
+                child: Text(
+                  label,
+                  style: AppTextStyles.font17WiteRegular.copyWith(
+                    fontSize: 16.sp,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
                 ),
               ),
             ],
