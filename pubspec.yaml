@@ -41,6 +41,7 @@ dependencies:
     sdk: flutter
   flutter_bloc: ^9.1.1
   flutter_dotenv: ^6.0.0
+  flutter_rating: ^2.0.2
   flutter_screenutil: ^5.9.3
   font_awesome_flutter: ^10.9.1
   google_fonts: ^6.3.2

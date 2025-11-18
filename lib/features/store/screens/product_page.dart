@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_rating/flutter_rating.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:depi_final_project/core/theme/colors.dart';
 import 'package:depi_final_project/core/routes/app_routes.dart';
@@ -31,6 +32,8 @@ class _ProductPageState extends State<ProductPage> {
   int selectedColor = 0;
   int count = 1;
 
+  double rating = 0.0;
+  TextEditingController _commentController = TextEditingController();
 
 
   @override
@@ -232,7 +235,93 @@ class _ProductPageState extends State<ProductPage> {
                   ),),
         
                   SizedBox(height: 30,),
-        
+                  ElevatedButton(
+                    
+                  onPressed: (){
+                   showModalBottomSheet(context: context, 
+                   builder: (context){
+                    return StatefulBuilder(
+                      builder: (context, setState) =>  Container(
+                        padding: EdgeInsets.all(20),
+                        height: MediaQuery.of(context).size.height * 0.5,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(30), 
+                            topRight: Radius.circular(30), 
+                            ),
+                            color: AppColors.lightBorder
+                        ),
+                        child: Column(
+                      
+                          children: [
+                            SizedBox(height: 10,),
+                            Text("How do you see this product", style: GoogleFonts.gabarito(fontWeight: FontWeight.bold, fontSize: 24),),
+                            SizedBox(height: 20,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                StarRating(
+                                  rating: rating,
+                                  color: AppColors.darkPrimary,
+                                  allowHalfRating: true,
+                                  onRatingChanged: (rating){
+                                    setState(() {
+                                      this.rating = rating;
+                                    });
+                                  },
+                                ),
+                                SizedBox(width: 5,),
+                                Text("$rating")
+                              ],
+                            ),
+                            SizedBox(height: 20,),
+                            TextField(
+                              controller: _commentController,
+                              maxLines: 7,
+                              decoration: InputDecoration(
+                                hintText: "Type your comment here",
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10)
+                                ),
+                                filled: true,
+                                fillColor: Colors.white
+                              ),
+                            ),
+                            SizedBox(height: 10,),
+                            Align(
+                              alignment: AlignmentGeometry.centerRight,
+                              child: ElevatedButton(
+                              onPressed: (){}, 
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text("Comment"),
+                                  SizedBox(width: 10,),
+                                  Icon(Icons.arrow_circle_up,size: 25,)
+                                ],
+                              )),
+                            )
+                          ],
+                        ),
+                      ),
+                    );
+                   });
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.darkPrimary
+
+                  ),
+                   child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                     children: [
+                       Text("Write your Review", style: GoogleFonts.gabarito(color: Colors.white, fontWeight: FontWeight.bold),),
+                       SizedBox(width: 10,),
+                       Icon(Icons.star)
+                     ],
+                   )),
+                  SizedBox(height: 10,),
                   Text("Reviews", style: GoogleFonts.gabarito(
                     textStyle: TextStyle(
                       fontSize: 16,
