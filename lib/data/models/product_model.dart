@@ -9,6 +9,7 @@ class ProductModel {
   final double rating;
   final int stock;
   final String productId;
+  //final List<Map<String, dynamic>> colors;
   final List<String> colors;
   final List<String> sizes;
   final List<String> imageUrl;

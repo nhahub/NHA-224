@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:depi_final_project/core/routes/app_routes.dart';
 import 'package:depi_final_project/core/theme/colors.dart';
 import 'package:depi_final_project/features/store/cubit/store_cubit.dart';
 import 'package:depi_final_project/features/store/cubit/store_state.dart';
@@ -63,14 +64,16 @@ class SearchPage extends StatelessWidget {
                                   ? "Min"
                                   : null),
                         onSelect: (option) {
-                          if (option == "Min")
+                          if (option == "Min") {
                             context.read<StoreCubit>().updateFilters(
                               minPrice: 0,
                             );
-                          if (option == "Max")
+                          }
+                          if (option == "Max") {
                             context.read<StoreCubit>().updateFilters(
                               maxPrice: 1000,
                             );
+                          }
                           Navigator.pop(context);
                         },
                       ),
@@ -126,10 +129,12 @@ class SearchPage extends StatelessWidget {
                   List products = [];
                   bool showCategories = true;
 
-                  if (state is StoreLoading)
+                  if (state is StoreLoading) {
                     return const Center(child: CircularProgressIndicator());
-                  if (state is StoreError)
+                  }
+                  if (state is StoreError) {
                     return Center(child: Text(state.message));
+                  }
                   if (state is StoreCategoriesLoaded) showCategories = true;
                   if (state is StoreProductsLoaded) {
                     products = state.products;
@@ -160,9 +165,14 @@ class SearchPage extends StatelessWidget {
                                     ),
                                 itemCount: products.length,
                                 itemBuilder: (context, index) {
+                                  print(index);
                                   final product = products[index];
                                   return ProductWidgetSearch(
-                                    imageUrl: product.imageUrl,
+                                    onTap: (){
+                                      print("product: "+product.name);
+                                     Navigator.pushNamed(context, AppRoutes.productDetails, arguments: product);
+                                    },
+                                    imageUrl: product.imageUrl[0],
                                     title: product.name,
                                     price:
                                         "\$${product.price.toStringAsFixed(2)}",

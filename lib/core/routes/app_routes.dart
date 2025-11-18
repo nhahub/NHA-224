@@ -1,3 +1,7 @@
+import 'package:depi_final_project/data/models/product_model.dart';
+import 'package:depi_final_project/features/store/screens/cart.dart';
+import 'package:depi_final_project/features/store/screens/checkout_screen.dart';
+import 'package:depi_final_project/features/store/screens/product_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:depi_final_project/features/admin/admin_page.dart';
@@ -37,6 +41,8 @@ class AppRoutes {
   static const String allTopSelling = '/allTopSelling';
   static const String allNewIn = '/allNewIn';
   static const String profile = '/profile';
+  static const String checkout= '/checkout';
+
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -94,6 +100,12 @@ class AppRoutes {
         );
       case profile:
         return MaterialPageRoute(builder: (_) => const BottomNavLayout());
+      case productDetails:
+        return MaterialPageRoute(builder: (_) =>  ProductPage(product: settings.arguments as ProductModel,));
+      case cart:
+        return MaterialPageRoute(builder: (_) => Cart());
+      case checkout:
+        return MaterialPageRoute(builder: (_) => CheckoutScreen());
       default:
         return _errorRoute("Route not found: ${settings.name}");
     }

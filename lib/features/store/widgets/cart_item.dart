@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:depi_final_project/features/store/widgets/counter_btn.dart';
 
 class CartItem extends StatelessWidget {
-  const CartItem({super.key, required this.image, required this.price, required this.size, required this.color, required this.title});
+  const CartItem({super.key, required this.image, required this.price, required this.size, required this.color, required this.title, required this.onEdit, this.onLongTab});
 
   final String image;
   final String title;
@@ -11,85 +11,78 @@ class CartItem extends StatelessWidget {
   final String size;
   final String color;
 
+  final void Function() onEdit;
+  final void Function()? onLongTab;
+
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: theme.surface,
-        border: Border.all(color: theme.outline.withOpacity(0.1)),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: Image.asset(image, width: 80, height: 80, fit: BoxFit.cover),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: theme.onSurface,
+    return InkWell(
+      onLongPress: onLongTab,
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          color: theme.secondary
+        ),
+        child: Row(
+          
+          children: [
+          Image.network(image, width: 100, height: 100,fit: BoxFit.contain,),
+          SizedBox(width: 5,),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                    width: 150,
+                    child: Text(title, overflow: TextOverflow.ellipsis,)),
+                  SizedBox(width: 50,),
+                  Text("\$$price", style: GoogleFonts.gabarito(textStyle: TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 12
+                  )),)
+                ],
+              ),
+              SizedBox(height: 10,),
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  RichText(
+                    text: TextSpan(
+                      text: "Size", style: TextStyle(color: Color.fromARGB(96, 39, 39, 128)),
+                      children: [TextSpan(
+                        text: " - $size",
+                        style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black)
+                      )]),
+                    
                   ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  "\$${price.toStringAsFixed(2)}",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                    color: theme.primary,
+                  SizedBox(width: 10,),
+                  RichText(
+                    text: TextSpan(
+                      text: "Color", style: TextStyle(color: Color.fromARGB(96, 39, 39, 128)),
+                      children: [TextSpan(
+                        text: " - $color",
+                        style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black)
+                      )]),
+                    
                   ),
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    Text(
-                      "Size $size",
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: theme.onSurfaceVariant,
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Text(
-                      "Color $color",
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: theme.onSurfaceVariant,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                Row(
-                  children: [
-                    CounterBtn(icon: "+"),
-                    const SizedBox(width: 12),
-                    CounterBtn(icon: "-"),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          IconButton(
-            icon: Icon(
-              Icons.delete_outline,
-              color: theme.error,
-            ),
-            onPressed: () {},
-          ),
-        ],
+                  SizedBox(width: 10,),
+                  TextButton(
+                  onPressed: onEdit,
+                  child: Text("Edit quantity", style: TextStyle(fontSize: 12),))
+                ],
+              ),
+            ],
+          )
+        ],)
+      
       ),
     );
   }
