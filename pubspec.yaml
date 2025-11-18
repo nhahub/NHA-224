@@ -52,6 +52,7 @@ dependencies:
   path: ^1.9.1
   salomon_bottom_bar: ^3.3.2
   shared_preferences: ^2.5.3
+  skeletonizer: ^2.1.0+1
 
 dev_dependencies:
 

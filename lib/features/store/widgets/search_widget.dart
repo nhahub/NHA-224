@@ -1,59 +1,83 @@
-import 'package:depi_final_project/core/theme/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:depi_final_project/core/theme/colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SearchWidget extends StatelessWidget {
-  final ValueChanged<String>? onChanged; // ← هنا ضفنا callback
-  final VoidCallback? onClear; // اختياري لو عايز زرار clear يشتغل
+  final TextEditingController controller;
+  final ValueChanged<String>? onChanged;
+  final VoidCallback? onClear;
 
-  const SearchWidget({super.key, this.onChanged, this.onClear});
+  const SearchWidget({
+    super.key,
+    required this.controller,
+    this.onChanged,
+    this.onClear,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Container(
-          padding: EdgeInsets.only(left: 4),
-          decoration: BoxDecoration(
-            color: AppColors.lightSecondary, 
-            borderRadius: BorderRadius.circular(24),
-          ),
-          child: IconButton(
-            onPressed: () {
-              Navigator.pop(context); 
-            },
-            icon: Icon(Icons.arrow_back_ios, color: AppColors.black),
-          ),
-        ),
-        SizedBox(width: 4),
-        Expanded(
-          child: TextField(
-            onChanged: onChanged, // ← ربطنا الـ callback
-            decoration: InputDecoration(
-              contentPadding: EdgeInsets.symmetric(vertical: 12),
-              hintText: "Search",
-              hintStyle: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontStyle: FontStyle.normal,
-                fontSize: 12,
-                height: 1.6,
-                letterSpacing: 0,
-                color: AppColors.black
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: Row(
+        children: [
+          GestureDetector(
+            onTap: () => Navigator.pop(context),
+            child: Container(
+              height: 40.h,
+              width: 40.h,
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.secondary,
+                shape: BoxShape.circle,
               ),
-              prefixIcon: Icon(Icons.search, color: AppColors.black, size: 24),
-              suffixIcon: IconButton(
-                icon: Icon(Icons.clear, color: AppColors.black),
-                onPressed: onClear, // ← زرار clear لو موجود
-              ),
-              filled: true,
-              fillColor: AppColors.lightSecondary,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(22),
-                borderSide: BorderSide.none,
+              child: Icon(
+                Icons.arrow_back_ios_new_rounded,
+                size: 18.sp,
+                color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
           ),
-        ),
-      ],
+          const SizedBox(width: 4),
+          Expanded(
+            child: SizedBox(
+              height: 40,
+              width: double.infinity,
+              child: TextField(
+                controller: controller,
+                enabled: true,
+                onChanged: onChanged,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Theme.of(context).colorScheme.secondary,
+                  prefixIcon: Icon(
+                    Icons.search,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                  hintText: 'Search',
+                  hintStyle: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: BorderSide.none,
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                  suffixIcon: controller.text.isNotEmpty
+                      ? IconButton(
+                          icon: Icon(
+                            Icons.clear,
+                            color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          ),
+                          onPressed: onClear,
+                        )
+                      : null,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

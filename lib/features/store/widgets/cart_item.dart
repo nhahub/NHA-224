@@ -1,88 +1,165 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:depi_final_project/features/store/widgets/counter_btn.dart';
+import 'package:depi_final_project/core/theme/colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CartItem extends StatelessWidget {
-  const CartItem({super.key, required this.image, required this.price, required this.size, required this.color, required this.title, required this.onEdit, this.onLongTab});
+  const CartItem({
+    super.key,
+    required this.image,
+    required this.price,
+    required this.size,
+    required this.color,
+    required this.title,
+    required this.quantity,
+    required this.onIncrement,
+    required this.onDecrement,
+    this.onLongTab,
+  });
 
   final String image;
   final String title;
   final double price;
   final String size;
   final String color;
-
-  final void Function() onEdit;
+  final int quantity;
+  final void Function() onIncrement;
+  final void Function() onDecrement;
   final void Function()? onLongTab;
-
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
-    return InkWell(
-      onLongPress: onLongTab,
-      child: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          color: theme.secondary
-        ),
-        child: Row(
-          
-          children: [
-          Image.network(image, width: 100, height: 100,fit: BoxFit.contain,),
-          SizedBox(width: 5,),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SizedBox(
-                    width: 150,
-                    child: Text(title, overflow: TextOverflow.ellipsis,)),
-                  SizedBox(width: 50,),
-                  Text("\$$price", style: GoogleFonts.gabarito(textStyle: TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: 12
-                  )),)
-                ],
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(12.r),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12.r),
+        color: theme.surface,
+        border: Border.all(color: theme.outline.withOpacity(0.1)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8.r),
+            child: Image.network(
+              image,
+              width: 80.r,
+              height: 80.r,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) => Icon(
+                Icons.broken_image,
+                size: 48.r,
+                color: theme.onSurfaceVariant,
               ),
-              SizedBox(height: 10,),
+            ),
+          ),
+          SizedBox(width: 12.w),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        title,
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w500,
+                          color: theme.onSurface,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 4.h),
+                Text(
+                  '\$${price.toStringAsFixed(2)}',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14.sp,
+                    color: theme.primary,
+                  ),
+                ),
+                SizedBox(height: 8.h),
+                Row(
+                  children: [
+                    Text(
+                      'Size: $size',
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        color: theme.onSurfaceVariant,
+                      ),
+                    ),
+                    SizedBox(width: 12.w),
+                    Text(
+                      'Color: $color',
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        color: theme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              InkWell(
+                onLongPress: onLongTab,
+                child: Icon(
+                  Icons.delete_outline,
+                  color: theme.onSurface,
+                  size: 20.r,
+                ),
+              ),
+              SizedBox(height: 30.h),
               Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  RichText(
-                    text: TextSpan(
-                      text: "Size", style: TextStyle(color: Color.fromARGB(96, 39, 39, 128)),
-                      children: [TextSpan(
-                        text: " - $size",
-                        style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black)
-                      )]),
-                    
+                  GestureDetector(
+                    onTap: onDecrement,
+                    child: CircleAvatar(
+                      radius: 12.r,
+                      backgroundColor: AppColors.darkPrimary,
+                      child: Icon(
+                        Icons.remove,
+                        size: 24.r,
+                        color: Theme.of(context).colorScheme.surface,
+                      ),
+                    ),
                   ),
-                  SizedBox(width: 10,),
-                  RichText(
-                    text: TextSpan(
-                      text: "Color", style: TextStyle(color: Color.fromARGB(96, 39, 39, 128)),
-                      children: [TextSpan(
-                        text: " - $color",
-                        style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black)
-                      )]),
-                    
+                  SizedBox(width: 6.w),
+                  Text(
+                    '$quantity',
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w500,
+                      color: theme.onSurface,
+                    ),
                   ),
-                  SizedBox(width: 10,),
-                  TextButton(
-                  onPressed: onEdit,
-                  child: Text("Edit quantity", style: TextStyle(fontSize: 12),))
+                  SizedBox(width: 6.w),
+                  GestureDetector(
+                    onTap: onIncrement,
+                    child: CircleAvatar(
+                      radius: 12.r,
+                      backgroundColor: AppColors.darkPrimary,
+                      child: Icon(
+                        Icons.add,
+                        size: 24.r,
+                        color: Theme.of(context).colorScheme.surface,
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ],
-          )
-        ],)
-      
+          ),
+        ],
       ),
     );
   }

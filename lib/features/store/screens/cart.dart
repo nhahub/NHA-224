@@ -7,10 +7,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:depi_final_project/core/theme/text_style.dart';
 import 'package:depi_final_project/core/routes/app_routes.dart';
 import 'package:depi_final_project/data/models/product_model.dart';
+import 'package:depi_final_project/core/widgets/cart_skeleton.dart';
 import 'package:depi_final_project/core/widgets/app_bar_widget.dart';
 import 'package:depi_final_project/features/store/cubit/cart_cubit.dart';
 import 'package:depi_final_project/features/store/cubit/cart_state.dart';
 import 'package:depi_final_project/features/store/widgets/cart_item.dart';
+import 'package:depi_final_project/core/widgets/progress_hud_widget.dart';
 import 'package:depi_final_project/features/store/widgets/counter_btn.dart';
 import 'package:depi_final_project/features/store/widgets/coupon_card.dart';
 import 'package:depi_final_project/features/store/widgets/price_detail.dart';
@@ -23,6 +25,8 @@ class Cart extends StatefulWidget {
 }
 
 class _CartState extends State<Cart> {
+  bool _isInitialLoad = true;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -37,286 +41,268 @@ class _CartState extends State<Cart> {
 
     TextEditingController _countController = TextEditingController();
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Cart", style: AppTextStyles.font20WitekBold),
-        centerTitle: true,
-      ),
-      body: BlocBuilder<CartCubit, CartState>(
-        builder: (context, state) {
-          if (state is CartLoaded && state.cartWithDetails.isEmpty) {
-            return _buildEmptyCart(theme);
-          }
-          if (state is CartLoading)
-            return Center(
-              child: CircularProgressIndicator(color: AppColors.darkPrimary),
-            );
+    return BlocListener<CartCubit, CartState>(
+      listener: (context, state) {
+        if (state is CartLoaded) {
+          _isInitialLoad = false;
+        }
+        if (state is CartError) {
+          _isInitialLoad = false;
+        }
+      },
+      child: ProgressHUDWidget(
+        isLoading:
+            !_isInitialLoad && context.watch<CartCubit>().state is CartLoading,
+        child: Scaffold(
+          appBar: const CustomAppBar(title: "Cart"),
+          body: BlocBuilder<CartCubit, CartState>(
+            builder: (context, state) {
+              if (state is CartLoaded && state.cartWithDetails.isEmpty) {
+                return _buildEmptyCart(theme);
+              }
 
-          if (state is RemoveAllSuccess) return _buildEmptyCart(theme);
+              if (state is RemoveAllSuccess) return _buildEmptyCart(theme);
 
-          if (state is CartLoaded) {
-            final items = state.cartWithDetails;
+              if (state is CartLoaded) {
+                final items = state.cartWithDetails;
 
-            double subtotal = 0;
-            double shippingCost = 0;
-            double tax = 0;
-            double total = 0;
-            for (var item in items) {
-              subtotal += item.product.price;
-              shippingCost = subtotal + 20;
-              tax = 0.14;
-              total = (subtotal * tax) + shippingCost;
-            }
-            return Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: TextButton(
-                        onPressed: () => {
-                          showDialog(
-                            context: context,
-                            builder: (_) {
-                              return AlertDialog(
-                                title: Text("Remove all product"),
-                                content: Text(
-                                  "Are you sure you want to delete all your cart items",
-                                ),
-                                actions: [
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      cubit.removeAllCartProducts();
-                                      Navigator.pop(context);
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.red,
+                double subtotal = items.fold(
+                  0.0,
+                  (sum, item) =>
+                      sum + item.product.price * item.cartDetails.quantity,
+                );
+                double shippingCost = 20.0;
+                double tax = subtotal * 0.14;
+                double total = subtotal + shippingCost + tax;
+                return SafeArea(
+                  child: SingleChildScrollView(
+                    padding: EdgeInsets.all(16.w),
+                    child: Column(
+                      children: [
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: TextButton(
+                            onPressed: () => {
+                              showDialog(
+                                context: context,
+                                builder: (_) {
+                                  return AlertDialog(
+                                    title: Text("Remove all product"),
+                                    content: Text(
+                                      "Are you sure you want to delete all your cart items",
                                     ),
-                                    child: Text(
-                                      "Yes",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                  ElevatedButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: AppColors.darkPrimary,
-                                      textStyle: TextStyle(color: Colors.white),
-                                    ),
-                                    child: Text(
-                                      "No",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                ],
-                              );
+                                    actions: [
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          cubit.removeAllCartProducts();
+                                          Navigator.pop(context);
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.red,
+                                        ),
+                                        child: Text(
+                                          "Yes",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ),
+                                      ElevatedButton(
+                                        onPressed: () => Navigator.pop(context),
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: theme.primary,
+                                          foregroundColor: theme.onPrimary,
+                                        ),
+                                        child: Text("No"),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ),
                             },
-                          ),
-                        },
-                        child: Text(
-                          "Remove all",
-                          style: TextStyle(
-                            color: theme.error,
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w600,
+                            child: Text(
+                              "Remove all",
+                              style: TextStyle(
+                                color: theme.onSurface,
+                                fontSize: 14.sp,
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 340.h,
-                      child: ListView.builder(
-                        itemCount: state.cartWithDetails.length,
-                        itemBuilder: (context, i) {
-                          final item = items[i];
-                          print(item.product.name);
-                          print("id: ${item.product.id}");
-                          return Padding(
-                            padding: EdgeInsets.only(bottom: 10.h),
-                            child: CartItem(
-                              onLongTab: () {
-                                print("Delete product");
-                                showDialog(
-                                  context: context,
-                                  builder: (_) {
-                                    return AlertDialog(
-                                      title: Text("Delete product"),
-                                      content: Text(
-                                        "Are you sure you want to delete this product",
-                                      ),
-                                      actions: [
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            cubit.deleteProduct(
-                                              item.product.id,
-                                            );
-                                            Navigator.pop(context);
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: Colors.red,
-                                          ),
-                                          child: Text("Yes", style: TextStyle(color: Colors.white),),
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: state.cartWithDetails.length,
+                          itemBuilder: (context, i) {
+                            final item = items[i];
+                            print(item.product.name);
+                            print("id: ${item.product.id}");
+                            return Padding(
+                              padding: EdgeInsets.only(bottom: 10.h),
+                              child: CartItem(
+                                onLongTab: () {
+                                  print("Delete product");
+                                  showDialog(
+                                    context: context,
+                                    builder: (_) {
+                                      return AlertDialog(
+                                        title: Text("Delete product"),
+                                        content: Text(
+                                          "Are you sure you want to delete this product",
                                         ),
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: AppColors.darkPrimary,
-                                          ),
-                                          child: Text("No",style: TextStyle(color: Colors.white)),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-                              },
-                              image: item.product.imageUrl[0],
-                              price: item.product.price,
-                              size: item.cartDetails.selectedSize,
-                              color: item.cartDetails.selectedColor,
-                              title: item.product.name,
-
-                              onEdit: () {
-                                _countController.text =
-                                    "${item.cartDetails.quantity}";
-                                showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return StatefulBuilder(
-                                      builder: (context, setState) {
-                                        return AlertDialog(
-                                          title: Text("Edit product quantity"),
-                                          content: Row(
-                                            children: [
-                                              Expanded(
-                                                child: CounterBtn(
-                                                  icon: "--",
-                                                  onTap: () {
-                                                    setState(() {
-                                                      if (item
-                                                              .cartDetails
-                                                              .quantity >
-                                                          1) {
-                                                        item
-                                                                .cartDetails
-                                                                .quantity -=
-                                                            1;
-                                                        _countController.text =
-                                                            "${item.cartDetails.quantity}";
-                                                      }
-                                                    });
-                                                    print(
-                                                      item.cartDetails.quantity,
-                                                    );
-                                                  },
-                                                ),
-                                              ),
-                                              SizedBox(width: 10),
-                                              Expanded(
-                                                child: TextField(
-                                                  controller: _countController,
-                                                  textAlign: TextAlign.center,
-                                                  keyboardType:
-                                                      TextInputType.number,
-                                                  decoration: InputDecoration(
-                                                    border: OutlineInputBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                            10,
-                                                          ),
-                                                    ),
-                                                    hintText: "xxx",
-                                                  ),
-                                                ),
-                                              ),
-                                              SizedBox(width: 10),
-                                              Expanded(
-                                                child: CounterBtn(
-                                                  icon: "+",
-                                                  onTap: () {
-                                                    setState(() {
-                                                      if (item
-                                                              .cartDetails
-                                                              .quantity <
-                                                          item.product.stock) {
-                                                        item
-                                                                .cartDetails
-                                                                .quantity +=
-                                                            1;
-                                                        _countController.text =
-                                                            "${item.cartDetails.quantity}";
-                                                      }
-                                                    });
-                                                    print(
-                                                      item.cartDetails.quantity,
-                                                    );
-                                                  },
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-
-                                          actions: [
-                                            ElevatedButton(
-                                              onPressed: () {
-                                                cubit.editProductQuantity(
-                                                  item.product.id,
-                                                  int.parse(
-                                                    _countController.text,
-                                                  ),
-                                                  item.product.stock,
-                                                );
-                                                Navigator.pop(context);
-                                              },
-                                              style: ElevatedButton.styleFrom(
-                                                backgroundColor:
-                                                    AppColors.darkPrimary,
-                                              ),
-                                              child: Text(
-                                                "Save",
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                ),
+                                        actions: [
+                                          ElevatedButton(
+                                            onPressed: () {
+                                              cubit.deleteProduct(
+                                                item.product.id,
+                                              );
+                                              Navigator.pop(context);
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.red,
+                                            ),
+                                            child: Text(
+                                              "Yes",
+                                              style: TextStyle(
+                                                color: Colors.white,
                                               ),
                                             ),
-                                          ],
-                                        );
-                                      },
+                                          ),
+                                          ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: theme.primary,
+                                              foregroundColor: theme.onPrimary,
+                                            ),
+                                            child: Text("No"),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                },
+                                image: item.product.imageUrl[0],
+                                price: item.product.price,
+                                size: item.cartDetails.selectedSize,
+                                color: item.cartDetails.selectedColor,
+                                title: item.product.name,
+                                quantity: item.cartDetails.quantity,
+                                onIncrement: () {
+                                  if (item.cartDetails.quantity <
+                                      item.product.stock) {
+                                    cubit.editProductQuantity(
+                                      item.product.id,
+                                      item.cartDetails.quantity + 1,
+                                      item.product.stock,
                                     );
-                                  },
-                                );
-                              },
-                            ),
-                          );
-                        },
+                                  }
+                                },
+                                onDecrement: () {
+                                  if (item.cartDetails.quantity > 1) {
+                                    cubit.editProductQuantity(
+                                      item.product.id,
+                                      item.cartDetails.quantity - 1,
+                                      item.product.stock,
+                                    );
+                                  }
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                        Divider(
+                          color: Colors.white24,
+                          thickness: 1,
+                          height: 24.h,
+                        ),
+                        _buildPriceSection(
+                          theme,
+                          subTotal: subtotal,
+                          shippingCost: shippingCost,
+                          tax: tax,
+                          total: total,
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }
+
+              if (state is CartError) {
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(SnackBar(content: Text(state.message)));
+              }
+
+              // Loading state - show skeleton
+              return Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Container(
+                          height: 20,
+                          width: 80,
+                          color: Colors.grey.shade300,
+                        ),
                       ),
-                    ),
-                    Divider(color: Colors.white24, thickness: 1, height: 24.h),
-                    _buildPriceSection(
-                      theme,
-                      subTotal: subtotal,
-                      shippingCost: shippingCost,
-                      tax: tax,
-                      total: total,
-                    ),
-                  ],
+                      SizedBox(height: 12.h),
+                      const CartItemSkeleton(),
+                      Divider(
+                        color: Colors.white24,
+                        thickness: 1,
+                        height: 24.h,
+                      ),
+                      // Price section skeleton
+                      Container(
+                        height: 16,
+                        width: double.infinity,
+                        color: Colors.grey.shade300,
+                        margin: EdgeInsets.only(bottom: 12),
+                      ),
+                      Container(
+                        height: 16,
+                        width: double.infinity,
+                        color: Colors.grey.shade300,
+                        margin: EdgeInsets.only(bottom: 12),
+                      ),
+                      Container(
+                        height: 16,
+                        width: double.infinity,
+                        color: Colors.grey.shade300,
+                        margin: EdgeInsets.only(bottom: 12),
+                      ),
+                      Container(
+                        height: 18,
+                        width: double.infinity,
+                        color: AppColors.figmaPrimary.withOpacity(0.5),
+                        margin: EdgeInsets.only(bottom: 20),
+                      ),
+                      // Coupon skeleton
+                      Container(
+                        height: 50,
+                        width: double.infinity,
+                        color: Colors.grey.shade300,
+                        margin: EdgeInsets.only(bottom: 20),
+                      ),
+                      // Checkout button skeleton
+                      Container(
+                        height: 50,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: AppColors.figmaPrimary.withOpacity(0.5),
+                          borderRadius: BorderRadius.circular(32),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            );
-          }
-
-          if (state is CartError) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(state.message)));
-          }
-
-          return Center(
-            child: CircularProgressIndicator(color: AppColors.darkPrimary),
-          );
-        },
+              );
+            },
+          ),
+        ),
       ),
     );
   }
@@ -331,14 +317,18 @@ class _CartState extends State<Cart> {
           children: [
             Opacity(
               opacity: 0.6,
-              child: Image.asset("assets/images/bag.png", width: 140.w, height: 140.h),
+              child: Image.asset(
+                "assets/images/bag.png",
+                width: 140.w,
+                height: 140.h,
+              ),
             ),
             SizedBox(height: 24.h),
             Text(
               "Your cart is empty",
-              style: GoogleFonts.gabarito(
+              style: TextStyle(
                 fontSize: 22.sp,
-                color: AppColors.darkSurface,
+                color: theme.onSurface,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -349,12 +339,16 @@ class _CartState extends State<Cart> {
                 Navigator.pushReplacementNamed(context, AppRoutes.search);
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.darkPrimary,
-                foregroundColor: Colors.white,
+                backgroundColor: theme.primary,
+                foregroundColor: theme.onPrimary,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(32.r),
                 ),
-              ), child: Text("Shop now", style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),),
+              ),
+              child: Text(
+                "Shop now",
+                style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
+              ),
             ),
           ],
         ),
@@ -386,8 +380,8 @@ class _CartState extends State<Cart> {
               Navigator.pushNamed(context, AppRoutes.checkout);
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.darkPrimary,
-              foregroundColor: Colors.white,
+              backgroundColor: theme.primary,
+              foregroundColor: theme.onPrimary,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(32),
               ),
@@ -395,10 +389,7 @@ class _CartState extends State<Cart> {
             ),
             child: Text(
               "Checkout",
-              style: TextStyle(
-                fontSize: 16.sp,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
             ),
           ),
         ),

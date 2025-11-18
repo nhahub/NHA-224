@@ -17,8 +17,9 @@ class OrdersScreen extends StatelessWidget {
     final bool hasOrders = dummyOrdersData.isNotEmpty;
 
     return Scaffold(
-      appBar:const CustomAppBar(
+      appBar: const CustomAppBar(
         title: "Orders",
+        automaticallyImplyLeading: false,
       ),
       body: hasOrders
           ? HaveOrdersScreen(orders: dummyOrdersData)

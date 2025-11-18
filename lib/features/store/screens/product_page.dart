@@ -1,13 +1,14 @@
-import 'package:depi_final_project/core/routes/app_routes.dart';
-import 'package:depi_final_project/data/models/cart_product.dart';
-import 'package:depi_final_project/data/models/product_model.dart';
-import 'package:depi_final_project/features/store/cubit/cart_cubit.dart';
-import 'package:depi_final_project/features/store/cubit/cart_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:depi_final_project/core/theme/colors.dart';
+import 'package:depi_final_project/core/routes/app_routes.dart';
+import 'package:depi_final_project/data/models/cart_product.dart';
 import 'package:depi_final_project/data/models/product_model.dart';
+import 'package:depi_final_project/data/models/product_model.dart';
+import 'package:depi_final_project/features/store/cubit/cart_cubit.dart';
+import 'package:depi_final_project/features/store/cubit/cart_state.dart';
+import 'package:depi_final_project/core/widgets/progress_hud_widget.dart';
 import 'package:depi_final_project/features/store/widgets/counter_btn.dart';
 import 'package:depi_final_project/features/store/widgets/review_card.dart';
 import 'package:depi_final_project/features/store/widgets/app_bar_icon.dart';
@@ -38,7 +39,9 @@ class _ProductPageState extends State<ProductPage> {
 
     final cubit = context.read<CartCubit>();
 
-    return Scaffold(
+    return ProgressHUDWidget(
+      isLoading: context.watch<CartCubit>().state is CartLoading,
+      child: Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         leading: Padding(
@@ -74,10 +77,8 @@ class _ProductPageState extends State<ProductPage> {
 
           
         },
-        builder: (context, state){  
-       return state is CartLoading? 
-        CircularProgressIndicator():
-        Padding(
+        builder: (context, state){
+       return Padding(
           padding: const EdgeInsets.all(10),
           child: SingleChildScrollView(
             child: Column(
@@ -308,10 +309,8 @@ class _ProductPageState extends State<ProductPage> {
           ),
         )),
       ),
-       
-       
-       );
-        
+      ),
+    );
     
   }
 }
