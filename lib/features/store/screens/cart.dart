@@ -1,19 +1,19 @@
-import 'package:depi_final_project/core/routes/app_routes.dart';
-import 'package:depi_final_project/data/models/product_model.dart';
-import 'package:depi_final_project/features/store/cubit/cart_cubit.dart';
-import 'package:depi_final_project/features/store/cubit/cart_state.dart';
-import 'package:depi_final_project/features/store/widgets/counter_btn.dart';
 import 'package:flutter/material.dart';
-import 'package:depi_final_project/core/theme/colors.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:depi_final_project/core/theme/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:depi_final_project/core/theme/text_style.dart';
+import 'package:depi_final_project/core/routes/app_routes.dart';
+import 'package:depi_final_project/data/models/product_model.dart';
 import 'package:depi_final_project/core/widgets/app_bar_widget.dart';
+import 'package:depi_final_project/features/store/cubit/cart_cubit.dart';
+import 'package:depi_final_project/features/store/cubit/cart_state.dart';
 import 'package:depi_final_project/features/store/widgets/cart_item.dart';
+import 'package:depi_final_project/features/store/widgets/counter_btn.dart';
 import 'package:depi_final_project/features/store/widgets/coupon_card.dart';
 import 'package:depi_final_project/features/store/widgets/price_detail.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class Cart extends StatefulWidget {
   const Cart({super.key});
@@ -354,7 +354,7 @@ class _CartState extends State<Cart> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(32.r),
                 ),
-              ),
+              ), child: Text("Shop now", style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),),
             ),
           ],
         ),
