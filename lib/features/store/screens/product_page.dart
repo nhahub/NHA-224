@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:depi_final_project/core/theme/colors.dart';
+import 'package:depi_final_project/data/models/product_model.dart';
 import 'package:depi_final_project/features/store/widgets/counter_btn.dart';
 import 'package:depi_final_project/features/store/widgets/review_card.dart';
 import 'package:depi_final_project/features/store/widgets/app_bar_icon.dart';
 import 'package:depi_final_project/features/store/widgets/product_option.dart';
 import 'package:depi_final_project/features/store/widgets/customize_option.dart';
-import 'package:depi_final_project/features/store/widgets/custom_bottom_sheet.dart';  
+import 'package:depi_final_project/features/store/widgets/custom_bottom_sheet.dart';
 
 
 class ProductPage extends StatelessWidget {
-  const ProductPage({super.key});
+  const ProductPage({super.key, required this.product});
+
+  final ProductModel product;
 
   @override
   Widget build(BuildContext context) {
@@ -45,32 +48,53 @@ class ProductPage extends StatelessWidget {
             children: [
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.25,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  // TODO: convert to listview builder
-                  children: [
-                    Image.asset("assets/images/image1.png"),
-                    SizedBox(width: 20,),
-                    Image.asset("assets/images/image2.png"),
-                    SizedBox(width: 20,),
-                    Image.asset("assets/images/image3.png"),
-                  ],
-                ),
+                child: product.imageUrl.isNotEmpty
+                  ? ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: product.imageUrl.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(right: 20),
+                          child: Image.network(product.imageUrl[index], fit: BoxFit.cover),
+                        );
+                      },
+                    )
+                  : const Center(child: Text('No images available')),
               ),
           
               Padding(
                 padding: const EdgeInsets.only(top: 20),
-                child: Text("Men's Harrington Jacket", style: GoogleFonts.gabarito(
+                child: Text(product.name, style: GoogleFonts.gabarito(
                   fontWeight: FontWeight.bold,
                   fontSize: 16
                 ),),
               ),
               SizedBox(height: 10,),
-              Text("\$148", style: GoogleFonts.gabarito(textStyle: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: AppColors.figmaPrimary
-              )),),
+              RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: '\$${product.price.toStringAsFixed(2)}',
+                      style: GoogleFonts.gabarito(textStyle: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.figmaPrimary
+                      )),
+                    ),
+                    if (product.oldPrice != null) ...[
+                      const TextSpan(text: ' '),
+                      TextSpan(
+                        text: '\$${product.oldPrice!.toStringAsFixed(2)}',
+                        style: GoogleFonts.gabarito(textStyle: TextStyle(
+                          fontSize: 12,
+                          decoration: TextDecoration.lineThrough,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        )),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
           
               ProductOption(
                 onTap: (){
@@ -230,14 +254,13 @@ class ProductPage extends StatelessWidget {
                 ],
               ),
 
-              //TODO: get all values from database
               SizedBox(height: 20,),
               Padding(
                 padding: const EdgeInsets.all(10),
                 child: Text(
-                  "Built for life and made to last, this full-zip corduroy jacket is part of our Nike Life collection. The spacious fit gives you plenty of room to layer underneath, while the soft corduroy keeps it casual and timeless.",
+                  product.description,
                   style: TextStyle(fontSize: 16, color: Color.fromARGB(176, 119, 119, 119)),
-                  ),
+                ),
               ),
               SizedBox(height: 20,),
               Text("Shipping & Returns", style: GoogleFonts.gabarito(
@@ -259,14 +282,14 @@ class ProductPage extends StatelessWidget {
                     fontWeight: FontWeight.bold
                   )
                 ),),
-                Text("4.5 Rating", style: GoogleFonts.gabarito(
+                Text("${product.rating} Rating", style: GoogleFonts.gabarito(
                   textStyle: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold
                   )
                 ),),
                 SizedBox(height: 20,),
-                Text("213 reviews", style: TextStyle(
+                Text("${product.stock} reviews", style: TextStyle(
                   color: Color.fromARGB(176, 119, 119, 119)
                 ),),
                 SizedBox(height: 20,),
@@ -309,7 +332,7 @@ class ProductPage extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("\$148", style: GoogleFonts.gabarito(textStyle: TextStyle(
+              Text('\$${product.price.toStringAsFixed(2)}', style: GoogleFonts.gabarito(textStyle: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
                 color: Colors.white

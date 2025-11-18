@@ -73,7 +73,6 @@ class _MyAppState extends State<MyApp> {
 
               return MaterialApp(
                 debugShowCheckedModeBanner: false,
-                title: 'خليها علينا',
                 theme: appThemeData[AppTheme.light]!,
                 darkTheme: appThemeData[AppTheme.dark]!,
                 themeMode: themeMode,

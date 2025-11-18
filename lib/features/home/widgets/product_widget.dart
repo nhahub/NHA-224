@@ -10,6 +10,7 @@ class ProductWidget extends StatelessWidget {
   final String? oldPrice;
   final bool isFavorite;
   final VoidCallback? onTap;
+  final VoidCallback? onFavoritePressed;
   const ProductWidget({
     super.key,
     required this.image,
@@ -18,6 +19,7 @@ class ProductWidget extends StatelessWidget {
     this.oldPrice,
     this.isFavorite = false,
     this.onTap,
+    this.onFavoritePressed,
   });
 
   @override
@@ -25,9 +27,8 @@ class ProductWidget extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 180,
-        height: 300,
-        margin: EdgeInsets.only(right: Spacing.lg, bottom: Spacing.sm),
+        width: double.infinity,
+        margin: EdgeInsets.all(Spacing.sm),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surfaceVariant,
           borderRadius: BorderRadius.circular(Spacing.lgRadius),
@@ -63,9 +64,7 @@ class ProductWidget extends StatelessWidget {
                       context,
                     ).colorScheme.surface.withOpacity(0.8),
                     child: IconButton(
-                      onPressed: () {
-                        // TODO: Handle favorite toggle
-                      },
+                      onPressed: onFavoritePressed,
                       icon: Icon(
                         isFavorite ? Icons.favorite : Icons.favorite_border,
                         color: isFavorite

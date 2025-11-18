@@ -17,21 +17,24 @@ class TopSellingList extends StatelessWidget {
         itemCount: products.length,
         itemBuilder: (context, index) {
           final product = products[index];
-          return ProductWidget(
-            image: product.imageUrl.isNotEmpty ? product.imageUrl[0] : '',
-            title: product.name,
-            price: '\$${product.price.toStringAsFixed(2)}',
-            oldPrice: product.oldPrice != null
-                ? '\$${product.oldPrice!.toStringAsFixed(2)}'
-                : null,
-            isFavorite: false, // TODO: Add favorite logic
-            onTap: () {
-              // Navigate to product details
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ProductPage()),
-              );
-            },
+          return SizedBox(
+            width: 180,
+            child: ProductWidget(
+              image: product.imageUrl.isNotEmpty ? product.imageUrl[0] : '',
+              title: product.name,
+              price: '\$${product.price.toStringAsFixed(2)}',
+              oldPrice: product.oldPrice != null
+                  ? '\$${product.oldPrice!.toStringAsFixed(2)}'
+                  : null,
+              isFavorite: false, // TODO: Add favorite logic
+              onTap: () {
+                // Navigate to product details
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ProductPage(product: product)),
+                );
+              },
+            ),
           );
         },
       ),

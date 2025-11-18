@@ -29,7 +29,7 @@ class NewInList extends StatelessWidget {
               // Navigate to product details
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const ProductPage()),
+                MaterialPageRoute(builder: (context) => ProductPage(product: product)),
               );
             },
           );

@@ -10,6 +10,7 @@ import 'package:depi_final_project/features/home/widgets/section_header.dart';
 import 'package:depi_final_project/features/home/widgets/categories_list.dart';
 import 'package:depi_final_project/features/home/cubit/home_cubit_states.dart';
 import 'package:depi_final_project/features/home/widgets/top_selling_List.dart';
+import 'package:depi_final_project/core/services/shared_preferences_service.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -88,7 +89,13 @@ class _HomeViewState extends State<HomeView> {
                     CategoriesList(categories: state.categories),
 
                     // Top Selling
-                    SectionHeader(title: 'Top Selling'),
+                    SectionHeader(
+                      title: 'Top Selling',
+                      onSeeAllTap: () => Navigator.pushNamed(
+                        context,
+                        AppRoutes.allTopSelling,
+                      ),
+                    ),
                     verticalSpacing(12),
                     TopSellingList(products: filteredProducts.take(3).toList()),
                     verticalSpacing(18),
@@ -96,12 +103,15 @@ class _HomeViewState extends State<HomeView> {
                     SectionHeader(
                       title: 'New In',
                       titleColor: AppColors.figmaPrimary,
+                      onSeeAllTap: () => Navigator.pushNamed(
+                        context,
+                        AppRoutes.allNewIn,
+                      ),
                     ),
                     verticalSpacing(12),
                     TopSellingList(
                       products: filteredProducts.skip(3).take(3).toList(),
                     ),
-                    
                   ],
                 ),
               ),
@@ -117,21 +127,40 @@ class _HomeViewState extends State<HomeView> {
   }
 }
 
-class _HomeHeader extends StatelessWidget {
+class _HomeHeader extends StatefulWidget {
   const _HomeHeader({required this.onGenderChanged});
 
   final void Function(String) onGenderChanged;
 
   @override
+  State<_HomeHeader> createState() => _HomeHeaderState();
+}
+
+class _HomeHeaderState extends State<_HomeHeader> {
+  final SharedPreferencesService _prefs = SharedPreferencesService();
+
+  @override
   Widget build(BuildContext context) {
+    final profileImageUrl = _prefs.profileImageUrl;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const CircleAvatar(
-          backgroundImage: AssetImage('assets/images/avatar1.png'),
-          radius: 22,
+        InkWell(
+          onTap: () {
+            Navigator.pushNamed(context, AppRoutes.profile);
+          },
+          child: CircleAvatar(
+            backgroundImage: profileImageUrl.isNotEmpty
+                ? NetworkImage(profileImageUrl)
+                : null,
+            radius: 22,
+            onBackgroundImageError: (exception, stackTrace) {
+              // Fallback to asset image if network image fails
+            },
+          ),
         ),
-        _GenderSelector(onGenderChanged: onGenderChanged),
+        _GenderSelector(onGenderChanged: widget.onGenderChanged),
         const _CartButton(),
       ],
     );
