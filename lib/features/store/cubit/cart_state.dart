@@ -1,8 +1,13 @@
 
 import 'package:depi_final_project/data/models/cart_product.dart';
 import 'package:depi_final_project/data/repos/cart_with_details.dart';
+import 'package:equatable/equatable.dart';
 
-abstract class CartState {}
+abstract class CartState extends Equatable{
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
 
 class CartInitial extends CartState{}
 

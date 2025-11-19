@@ -1,3 +1,6 @@
+import 'package:depi_final_project/core/errors/failures.dart';
+import 'package:depi_final_project/features/store/cubit/review_cubit.dart';
+import 'package:depi_final_project/features/store/cubit/review_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating/flutter_rating.dart';
@@ -66,22 +69,7 @@ class _ProductPageState extends State<ProductPage> {
         ],
       ),
 
-      body: BlocConsumer<CartCubit, CartState>(
-        listener: (context, state) {
-      
-        if(state is CartError){
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message)));
-          }
-
-          if(state is CartSuccess){
-            // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Product added successfully", style: TextStyle(color: Colors.white),), backgroundColor: Colors.green,));
-            Navigator.pushNamed(context, AppRoutes.cart);
-          }
-
-          
-        },
-        builder: (context, state){
-       return Padding(
+      body: Padding(
           padding: const EdgeInsets.all(10),
           child: SingleChildScrollView(
             child: Column(
@@ -252,58 +240,75 @@ class _ProductPageState extends State<ProductPage> {
                             ),
                             color: AppColors.lightBorder
                         ),
-                        child: Column(
-                      
-                          children: [
-                            SizedBox(height: 10,),
-                            Text("How do you see this product", style: GoogleFonts.gabarito(fontWeight: FontWeight.bold, fontSize: 24),),
-                            SizedBox(height: 20,),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                StarRating(
-                                  rating: rating,
-                                  color: AppColors.darkPrimary,
-                                  allowHalfRating: true,
-                                  onRatingChanged: (rating){
-                                    setState(() {
-                                      this.rating = rating;
-                                    });
-                                  },
-                                ),
-                                SizedBox(width: 5,),
-                                Text("$rating")
-                              ],
-                            ),
-                            SizedBox(height: 20,),
-                            TextField(
-                              controller: _commentController,
-                              maxLines: 7,
-                              decoration: InputDecoration(
-                                hintText: "Type your comment here",
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10)
-                                ),
-                                filled: true,
-                                fillColor: Colors.white
-                              ),
-                            ),
-                            SizedBox(height: 10,),
-                            Align(
-                              alignment: AlignmentGeometry.centerRight,
-                              child: ElevatedButton(
-                              onPressed: (){}, 
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                mainAxisSize: MainAxisSize.min,
+                        child: BlocConsumer<ReviewCubit, ReviewState>(
+
+                          listener: (context, state){
+                            if(state is ReviewSuccess){
+                              Navigator.pop(context);
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Your review added successfully"), backgroundColor: Colors.green,));
+                            }
+                          },
+                          builder: (context, state) {
+                            
+                            return state is ReviewLoading?Center(child: CircularProgressIndicator(color: AppColors.darkPrimary,),): 
+                             Column(                                   
+                            children: [
+                              SizedBox(height: 10,),
+                              Text("How do you see this product", style: GoogleFonts.gabarito(fontWeight: FontWeight.bold, fontSize: 24),),
+                              SizedBox(height: 20,),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text("Comment"),
-                                  SizedBox(width: 10,),
-                                  Icon(Icons.arrow_circle_up,size: 25,)
+                                  StarRating(
+                                    rating: rating,
+                                    color: AppColors.darkPrimary,
+                                    allowHalfRating: true,
+                                    onRatingChanged: (rating){
+                                      setState(() {
+                                        this.rating = rating;
+                                      });
+                                    },
+                                  ),
+                                  SizedBox(width: 5,),
+                                  Text("$rating")
                                 ],
-                              )),
-                            )
-                          ],
+                              ),
+                              SizedBox(height: 20,),
+                              TextField(
+                                controller: _commentController,
+                                maxLines: 7,
+                                decoration: InputDecoration(
+                                  hintText: "Type your comment here",
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10)
+                                  ),
+                                  filled: true,
+                                  fillColor: Colors.white
+                                ),
+                              ),
+                              SizedBox(height: 10,),
+                              Align(
+                                alignment: AlignmentGeometry.centerRight,
+                                child: ElevatedButton(
+                                onPressed: (){
+                                  final cubit = context.read<ReviewCubit>();
+                                  cubit.addToFirestore(
+                                    productId: widget.product.id, 
+                                    rating: rating, 
+                                    comment:  _commentController.text);
+                                }, 
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text("Comment"),
+                                    SizedBox(width: 10,),
+                                    Icon(Icons.arrow_circle_up,size: 25,)
+                                  ],
+                                )),
+                              )
+                            ],
+                          );},
                         ),
                       ),
                     );
@@ -365,38 +370,49 @@ class _ProductPageState extends State<ProductPage> {
               ],
             ),
           ),
-        );}
-      ),
+        ),
 
-      floatingActionButton: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10),
-        width: MediaQuery.of(context).size.width * 0.9,
-        child: FloatingActionButton.extended(onPressed: (){
-          cubit.addProductToCart(CartProduct(
-            productId: widget.product.id, 
-            selectedSize: widget.product.sizes[selectedSize], 
-            selectedColor: widget.product.colors[selectedColor], 
-            quantity: count));
+      floatingActionButton: BlocConsumer<CartCubit, CartState>(
+        listener: (context, state) {
+           if(state is CartError){
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message)));
+          }
+
+          if(state is CartSuccess){
+            // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Product added successfully", style: TextStyle(color: Colors.white),), backgroundColor: Colors.green,));
+            Navigator.pushNamed(context, AppRoutes.cart);
+          }
         },
-        label: Container(
-          padding: EdgeInsets.symmetric(horizontal: 20),
+        builder: (context, state) =>  Container(
+          padding: EdgeInsets.symmetric(horizontal: 10),
           width: MediaQuery.of(context).size.width * 0.9,
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text("\$${widget.product.price}", style: GoogleFonts.gabarito(textStyle: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.white
-              )),),
-              Text("Add to bag", style: GoogleFonts.gabarito(textStyle: TextStyle(
-                fontSize: 16,
-                color: Colors.white
-              )),)
-            ],
-          ),
-        )),
+          child: FloatingActionButton.extended(onPressed: (){
+            cubit.addProductToCart(CartProduct(
+              productId: widget.product.id, 
+              selectedSize: widget.product.sizes[selectedSize], 
+              selectedColor: widget.product.colors[selectedColor], 
+              quantity: count));
+          },
+          label: Container(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            width: MediaQuery.of(context).size.width * 0.9,
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text("\$${widget.product.price}", style: GoogleFonts.gabarito(textStyle: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white
+                )),),
+                Text("Add to bag", style: GoogleFonts.gabarito(textStyle: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white
+                )),)
+              ],
+            ),
+          )),
+        ),
       ),
       ),
     );

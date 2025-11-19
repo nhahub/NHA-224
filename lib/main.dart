@@ -2,6 +2,7 @@ import 'package:depi_final_project/data/repos/home_repo_implementation.dart';
 import 'package:depi_final_project/data/sources/firebase_service.dart';
 import 'package:depi_final_project/features/personalization/cubit/personalization_cubit.dart';
 import 'package:depi_final_project/features/store/cubit/cart_cubit.dart';
+import 'package:depi_final_project/features/store/cubit/review_cubit.dart';
 import 'package:depi_final_project/features/store/cubit/store_cubit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -53,8 +54,10 @@ class _MyAppState extends State<MyApp> {
           create: (context) => HomeCubit(
             homeRepo: HomeRepoImplementation(firebaseService: FirebaseService()),
           ),
+
         ),
         BlocProvider(create: (context) => CartCubit()),
+        BlocProvider(create: (context) => ReviewCubit()),
         // BlocProvider(
         // create: (context) => SearchCubit(
         // HomeRepoImplementation(firebaseService: FirebaseService()),
