@@ -1,4 +1,6 @@
+import 'package:depi_final_project/core/theme/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating/flutter_rating.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ReviewCard extends StatelessWidget {
@@ -8,7 +10,7 @@ class ReviewCard extends StatelessWidget {
   final String name;
   final String review;
   final int daysAgo;
-  final int rating;
+  final double rating;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +32,7 @@ class ReviewCard extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: theme.secondary,
                       borderRadius: BorderRadius.circular(100),
-                      image: DecorationImage(image: AssetImage(avatar), fit: BoxFit.cover)
+                      image: DecorationImage(image: NetworkImage(avatar), fit: BoxFit.cover)
                     ),
                   ),
                   SizedBox(width: 10,),
@@ -43,9 +45,12 @@ class ReviewCard extends StatelessWidget {
                 ],
               ),
 
-              Row(children: List.generate(5, (i){
-                return Icon(Icons.star, size: 12, color: i < rating ? theme.primary : theme.secondary,);
-              }),)
+             StarRating(
+              size: 20,
+              rating: rating,
+              color: AppColors.darkPrimary,
+              allowHalfRating: true,
+             )
             ],
           ),
           SizedBox(height: 20,),

@@ -12,8 +12,8 @@ class ReviewInitial extends ReviewState{}
 class ReviewLoading extends ReviewState{}
 
 class ReviewsLoaded extends ReviewState{
-  final List<ReviewModel> model;
-  ReviewsLoaded(this.model);
+  final List<ReviewModel> reviews;
+  ReviewsLoaded(this.reviews);
 }
 
 class ReviewSuccess extends ReviewState{}

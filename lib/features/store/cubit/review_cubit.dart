@@ -24,4 +24,15 @@ class ReviewCubit extends Cubit<ReviewState>{
       emit(ReviewError(e.toString()));
     }
   }
+
+  Future<void> loadReviews(String productId)async{
+    emit(ReviewLoading());
+    try{
+      final reviews = await _service.getReviews(productId);
+      emit(ReviewsLoaded(reviews));
+    }catch(e){
+      print("Error while fetching data");
+      emit(ReviewError(e.toString()));
+    }
+  }
 }

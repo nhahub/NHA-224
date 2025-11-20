@@ -1,4 +1,5 @@
 import 'package:depi_final_project/core/errors/failures.dart';
+import 'package:depi_final_project/data/models/review_model.dart';
 import 'package:depi_final_project/features/store/cubit/review_cubit.dart';
 import 'package:depi_final_project/features/store/cubit/review_state.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +39,13 @@ class _ProductPageState extends State<ProductPage> {
   double rating = 0.0;
   TextEditingController _commentController = TextEditingController();
 
+@override
+  void initState() {
+    super.initState();
+
+    context.read<ReviewCubit>().loadReviews(widget.product.id);
+  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -242,13 +250,18 @@ class _ProductPageState extends State<ProductPage> {
                         ),
                         child: BlocConsumer<ReviewCubit, ReviewState>(
 
+                        
                           listener: (context, state){
+                            
                             if(state is ReviewSuccess){
                               Navigator.pop(context);
                               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Your review added successfully"), backgroundColor: Colors.green,));
                             }
+
+                         
                           },
                           builder: (context, state) {
+                        
                             
                             return state is ReviewLoading?Center(child: CircularProgressIndicator(color: AppColors.darkPrimary,),): 
                              Column(                                   
@@ -339,34 +352,43 @@ class _ProductPageState extends State<ProductPage> {
                       fontWeight: FontWeight.bold
                     )
                   ),),
-                  SizedBox(height: 20,),
-                  Text("213 reviews", style: TextStyle(
-                    color: Color.fromARGB(176, 119, 119, 119)
-                  ),),
-                  SizedBox(height: 20,),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.5,
-                    //TODO: Convert to listview builder
-                    child: ListView(
+                  BlocBuilder<ReviewCubit, ReviewState>(
+                  
+                    builder: (context, state) {
+                      if(state is ReviewLoading){
+                        return Center(child: CircularProgressIndicator(color: AppColors.darkPrimary,),);
+                      }
+
+                      if(state is ReviewsLoaded){
+                        final reviews = state.reviews;
+                    return  Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        ReviewCard(
-                      avatar: "assets/images/avatar1.png",
-                      name: "Samantha",
-                      review: "Great quality jacket, very comfortable and fits well. The material is durable and perfect for everyday wear.",
-                      daysAgo: 12,
-                      rating: 4,
-                    ),
-                    ReviewCard(
-                      avatar: "assets/images/avatar2.png",
-                      name: "Alex Morgan",
-                      review: "I love this",
-                      daysAgo: 8,
-                      rating:5 ,
-                    ),
+                        SizedBox(height: 20,),
+                        Text("${reviews.length} reviews", style: TextStyle(
+                          color: Color.fromARGB(176, 119, 119, 119)
+                        ),),
+                        SizedBox(height: 20,),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.5,
+                          child: ListView.builder(
+                            itemCount: reviews.length,
+                            itemBuilder: (context, i) {
+                            return ReviewCard(
+                              avatar: reviews[i].userImage, 
+                              name: reviews[i].reviewerName, 
+                              review: reviews[i].comment, 
+                              daysAgo: 23, 
+                              rating: reviews[i].rating);
+                          },),
+                        
+                        ),
+                        SizedBox(height: 200,),
                       ],
-                    ),
+                    );}
+                    return Text("unexpected fail");
+                    }
                   ),
-                  SizedBox(height: 200,)
               ],
             ),
           ),
