@@ -1,5 +1,7 @@
 import 'package:depi_final_project/core/errors/failures.dart';
+import 'package:depi_final_project/core/services/helper_functions.dart';
 import 'package:depi_final_project/data/models/review_model.dart';
+import 'package:depi_final_project/data/repos/review_repo.dart';
 import 'package:depi_final_project/features/store/cubit/review_cubit.dart';
 import 'package:depi_final_project/features/store/cubit/review_state.dart';
 import 'package:flutter/material.dart';
@@ -309,6 +311,7 @@ class _ProductPageState extends State<ProductPage> {
                                     productId: widget.product.id, 
                                     rating: rating, 
                                     comment:  _commentController.text);
+                                    setState(() {},);
                                 }, 
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
@@ -378,7 +381,7 @@ class _ProductPageState extends State<ProductPage> {
                               avatar: reviews[i].userImage, 
                               name: reviews[i].reviewerName, 
                               review: reviews[i].comment, 
-                              daysAgo: 23, 
+                              daysAgo: HelperFunctions.timeAgoFromDate(reviews[i].timeAgo), 
                               rating: reviews[i].rating);
                           },),
                         

@@ -9,7 +9,7 @@ class ReviewCard extends StatelessWidget {
   final String avatar;
   final String name;
   final String review;
-  final int daysAgo;
+  final String daysAgo;
   final double rating;
 
   @override
@@ -57,7 +57,7 @@ class ReviewCard extends StatelessWidget {
           Text(review,
           style: TextStyle(fontSize: 12, color: Color.fromARGB(176, 119, 119, 119)),),
           SizedBox(height: 20,),
-          Text("${daysAgo}days", ),
+          Text("${daysAgo}", ),
           SizedBox(height: 20,),
         ],
       ),

@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:depi_final_project/core/services/helper_functions.dart';
 import 'package:depi_final_project/data/models/review_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class ReviewService {
+class ReviewRepo {
   final user = FirebaseAuth.instance.currentUser!;
 
   Future<void> addReview(String productId, ReviewModel model) async {
@@ -13,7 +14,24 @@ class ReviewService {
         .collection("reviews")
         .doc(user.uid)
         .set(model.toFireStore());
+    recalculateRating(productId);
+
   }
+
+  void recalculateRating(String productId) async {
+    final reviews = await getReviews(productId);
+    double totalRating = 0;
+    for (var review in reviews) {
+      totalRating += review.rating;
+    }
+    double avgRating = reviews.isNotEmpty ? (totalRating / reviews.length) : 0;
+
+    await FirebaseFirestore.instance
+        .collection("products")
+        .doc(productId)
+        .update({'rating': avgRating});
+  }
+
 
   Future<List<ReviewModel>> getReviews(String productId) async {
     try{
@@ -31,4 +49,6 @@ class ReviewService {
       return [];
     }
   }
+
+  
 }
