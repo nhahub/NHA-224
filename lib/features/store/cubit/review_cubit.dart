@@ -9,7 +9,7 @@ class ReviewCubit extends Cubit<ReviewState>{
   ReviewCubit(): super(ReviewInitial());
 
   final ReviewRepo _service = ReviewRepo();
-  void addToFirestore({required String productId,required double rating , required String comment}){
+  void addToFirestore({required String productId, required double rating , required String comment}){
     emit(ReviewLoading());
     try{
 
