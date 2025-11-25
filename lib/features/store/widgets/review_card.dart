@@ -4,13 +4,16 @@ import 'package:flutter_rating/flutter_rating.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ReviewCard extends StatelessWidget {
-  const ReviewCard({super.key, required this.avatar, required this.name, required this.review, required this.daysAgo, required this.rating});
+  const ReviewCard({super.key, required this.avatar, required this.name, required this.review, required this.daysAgo, required this.rating, required this.isUserReview, this.onMorePressed, this.onReportPressed});
 
   final String avatar;
   final String name;
   final String review;
   final String daysAgo;
   final double rating;
+  final bool isUserReview;
+  final void Function()? onMorePressed;
+  final void Function()? onReportPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -45,11 +48,17 @@ class ReviewCard extends StatelessWidget {
                 ],
               ),
 
-             StarRating(
-              size: 20,
-              rating: rating,
-              color: AppColors.darkPrimary,
-              allowHalfRating: true,
+             Row(
+               children: [
+                 StarRating(
+                  size: 20,
+                  rating: rating,
+                  color: AppColors.darkPrimary,
+                  allowHalfRating: true,
+                 ),
+                 isUserReview? IconButton(onPressed: onMorePressed, icon: Icon(Icons.more_vert)):
+                  IconButton(onPressed: onReportPressed, icon: Icon(Icons.flag_outlined)),
+               ],
              )
             ],
           ),

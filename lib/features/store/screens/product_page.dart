@@ -4,6 +4,7 @@ import 'package:depi_final_project/data/models/review_model.dart';
 import 'package:depi_final_project/data/repos/review_repo.dart';
 import 'package:depi_final_project/features/store/cubit/review_cubit.dart';
 import 'package:depi_final_project/features/store/cubit/review_state.dart';
+import 'package:depi_final_project/features/store/widgets/report_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating/flutter_rating.dart';
@@ -38,8 +39,9 @@ class _ProductPageState extends State<ProductPage> {
   int selectedColor = 0;
   int count = 1;
 
-  double rating = 0.0;
+  double avgRating = 0.0;
   TextEditingController _commentController = TextEditingController();
+  TextEditingController _editCommentController = TextEditingController();
 
 @override
   void initState() {
@@ -175,14 +177,6 @@ class _ProductPageState extends State<ProductPage> {
                   label: "Color",
                   options: [
                     Text(widget.product.colors[selectedColor]),
-                    // Container(
-                    //   width: 20,
-                    //   height: 20,
-                    //   decoration: BoxDecoration(
-                    //     borderRadius: BorderRadius.circular(100),
-                    //     // color: Color(int.parse(widget.product.colors[selectedColor])) //first value until user selection TODO: change to user selection
-                    //   ),
-                    // ),
                     SizedBox(width: 30,),
                     Image.asset(themeBrightness == Brightness.light? "assets/icons/arrowdown.png":"assets/icons/arrowdown_dark.png")
                   ],
@@ -275,17 +269,17 @@ class _ProductPageState extends State<ProductPage> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   StarRating(
-                                    rating: rating,
+                                    rating: avgRating,
                                     color: AppColors.darkPrimary,
                                     allowHalfRating: true,
                                     onRatingChanged: (rating){
                                       setState(() {
-                                        this.rating = rating;
+                                        avgRating = rating;
                                       });
                                     },
                                   ),
                                   SizedBox(width: 5,),
-                                  Text("$rating")
+                                  Text("$avgRating")
                                 ],
                               ),
                               SizedBox(height: 20,),
@@ -309,7 +303,7 @@ class _ProductPageState extends State<ProductPage> {
                                   final cubit = context.read<ReviewCubit>();
                                   cubit.addToFirestore(
                                     productId: widget.product.id, 
-                                    rating: rating, 
+                                    rating: avgRating, 
                                     comment:  _commentController.text);
                                     setState(() {},);
                                 }, 
@@ -382,14 +376,167 @@ class _ProductPageState extends State<ProductPage> {
                               name: reviews[i].reviewerName, 
                               review: reviews[i].comment, 
                               daysAgo: HelperFunctions.timeAgoFromDate(reviews[i].timeAgo), 
-                              rating: reviews[i].rating);
+                              rating: reviews[i].rating,
+                              isUserReview: context.read<ReviewCubit>().isUserReview(reviews[i].userId!),
+                              onReportPressed: (){
+                                showDialog(context: context, 
+                                builder: (context){
+                                  Map<String, bool> reportReasons = {};
+                                  return AlertDialog(
+                                    title: Text("Report this review"),
+                                    content: ReportWidget(
+                                      onChanged: (map){
+                                        reportReasons = map;
+                                      },
+                                    ),
+                                    actions: [
+                                      ElevatedButton(
+                                      onPressed: (){
+                                        context.read<ReviewCubit>().submitReport(
+                                          widget.product.id,
+                                          reviews[i].userId!, 
+                                          reportReasons
+                                          );
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: AppColors.darkPrimary,
+                                        foregroundColor: Colors.white
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: [
+                                          Text("Submit Report", style: TextStyle(color: Colors.white),),
+                                          SizedBox(width: 10,),
+                                          Icon(Icons.flag_outlined, color: Colors.white, size: 25,)
+                                        ],
+                                      )),
+                                    ],
+                                  );
+
+                                });
+                              },
+                              onMorePressed: (){
+                                showModalBottomSheet(context: context, 
+                                builder: (context){
+                                  _editCommentController.text = reviews[i].comment;
+                                  double tempRating = reviews[i].rating;
+                                  return StatefulBuilder(
+                                    builder: (context, setState) =>  Container(
+                                      padding: EdgeInsets.all(20),
+                                      height: MediaQuery.of(context).size.height * 0.5,
+                                      child: Column(
+                                        children: [
+                                          Align(
+                                            alignment: Alignment.topRight,
+                                            child: IconButton(onPressed: (){
+                                              showDialog(context: context, 
+                                              builder: (context){
+                                                return AlertDialog(
+                                                  title: Text("Delete review"),
+                                                  content: Text("Are you sure you want to delete your review"),
+                                                  actions: [
+                                                    ElevatedButton(onPressed: (){
+                                                      context.read<ReviewCubit>().deleteReview(widget.product.id);
+                                                      Navigator.pop(context); // Close the dialog
+                                                    }, 
+                                                    style: ElevatedButton.styleFrom(
+                                                      backgroundColor: Colors.red,
+                                                      foregroundColor: Colors.white
+                                                                                              
+                                                      ),
+                                                    child: Text("Yes delete my review", style: TextStyle(color: Colors.white),)),
+                                                    ElevatedButton(onPressed: (){
+                                                      Navigator.pop(context);
+                                                      Navigator.pop(context);
+                                                    }, 
+                                                    style: ElevatedButton.styleFrom(
+                                                      backgroundColor: AppColors.darkPrimary,
+                                                      foregroundColor: Colors.white
+                                                                                              
+                                                      ),
+                                                    child: Text("No", style: TextStyle(color: Colors.white),))
+                                                  ],
+                                                );
+                                              });
+                                            }, 
+                                            icon: Icon(Icons.delete_outline, color: Colors.red)),
+                                          ),
+                                          Text("Edit your review", style: GoogleFonts.gabarito(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 24
+                                          ),),
+                                    
+                                          SizedBox(height: 20,),
+                                          StarRating(
+                                            rating: tempRating,
+                                            color: AppColors.darkPrimary,
+                                            allowHalfRating: true,
+                                            onRatingChanged: (rating){
+                                              setState(() {
+                                               tempRating = rating;
+                                              });
+                                            },
+                                          ),
+                                          SizedBox(height: 20,),
+                                          TextField(
+                                            controller: _editCommentController,
+                                            decoration: InputDecoration(
+                                              hintText: "Type your comment here",
+                                              border: OutlineInputBorder(
+                                                borderRadius: BorderRadius.circular(10)
+                                              ),
+                                              filled: true,
+                                              fillColor: Colors.white
+                                            ),
+                                            maxLines: 7,
+                                    
+                                          ),
+                                          SizedBox(height: 20,),
+                                          ElevatedButton(
+                                            onPressed: (){
+                                              final cubit = context.read<ReviewCubit>();
+                                              cubit.editReview(
+                                                productId: widget.product.id, 
+                                                username: reviews[i].reviewerName,
+                                                userImage: reviews[i].userImage,
+                                                userId: reviews[i].userId!,
+                                                rating: tempRating, 
+                                                comment:  _editCommentController.text.isNotEmpty? _editCommentController.text : reviews[i].comment);
+                                                cubit.loadReviews(widget.product.id);
+                                                setState(() {
+                                                  avgRating = widget.product.rating;
+                                                },);
+                                                Navigator.pop(context);
+                                            }, 
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: AppColors.darkPrimary,
+                                              foregroundColor: Colors.white
+                                            )
+                                          ,
+                                            child: Text("Save Changes", style: TextStyle(color: Colors.white),))
+                                        ],
+                                      ),
+                                    ),
+                                  
+                                  );
+
+                                
+                                });
+
+                                
+                              },
+                              );
                           },),
                         
                         ),
                         SizedBox(height: 200,),
                       ],
                     );}
-                    return Text("unexpected fail");
+                    if(state is ReviewError){
+                        return Center(child: Text(state.message),);
+                      }
+                      return Center(child: Text("your review is added"),);
                     }
                   ),
               ],

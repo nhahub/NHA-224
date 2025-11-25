@@ -50,5 +50,50 @@ class ReviewRepo {
     }
   }
 
+
+  Future<void> editReview(String productId, ReviewModel model) async {
+    await FirebaseFirestore.instance
+        .collection("products")
+        .doc(productId)
+        .collection("reviews")
+        .doc(user.uid)
+        .update(model.toFireStore());
+    recalculateRating(productId);
+  }
+
+  Future<void> deleteReview(String productId) async {
+    await FirebaseFirestore.instance
+        .collection("products")
+        .doc(productId)
+        .collection("reviews")
+        .doc(user.uid)
+        .delete();
+    recalculateRating(productId);
+  }
+
+  bool isUserReview(String reviewUserId) {
+    return reviewUserId == user.uid;
+  }
+
+
+  Future<void> submitReport(String productId, String reportedUserId,Map<String, bool> reportOptions) async{
+    final selectedReasons = reportOptions.entries
+        .where((entry) => entry.value)
+        .map((entry) => entry.key)
+        .toList();
+
+    final reportData = {
+      'userId': user.uid,
+      'productId': productId,
+      'reasons': selectedReasons,
+      'reportedUserId': reportedUserId,
+      'timestamp': FieldValue.serverTimestamp(),
+    };
+
+  await  FirebaseFirestore.instance
+        .collection('reports')
+        .add(reportData);
+  }
+
   
 }

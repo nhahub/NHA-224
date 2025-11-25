@@ -36,4 +36,47 @@ class ReviewCubit extends Cubit<ReviewState>{
       emit(ReviewError(e.toString()));
     }
   }
+
+
+  Future<void> editReview({required String productId,String? username, String? userImage , required String userId,required double rating , required String comment})async{
+    emit(ReviewLoading());
+    try{
+      await _service.editReview(productId, ReviewModel(
+        rating: rating,
+        reviewerName: username??"Guest",
+        userId: userId,
+        userImage: userImage??"https://imgs.search.brave.com/r8_rpLtbGMxU9_hP_eV66IWtpYYaUuj62TaONvbGyA8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly91cy4x/MjNyZi5jb20vNDUw/d20vYmxpbmtibGlu/azEvYmxpbmtibGlu/azEyMDA1L2JsaW5r/YmxpbmsxMjAwNTAw/MDE1LzE0Njk3OTQ2/NC1hdmF0YXItbWFu/bi1zeW1ib2wuanBn/P3Zlcj02", 
+        comment: comment));
+        _service.recalculateRating(productId);
+        emit(ReviewSuccess());
+
+    }catch(e){
+      emit(ReviewError(e.toString()));
+    }
+  }
+
+  Future<void> deleteReview(String productId)async{
+    emit(ReviewLoading());
+    try{
+      await _service.deleteReview(productId);
+      _service.recalculateRating(productId);
+      emit(ReviewSuccess());
+    }catch(e){
+      emit(ReviewError(e.toString()));
+    }
+  }
+
+  bool isUserReview(String reviewId){
+    return _service.isUserReview(reviewId);
+  }
+
+  void submitReport(String productId,reportedUserId, Map<String, bool> reasons) async {
+    emit(ReviewLoading());
+    try {
+      await _service.submitReport(productId ,reportedUserId , reasons);
+      emit(ReviewSuccess());
+    } catch (e) {
+      emit(ReviewError(e.toString()));
+    }
+  }
 }
