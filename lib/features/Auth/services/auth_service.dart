@@ -109,6 +109,7 @@ class AuthService {
           'role': 'user',
         });
 
+        FirebaseAuth.instance.currentUser!.updateDisplayName(name);
         return user;
       }
     } on FirebaseAuthException {

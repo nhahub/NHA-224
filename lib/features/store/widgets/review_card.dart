@@ -1,14 +1,19 @@
+import 'package:depi_final_project/core/theme/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating/flutter_rating.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ReviewCard extends StatelessWidget {
-  const ReviewCard({super.key, required this.avatar, required this.name, required this.review, required this.daysAgo, required this.rating});
+  const ReviewCard({super.key, required this.avatar, required this.name, required this.review, required this.daysAgo, required this.rating, required this.isUserReview, this.onMorePressed, this.onReportPressed});
 
   final String avatar;
   final String name;
   final String review;
-  final int daysAgo;
-  final int rating;
+  final String daysAgo;
+  final double rating;
+  final bool isUserReview;
+  final void Function()? onMorePressed;
+  final void Function()? onReportPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +35,7 @@ class ReviewCard extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: theme.secondary,
                       borderRadius: BorderRadius.circular(100),
-                      image: DecorationImage(image: AssetImage(avatar), fit: BoxFit.cover)
+                      image: DecorationImage(image: NetworkImage(avatar), fit: BoxFit.cover)
                     ),
                   ),
                   SizedBox(width: 10,),
@@ -43,16 +48,25 @@ class ReviewCard extends StatelessWidget {
                 ],
               ),
 
-              Row(children: List.generate(5, (i){
-                return Icon(Icons.star, size: 12, color: i < rating ? theme.primary : theme.secondary,);
-              }),)
+             Row(
+               children: [
+                 StarRating(
+                  size: 20,
+                  rating: rating,
+                  color: AppColors.darkPrimary,
+                  allowHalfRating: true,
+                 ),
+                 isUserReview? IconButton(onPressed: onMorePressed, icon: Icon(Icons.more_vert)):
+                  IconButton(onPressed: onReportPressed, icon: Icon(Icons.flag_outlined)),
+               ],
+             )
             ],
           ),
           SizedBox(height: 20,),
           Text(review,
           style: TextStyle(fontSize: 12, color: Color.fromARGB(176, 119, 119, 119)),),
           SizedBox(height: 20,),
-          Text("${daysAgo}days", ),
+          Text("${daysAgo}", ),
           SizedBox(height: 20,),
         ],
       ),
