@@ -31,8 +31,8 @@ class _BottomNavLayoutState extends State<BottomNavLayout> {
     super.initState();
     _pages.addAll([
       const HomeView(),
-      const OrdersScreen(),
-      const NotificationsScreen(),
+       OrdersScreen(),
+       NotificationsScreen(),
       Profile(),
       //Center(child: Text(S().ContactUs)),
     ]);

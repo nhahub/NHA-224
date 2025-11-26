@@ -41,8 +41,7 @@ class AppRoutes {
   static const String allTopSelling = '/allTopSelling';
   static const String allNewIn = '/allNewIn';
   static const String profile = '/profile';
-  static const String checkout= '/checkout';
-
+  static const String checkout = '/checkout';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -101,11 +100,17 @@ class AppRoutes {
       case profile:
         return MaterialPageRoute(builder: (_) => const BottomNavLayout());
       case productDetails:
-        return MaterialPageRoute(builder: (_) =>  ProductPage(product: settings.arguments as ProductModel,));
+        return MaterialPageRoute(
+          builder: (_) =>
+              ProductPage(product: settings.arguments as ProductModel),
+        );
       case cart:
         return MaterialPageRoute(builder: (_) => Cart());
       case checkout:
-        return MaterialPageRoute(builder: (_) => CheckoutScreen());
+        return MaterialPageRoute(
+          builder: (_) => CheckoutScreen(),
+          settings: settings,
+        );
       default:
         return _errorRoute("Route not found: ${settings.name}");
     }

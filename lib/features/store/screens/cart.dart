@@ -29,7 +29,6 @@ class _CartState extends State<Cart> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     context.read<CartCubit>().loadProducts();
   }
@@ -38,8 +37,6 @@ class _CartState extends State<Cart> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
     final cubit = context.read<CartCubit>();
-
-    TextEditingController _countController = TextEditingController();
 
     return BlocListener<CartCubit, CartState>(
       listener: (context, state) {
@@ -66,14 +63,23 @@ class _CartState extends State<Cart> {
               if (state is CartLoaded) {
                 final items = state.cartWithDetails;
 
+                // 1. حساب السعر الإجمالي
                 double subtotal = items.fold(
                   0.0,
                   (sum, item) =>
                       sum + item.product.price * item.cartDetails.quantity,
                 );
+
+                // 2. (تعديل جديد) حساب عدد العناصر الكلي
+                int totalItemsCount = items.fold(
+                  0,
+                  (sum, item) => sum + item.cartDetails.quantity,
+                );
+
                 double shippingCost = 20.0;
                 double tax = subtotal * 0.14;
                 double total = subtotal + shippingCost + tax;
+
                 return SafeArea(
                   child: SingleChildScrollView(
                     padding: EdgeInsets.all(16.w),
@@ -87,8 +93,8 @@ class _CartState extends State<Cart> {
                                 context: context,
                                 builder: (_) {
                                   return AlertDialog(
-                                    title: Text("Remove all product"),
-                                    content: Text(
+                                    title: const Text("Remove all product"),
+                                    content: const Text(
                                       "Are you sure you want to delete all your cart items",
                                     ),
                                     actions: [
@@ -100,7 +106,7 @@ class _CartState extends State<Cart> {
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.red,
                                         ),
-                                        child: Text(
+                                        child: const Text(
                                           "Yes",
                                           style: TextStyle(color: Colors.white),
                                         ),
@@ -111,7 +117,7 @@ class _CartState extends State<Cart> {
                                           backgroundColor: theme.primary,
                                           foregroundColor: theme.onPrimary,
                                         ),
-                                        child: Text("No"),
+                                        child: const Text("No"),
                                       ),
                                     ],
                                   );
@@ -133,19 +139,16 @@ class _CartState extends State<Cart> {
                           itemCount: state.cartWithDetails.length,
                           itemBuilder: (context, i) {
                             final item = items[i];
-                            print(item.product.name);
-                            print("id: ${item.product.id}");
                             return Padding(
                               padding: EdgeInsets.only(bottom: 10.h),
                               child: CartItem(
                                 onLongTab: () {
-                                  print("Delete product");
                                   showDialog(
                                     context: context,
                                     builder: (_) {
                                       return AlertDialog(
-                                        title: Text("Delete product"),
-                                        content: Text(
+                                        title: const Text("Delete product"),
+                                        content: const Text(
                                           "Are you sure you want to delete this product",
                                         ),
                                         actions: [
@@ -159,7 +162,7 @@ class _CartState extends State<Cart> {
                                             style: ElevatedButton.styleFrom(
                                               backgroundColor: Colors.red,
                                             ),
-                                            child: Text(
+                                            child: const Text(
                                               "Yes",
                                               style: TextStyle(
                                                 color: Colors.white,
@@ -174,7 +177,7 @@ class _CartState extends State<Cart> {
                                               backgroundColor: theme.primary,
                                               foregroundColor: theme.onPrimary,
                                             ),
-                                            child: Text("No"),
+                                            child: const Text("No"),
                                           ),
                                         ],
                                       );
@@ -215,12 +218,14 @@ class _CartState extends State<Cart> {
                           thickness: 1,
                           height: 24.h,
                         ),
+                        // 3. تمرير العدد الكلي لدالة السعر
                         _buildPriceSection(
                           theme,
                           subTotal: subtotal,
                           shippingCost: shippingCost,
                           tax: tax,
                           total: total,
+                          itemCount: totalItemsCount, // القيمة الجديدة
                         ),
                       ],
                     ),
@@ -260,32 +265,32 @@ class _CartState extends State<Cart> {
                         height: 16,
                         width: double.infinity,
                         color: Colors.grey.shade300,
-                        margin: EdgeInsets.only(bottom: 12),
+                        margin: const EdgeInsets.only(bottom: 12),
                       ),
                       Container(
                         height: 16,
                         width: double.infinity,
                         color: Colors.grey.shade300,
-                        margin: EdgeInsets.only(bottom: 12),
+                        margin: const EdgeInsets.only(bottom: 12),
                       ),
                       Container(
                         height: 16,
                         width: double.infinity,
                         color: Colors.grey.shade300,
-                        margin: EdgeInsets.only(bottom: 12),
+                        margin: const EdgeInsets.only(bottom: 12),
                       ),
                       Container(
                         height: 18,
                         width: double.infinity,
                         color: AppColors.figmaPrimary.withOpacity(0.5),
-                        margin: EdgeInsets.only(bottom: 20),
+                        margin: const EdgeInsets.only(bottom: 20),
                       ),
                       // Coupon skeleton
                       Container(
                         height: 50,
                         width: double.infinity,
                         color: Colors.grey.shade300,
-                        margin: EdgeInsets.only(bottom: 20),
+                        margin: const EdgeInsets.only(bottom: 20),
                       ),
                       // Checkout button skeleton
                       Container(
@@ -363,6 +368,7 @@ class _CartState extends State<Cart> {
     double? shippingCost,
     double? tax,
     double? total,
+    required int itemCount, // 4. استقبال العدد هنا
   }) {
     return Column(
       children: [
@@ -371,13 +377,21 @@ class _CartState extends State<Cart> {
         PriceDetail(title: "Tax", price: tax ?? 0),
         PriceDetail(title: "Total", price: total ?? 0, isPriceBolded: true),
         SizedBox(height: 12.h),
-        CouponCard(),
+        const CouponCard(),
         SizedBox(height: 20.h),
         SizedBox(
           width: double.infinity,
           child: ElevatedButton(
+            // 5. تعديل الزر لإرسال البيانات
             onPressed: () {
-              Navigator.pushNamed(context, AppRoutes.checkout);
+              Navigator.pushNamed(
+                context,
+                AppRoutes.checkout,
+                arguments: {
+                  'totalPrice': total ?? 0.0,
+                  'totalItems': itemCount,
+                },
+              );
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: theme.primary,
@@ -385,7 +399,7 @@ class _CartState extends State<Cart> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(32),
               ),
-              padding: EdgeInsets.symmetric(vertical: 16),
+              padding: const EdgeInsets.symmetric(vertical: 16),
             ),
             child: Text(
               "Checkout",
