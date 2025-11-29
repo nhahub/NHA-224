@@ -4,6 +4,7 @@ import 'package:depi_final_project/features/personalization/cubit/notifications_
 import 'package:depi_final_project/features/personalization/cubit/orders_cubit.dart';
 import 'package:depi_final_project/features/personalization/cubit/personalization_cubit.dart';
 import 'package:depi_final_project/features/store/cubit/cart_cubit.dart';
+import 'package:depi_final_project/features/store/cubit/fave_cubit.dart';
 import 'package:depi_final_project/features/store/cubit/review_cubit.dart';
 import 'package:depi_final_project/features/store/cubit/store_cubit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -62,6 +63,7 @@ class _MyAppState extends State<MyApp> {
         ),
         BlocProvider(create: (context) => CartCubit()),
         BlocProvider(create: (context) => ReviewCubit()),
+        BlocProvider(create: (context) => FaveCubit()),
         // BlocProvider(
         // create: (context) => SearchCubit(
         // HomeRepoImplementation(firebaseService: FirebaseService()),
