@@ -1,7 +1,11 @@
 import 'package:depi_final_project/data/repos/home_repo_implementation.dart';
 import 'package:depi_final_project/data/sources/firebase_service.dart';
+import 'package:depi_final_project/features/personalization/cubit/notifications_cubit.dart';
+import 'package:depi_final_project/features/personalization/cubit/orders_cubit.dart';
 import 'package:depi_final_project/features/personalization/cubit/personalization_cubit.dart';
 import 'package:depi_final_project/features/store/cubit/cart_cubit.dart';
+import 'package:depi_final_project/features/store/cubit/fave_cubit.dart';
+import 'package:depi_final_project/features/store/cubit/review_cubit.dart';
 import 'package:depi_final_project/features/store/cubit/store_cubit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -26,7 +30,7 @@ import 'package:depi_final_project/features/personalization/cubit/personalizatio
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  print(FirebaseAuth.instance.currentUser?.uid??"User not registered");
+  print(FirebaseAuth.instance.currentUser?.uid ?? "User not registered");
 
   await SharedPreferencesService().init();
 
@@ -51,10 +55,15 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(create: (context) => PersonalizationCubit()),
         BlocProvider(
           create: (context) => HomeCubit(
-            homeRepo: HomeRepoImplementation(firebaseService: FirebaseService()),
+            homeRepo: HomeRepoImplementation(
+              firebaseService: FirebaseService(),
+            ),
           ),
+
         ),
         BlocProvider(create: (context) => CartCubit()),
+        BlocProvider(create: (context) => ReviewCubit()),
+        BlocProvider(create: (context) => FaveCubit()),
         // BlocProvider(
         // create: (context) => SearchCubit(
         // HomeRepoImplementation(firebaseService: FirebaseService()),
@@ -64,6 +73,12 @@ class _MyAppState extends State<MyApp> {
           create: (context) => StoreCubit(
             HomeRepoImplementation(firebaseService: FirebaseService()),
           )..fetchCategories(),
+        ),
+        BlocProvider(
+          create: (context) => OrdersCubit()..loadOrders(),
+        ), // الـ ..loadOrders اختيارية هنا لأننا وضعناها في الـ screens أيضاً
+        BlocProvider(
+          create: (context) => NotificationsCubit()..loadNotifications(),
         ),
       ],
       child: ScreenUtilInit(
@@ -75,11 +90,14 @@ class _MyAppState extends State<MyApp> {
             builder: (context, themeState) {
               // Determine the current theme and theme mode
               AppTheme currentTheme = AppTheme.light;
-              ThemeMode themeMode = ThemeMode.light; // Default to light to avoid system theme
+              ThemeMode themeMode =
+                  ThemeMode.light; // Default to light to avoid system theme
 
               if (themeState is LoadingThemeState) {
                 currentTheme = themeState.appTheme;
-                themeMode = currentTheme == AppTheme.light ? ThemeMode.light : ThemeMode.dark;
+                themeMode = currentTheme == AppTheme.light
+                    ? ThemeMode.light
+                    : ThemeMode.dark;
               }
 
               return MaterialApp(

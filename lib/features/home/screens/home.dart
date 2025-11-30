@@ -317,7 +317,7 @@ class _HomeHeaderState extends State<_HomeHeader> {
           child: CircleAvatar(
             backgroundImage: profileImageUrl.isNotEmpty
                 ? NetworkImage(profileImageUrl)
-                : null,
+                : NetworkImage("https://imgs.search.brave.com/r8_rpLtbGMxU9_hP_eV66IWtpYYaUuj62TaONvbGyA8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly91cy4x/MjNyZi5jb20vNDUw/d20vYmxpbmtibGlu/azEvYmxpbmtibGlu/azEyMDA1L2JsaW5r/YmxpbmsxMjAwNTAw/MDE1LzE0Njk3OTQ2/NC1hdmF0YXItbWFu/bi1zeW1ib2wuanBn/P3Zlcj02"),
             radius: 22,
             onBackgroundImageError: (exception, stackTrace) {
               // Fallback to asset image if network image fails
