@@ -49,6 +49,19 @@ class _ProductPageState extends State<ProductPage> {
     super.initState();
 
     context.read<ReviewCubit>().loadReviews(widget.product.id);
+
+  
+    context
+      .read<FaveCubit>()
+      .isProductFavored(widget.product.id)
+      .then((fav) {
+      if (!mounted) return;
+      setState(() {
+      isFav = fav;
+      });
+    }).catchError((error) {
+      // optional: handle error, e.g. log or keep default value
+    });
   }
 
   @override
