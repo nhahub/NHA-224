@@ -21,7 +21,7 @@ class Inputfield extends StatelessWidget {
       validator: validator,
 
       style: TextStyle(
-        color: theme.colorScheme.onSurface, // لون النص في الدارك و اللايت
+        color: theme.colorScheme.onSurface, 
         fontSize: 16,
       ),
 
@@ -30,7 +30,7 @@ class Inputfield extends StatelessWidget {
         labelStyle: theme.inputDecorationTheme.labelStyle,
 
         filled: true,
-        fillColor: theme.inputDecorationTheme.fillColor, // نفس الدروب داون
+        fillColor: theme.inputDecorationTheme.fillColor,
 
         border: theme.inputDecorationTheme.border,
         enabledBorder: theme.inputDecorationTheme.enabledBorder,

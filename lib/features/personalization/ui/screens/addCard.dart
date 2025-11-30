@@ -59,7 +59,7 @@ class _AddcardState extends State<Addcard> {
   void initState() {
     super.initState();
 
-    /// لو جاي Edit → املا الفيلدز
+    
     if (widget.id != null) {
       cardNumberController.text = widget.number ?? "";
       cardNameController.text = widget.name ?? "";
@@ -72,7 +72,6 @@ class _AddcardState extends State<Addcard> {
     }
   }
 
-  /// حفظ كارت جديد
   Future<void> saveCard() async {
     try {
       final userId = FirebaseAuth.instance.currentUser!.uid;
@@ -103,7 +102,6 @@ class _AddcardState extends State<Addcard> {
     }
   }
 
-  /// تعديل الكارت
   Future<void> updateCard() async {
     try {
       final userId = FirebaseAuth.instance.currentUser!.uid;
@@ -240,15 +238,15 @@ class _AddcardState extends State<Addcard> {
 
                             dropdownColor: Theme.of(
                               context,
-                            ).colorScheme.surface, // زي القايمة اللي بتفتح
+                            ).colorScheme.surface, 
                             iconEnabledColor: Theme.of(
                               context,
-                            ).colorScheme.onSurface, // لون السهم
+                            ).colorScheme.onSurface,
 
                             style: TextStyle(
                               color: Theme.of(
                                 context,
-                              ).colorScheme.onSurface, // لون النص
+                              ).colorScheme.onSurface, 
                               fontSize: 16,
                             ),
 
@@ -260,7 +258,7 @@ class _AddcardState extends State<Addcard> {
                                   style: TextStyle(
                                     color: Theme.of(
                                       context,
-                                    ).colorScheme.onSurface, // نص القائمة
+                                    ).colorScheme.onSurface, 
                                   ),
                                 ),
                               );

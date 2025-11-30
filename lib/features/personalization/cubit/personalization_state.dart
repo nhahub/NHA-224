@@ -2,7 +2,6 @@ import 'package:equatable/equatable.dart';
 
 class PersonalizationState extends Equatable{
   @override
-  // TODO: implement props
   List<Object?> get props => [];
 }
 
@@ -27,7 +26,6 @@ class PersonalizationLoadedd extends PersonalizationState {
 
 class PersonalizationSuccess extends PersonalizationState{
   final String imageUrl;
-  // TODO: add the reset profile probs
   PersonalizationSuccess(this.imageUrl);
 }
 class PersonalizationFailure extends PersonalizationState{

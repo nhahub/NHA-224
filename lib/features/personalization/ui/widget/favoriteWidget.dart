@@ -45,7 +45,7 @@ class FavouriteWidget extends StatelessWidget {
                 ),
               ),
 
-              /// زرار القلب
+              
               Positioned(
                 top: 8,
                 right: 8,
@@ -68,7 +68,6 @@ class FavouriteWidget extends StatelessWidget {
             ],
           ),
 
-          /// الاسم
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
             child: Text(
@@ -82,7 +81,6 @@ class FavouriteWidget extends StatelessWidget {
             ),
           ),
 
-          /// السعر والقديم
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Row(
