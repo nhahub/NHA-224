@@ -12,6 +12,19 @@ class PersonalizationLoaded extends PersonalizationState{
   final String imageUrl;
   PersonalizationLoaded(this.imageUrl);
 }
+
+class PersonalizationLoadedd extends PersonalizationState {
+  final String name;
+  final String email;
+
+  PersonalizationLoadedd({
+    required this.name,
+    required this.email,
+  });
+}
+
+
+
 class PersonalizationSuccess extends PersonalizationState{
   final String imageUrl;
   // TODO: add the reset profile probs

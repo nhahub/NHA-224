@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:depi_final_project/core/theme/colors.dart';
 import 'package:depi_final_project/core/widgets/app_bar_widget.dart';
@@ -9,55 +11,135 @@ class PaymentPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final userId = FirebaseAuth.instance.currentUser!.uid;
+
     return Scaffold(
-      appBar:const CustomAppBar(
-        title: "Payment",
-      ),
+      appBar: const CustomAppBar(title: "Payment"),
+
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text("Cards",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+            
+            Text(
+              "Cards",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+                color: theme.colorScheme.primary,
+              ),
+            ),
+
             const SizedBox(height: 12),
-            Paymentcard(text: "**** 4187"),
-            Paymentcard(text: "**** 9387"),
-            const SizedBox(height: 20),
-            const Text("Paypal",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-            const SizedBox(height: 12),
-            Paymentcard(text: "Cloth@gmail.com"),
-             Center(
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.5,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const Addcard()),
+
+            Expanded(
+              child: StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection("users")
+                    .doc(userId)
+                    .collection("card")
+                    .orderBy("createdAt", descending: false)
+                    .snapshots(),
+
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
+                  if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                    return Center(
+                      child: Text(
+                        "No cards added yet",
+                        style: TextStyle(
+                          color: theme.colorScheme.primary,
+                        ),
+                      ),
+                    );
+                  }
+
+                  final docs = snapshot.data!.docs;
+
+                  return ListView.builder(
+                    itemCount: docs.length,
+                    itemBuilder: (context, index) {
+                      final card = docs[index];
+                      final id = card.id;
+                      final number = card["Card Number"];
+                      final last4 = number.substring(number.length - 4);
+
+                      return InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => Addcard(
+                                id: id,
+                                number: card["Card Number"],
+                                name: card["Card Name"],
+                                expire: card["Exp"],
+                                cvv: card["CVV"],
+                              ),
+                            ),
+                          );
+                        },
+
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(vertical: 8),
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: theme.inputDecorationTheme.fillColor,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: theme.colorScheme.outlineVariant,
+                            ),
+                          ),
+                          child: Text(
+                            "**** $last4",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: theme.colorScheme.onSurface,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
                   );
                 },
-                child: const Text(
-                  "Add Card",
-                  style: TextStyle(color: Colors.white),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.lightPrimary,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(35),
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            Center(
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width * 0.5,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const Addcard()),
+                    );
+                  },
+                  child: const Text(
+                    "Add Card",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.lightPrimary,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(35),
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-         
           ],
         ),
       ),
     );
   }
-
- 
 }

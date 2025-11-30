@@ -1,3 +1,6 @@
+import 'package:depi_final_project/features/Auth/presentation/login_page.dart';
+import 'package:depi_final_project/features/personalization/ui/screens/favorite.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:depi_final_project/core/theme/colors.dart';
@@ -6,7 +9,6 @@ import 'package:depi_final_project/core/theme/text_style.dart';
 import 'package:depi_final_project/features/personalization/ui/screens/address.dart';
 import 'package:depi_final_project/features/personalization/ui/screens/payment.dart';
 import 'package:depi_final_project/features/personalization/ui/widget/menuItem.dart';
-import 'package:depi_final_project/features/personalization/ui/screens/favourites.dart';
 import 'package:depi_final_project/features/personalization/cubit/personalization_cubit.dart';
 import 'package:depi_final_project/features/personalization/cubit/personalization_state.dart';
 import 'package:depi_final_project/features/personalization/ui/screens/settings_screen_english.dart';
@@ -27,6 +29,7 @@ class _ProfileState extends State<Profile> {
   void initState() {
     // TODO: implement initState
     context.read<PersonalizationCubit>().loadUserImage();
+    context.read<PersonalizationCubit>().loadUserData();
     super.initState();
   }
 
@@ -95,23 +98,24 @@ class _ProfileState extends State<Profile> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "Gilbert Jones",
+                                state is PersonalizationLoadedd
+                                    ? state.name
+                                    : "Loading...",
                                 style: AppTextStyles.headline6.copyWith(
-                                  color: Theme.of(context).colorScheme.onSurface,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurface,
                                 ),
                               ),
                               SizedBox(height: Spacing.xs),
                               Text(
-                                "gilbertjones001@gmail.com",
+                                state is PersonalizationLoadedd
+                                    ? state.email
+                                    : "",
                                 style: AppTextStyles.bodySmall.copyWith(
-                                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                                ),
-                              ),
-                              SizedBox(height: Spacing.xs),
-                              Text(
-                                "+1 212-555-1234",
-                                style: AppTextStyles.bodySmall.copyWith(
-                                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurfaceVariant,
                                 ),
                               ),
                             ],
@@ -119,9 +123,13 @@ class _ProfileState extends State<Profile> {
                         ),
                         // Edit Button
                         TextButton(
-                          onPressed: () {},
+onPressed: () {
+  if (state is PersonalizationLoadedd) {
+    showEditNameDialog(context, state.name);
+  }
+},
                           child: Text(
-                            "Edit Profile",
+                            "Edit",
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.primary,
                               fontWeight: FontWeight.w600,
@@ -140,7 +148,9 @@ class _ProfileState extends State<Profile> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (_) => const SettingsScreen()),
+                        MaterialPageRoute(
+                          builder: (_) => const SettingsScreen(),
+                        ),
                       );
                     },
                   ),
@@ -160,7 +170,7 @@ class _ProfileState extends State<Profile> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (_) => const Favourites()),
+                        MaterialPageRoute(builder: (_) => FavoriteScreen()),
                       );
                     },
                   ),
@@ -174,21 +184,27 @@ class _ProfileState extends State<Profile> {
                       );
                     },
                   ),
-                  Menuitem(context: context, title: "Help Center", onTap: () {}),
-                  Menuitem(context: context, title: "Support", onTap: () {}),
 
                   const SizedBox(height: 20),
+TextButton(
+  onPressed: () async {
+    await FirebaseAuth.instance.signOut();
 
-                  TextButton(
-                    onPressed: () {},
-                    child: const Text(
-                      "Sign Out",
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (_) => LoginPage()),
+      (route) => false, // يمسح كل الصفحات اللي فاتت
+    );
+  },
+  child: const Text(
+    "Sign Out",
+    style: TextStyle(
+      color: Colors.red,
+      fontWeight: FontWeight.bold,
+    ),
+  ),
+)
+
                 ],
               );
             },
@@ -197,4 +213,76 @@ class _ProfileState extends State<Profile> {
       ),
     );
   }
+}
+
+void showEditNameDialog(BuildContext context, String currentName) {
+  final TextEditingController controller =
+      TextEditingController(text: currentName);
+  showDialog(
+  context: context,
+  builder: (context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return AlertDialog(
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      title: Text(
+        "Edit Name",
+        style: TextStyle(
+          color: Theme.of(context).colorScheme.onSurface,
+        ),
+      ),
+      content: TextField(
+        controller: controller,
+        style: TextStyle(
+          color: Theme.of(context).colorScheme.onSurface, // اللون في دارك/لايت
+        ),
+        decoration: InputDecoration(
+          labelText: "New Name",
+          labelStyle: TextStyle(
+            color: Theme.of(context).colorScheme.onSurfaceVariant, // لون اللابل
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Theme.of(context).colorScheme.outline,
+            ),
+          ),
+          
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Theme.of(context).colorScheme.primary,
+              width: 1.5,
+            ),
+          ),
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text(
+            "Cancel",
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+        ),
+
+        ElevatedButton(
+          onPressed: () {
+            String newName = controller.text.trim();
+            if (newName.isEmpty) return;
+
+            context.read<PersonalizationCubit>().updateName(newName);
+            Navigator.pop(context);
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            foregroundColor: Theme.of(context).colorScheme.onPrimary,
+          ),
+          child: const Text("Save"),
+        ),
+      ],
+    );
+  },
+);
+
 }
