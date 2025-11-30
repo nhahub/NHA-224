@@ -30,6 +30,26 @@ class PersonalizationCubit extends Cubit<PersonalizationState> {
   }
 }
 
+Future<void> updateName(String newName) async {
+  emit(PersonalizationLoading());
+
+  try {
+    final uid = FirebaseAuth.instance.currentUser!.uid;
+
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(uid)
+        .update({"name": newName});
+
+    // تحميل الداتا من جديد
+    await loadUserData();
+
+    emit(PersonalizationSuccess("Name updated"));
+  } catch (e) {
+    emit(PersonalizationFailure("Error updating name"));
+  }
+}
+
 
   Future<void> loadUserImage() async {
     emit(PersonalizationLoading());

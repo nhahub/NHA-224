@@ -121,7 +121,11 @@ class _ProfileState extends State<Profile> {
                         ),
                         // Edit Button
                         TextButton(
-                          onPressed: () {},
+onPressed: () {
+  if (state is PersonalizationLoadedd) {
+    showEditNameDialog(context, state.name);
+  }
+},
                           child: Text(
                             "Edit",
                             style: TextStyle(
@@ -199,4 +203,44 @@ class _ProfileState extends State<Profile> {
       ),
     );
   }
+}
+
+void showEditNameDialog(BuildContext context, String currentName) {
+  final TextEditingController controller =
+      TextEditingController(text: currentName);
+
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: const Text("Edit Name"),
+        content: TextField(
+          controller: controller,
+          decoration: const InputDecoration(
+            labelText: "New Name",
+            border: OutlineInputBorder(),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("Cancel"),
+          ),
+
+          ElevatedButton(
+            onPressed: () {
+              String newName = controller.text.trim();
+              if (newName.isEmpty) return;
+
+              // ناديل الكيوبت ليعمل update
+              context.read<PersonalizationCubit>().updateName(newName);
+
+              Navigator.pop(context);
+            },
+            child: const Text("Save"),
+          ),
+        ],
+      );
+    },
+  );
 }

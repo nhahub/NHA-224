@@ -13,7 +13,7 @@ class AddressPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final userId = FirebaseAuth.instance.currentUser!.uid;
     return Scaffold(
-      appBar: AppBar(title: const Text("My Addresses")),
+      appBar: CustomAppBar(title: "Address",),
 
       body: Padding(
         padding: const EdgeInsets.all(16),
