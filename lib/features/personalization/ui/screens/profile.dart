@@ -12,8 +12,6 @@ import 'package:depi_final_project/features/personalization/ui/widget/menuItem.d
 import 'package:depi_final_project/features/personalization/cubit/personalization_cubit.dart';
 import 'package:depi_final_project/features/personalization/cubit/personalization_state.dart';
 import 'package:depi_final_project/features/personalization/ui/screens/settings_screen_english.dart';
-// import 'package:depi_final_project/core/errors/failures.dart';
-// import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -27,7 +25,6 @@ class _ProfileState extends State<Profile> {
 
   @override
   void initState() {
-    // TODO: implement initState
     context.read<PersonalizationCubit>().loadUserImage();
     context.read<PersonalizationCubit>().loadUserData();
     super.initState();
@@ -79,7 +76,6 @@ class _ProfileState extends State<Profile> {
                   ),
                   const SizedBox(height: 20),
 
-                  // Info Container
                   Container(
                     padding: EdgeInsets.all(Spacing.md),
                     decoration: BoxDecoration(
@@ -92,7 +88,6 @@ class _ProfileState extends State<Profile> {
                     ),
                     child: Row(
                       children: [
-                        // Name & Email
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -121,13 +116,12 @@ class _ProfileState extends State<Profile> {
                             ],
                           ),
                         ),
-                        // Edit Button
                         TextButton(
-onPressed: () {
-  if (state is PersonalizationLoadedd) {
-    showEditNameDialog(context, state.name);
-  }
-},
+                          onPressed: () {
+                            if (state is PersonalizationLoadedd) {
+                              showEditNameDialog(context, state.name);
+                            }
+                          },
                           child: Text(
                             "Edit",
                             style: TextStyle(
@@ -141,7 +135,6 @@ onPressed: () {
                   ),
                   const SizedBox(height: 20),
 
-                  // Menu Items
                   Menuitem(
                     context: context,
                     title: "Settings",
@@ -186,25 +179,24 @@ onPressed: () {
                   ),
 
                   const SizedBox(height: 20),
-TextButton(
-  onPressed: () async {
-    await FirebaseAuth.instance.signOut();
+                  TextButton(
+                    onPressed: () async {
+                      await FirebaseAuth.instance.signOut();
 
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (_) => LoginPage()),
-      (route) => false, // يمسح كل الصفحات اللي فاتت
-    );
-  },
-  child: const Text(
-    "Sign Out",
-    style: TextStyle(
-      color: Colors.red,
-      fontWeight: FontWeight.bold,
-    ),
-  ),
-)
-
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (_) => LoginPage()),
+                        (route) => false,
+                      );
+                    },
+                    child: const Text(
+                      "Sign Out",
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
                 ],
               );
             },
@@ -216,73 +208,67 @@ TextButton(
 }
 
 void showEditNameDialog(BuildContext context, String currentName) {
-  final TextEditingController controller =
-      TextEditingController(text: currentName);
+  final TextEditingController controller = TextEditingController(
+    text: currentName,
+  );
   showDialog(
-  context: context,
-  builder: (context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    context: context,
+    builder: (context) {
+      final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return AlertDialog(
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      title: Text(
-        "Edit Name",
-        style: TextStyle(
-          color: Theme.of(context).colorScheme.onSurface,
+      return AlertDialog(
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        title: Text(
+          "Edit Name",
+          style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
         ),
-      ),
-      content: TextField(
-        controller: controller,
-        style: TextStyle(
-          color: Theme.of(context).colorScheme.onSurface, // اللون في دارك/لايت
-        ),
-        decoration: InputDecoration(
-          labelText: "New Name",
-          labelStyle: TextStyle(
-            color: Theme.of(context).colorScheme.onSurfaceVariant, // لون اللابل
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Theme.of(context).colorScheme.outline,
+        content: TextField(
+          controller: controller,
+          style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+          decoration: InputDecoration(
+            labelText: "New Name",
+            labelStyle: TextStyle(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
-          ),
-          
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Theme.of(context).colorScheme.primary,
-              width: 1.5,
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Theme.of(context).colorScheme.outline,
+              ),
+            ),
+
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Theme.of(context).colorScheme.primary,
+                width: 1.5,
+              ),
             ),
           ),
         ),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: Text(
-            "Cancel",
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.primary,
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(
+              "Cancel",
+              style: TextStyle(color: Theme.of(context).colorScheme.primary),
             ),
           ),
-        ),
 
-        ElevatedButton(
-          onPressed: () {
-            String newName = controller.text.trim();
-            if (newName.isEmpty) return;
+          ElevatedButton(
+            onPressed: () {
+              String newName = controller.text.trim();
+              if (newName.isEmpty) return;
 
-            context.read<PersonalizationCubit>().updateName(newName);
-            Navigator.pop(context);
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            foregroundColor: Theme.of(context).colorScheme.onPrimary,
+              context.read<PersonalizationCubit>().updateName(newName);
+              Navigator.pop(context);
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              foregroundColor: Theme.of(context).colorScheme.onPrimary,
+            ),
+            child: const Text("Save"),
           ),
-          child: const Text("Save"),
-        ),
-      ],
-    );
-  },
-);
-
+        ],
+      );
+    },
+  );
 }

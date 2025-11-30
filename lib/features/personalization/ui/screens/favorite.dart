@@ -45,7 +45,6 @@ class FavoriteScreen extends StatelessWidget {
               final data = favDocs[index].data() as Map<String, dynamic>;
               final docId = favDocs[index].id;
 
-              // أول صورة من imageUrl (list)
               final imageUrl = (data["imageUrl"] as List).isNotEmpty
                   ? data["imageUrl"][0]
                   : "";

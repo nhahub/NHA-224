@@ -12,10 +12,8 @@ class PersonalizationCubit extends Cubit<PersonalizationState> {
   emit(PersonalizationLoading());
 
   try {
-    // 1) ارفع الصورة وخد رابطها
     final imageUrl = await imageService.uploadImageUrlToFirebase();
 
-    // 2) حفظ الرابط في Firestore
     final uid = FirebaseAuth.instance.currentUser!.uid;
 
     await FirebaseFirestore.instance
@@ -23,7 +21,6 @@ class PersonalizationCubit extends Cubit<PersonalizationState> {
         .doc(uid)
         .update({"imageUrl": imageUrl});
 
-    // 3) رجّع الستيت باللينك الجديد
     emit(PersonalizationSuccess(imageUrl));
   } catch (e) {
     emit(PersonalizationFailure(e.toString()));
@@ -41,7 +38,6 @@ Future<void> updateName(String newName) async {
         .doc(uid)
         .update({"name": newName});
 
-    // تحميل الداتا من جديد
     
     await loadUserData();
 
