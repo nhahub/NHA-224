@@ -17,4 +17,13 @@ class FaveCubit extends Cubit<FaveState>{
       emit(FaveError('Failed to toggle favorite status: $e'));
     }
   }
+
+  Future<bool> isProductFavored(String productId) async{
+    try{
+      return await fave_repo.isProductFavored(productId);
+    } catch (e) {
+      emit(FaveError('Failed to check favorite status: $e'));
+      return false;
+    }
+  }
 }
