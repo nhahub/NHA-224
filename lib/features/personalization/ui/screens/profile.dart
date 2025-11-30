@@ -1,3 +1,6 @@
+import 'package:depi_final_project/features/Auth/presentation/login_page.dart';
+import 'package:depi_final_project/features/personalization/ui/screens/favorite.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:depi_final_project/core/theme/colors.dart';
@@ -6,7 +9,6 @@ import 'package:depi_final_project/core/theme/text_style.dart';
 import 'package:depi_final_project/features/personalization/ui/screens/address.dart';
 import 'package:depi_final_project/features/personalization/ui/screens/payment.dart';
 import 'package:depi_final_project/features/personalization/ui/widget/menuItem.dart';
-import 'package:depi_final_project/features/personalization/ui/screens/favourites.dart';
 import 'package:depi_final_project/features/personalization/cubit/personalization_cubit.dart';
 import 'package:depi_final_project/features/personalization/cubit/personalization_state.dart';
 import 'package:depi_final_project/features/personalization/ui/screens/settings_screen_english.dart';
@@ -168,7 +170,7 @@ onPressed: () {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (_) => const Favourites()),
+                        MaterialPageRoute(builder: (_) => FavoriteScreen()),
                       );
                     },
                   ),
@@ -184,17 +186,25 @@ onPressed: () {
                   ),
 
                   const SizedBox(height: 20),
+TextButton(
+  onPressed: () async {
+    await FirebaseAuth.instance.signOut();
 
-                  TextButton(
-                    onPressed: () {},
-                    child: const Text(
-                      "Sign Out",
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (_) => LoginPage()),
+      (route) => false, // يمسح كل الصفحات اللي فاتت
+    );
+  },
+  child: const Text(
+    "Sign Out",
+    style: TextStyle(
+      color: Colors.red,
+      fontWeight: FontWeight.bold,
+    ),
+  ),
+)
+
                 ],
               );
             },
@@ -208,39 +218,71 @@ onPressed: () {
 void showEditNameDialog(BuildContext context, String currentName) {
   final TextEditingController controller =
       TextEditingController(text: currentName);
-
   showDialog(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        title: const Text("Edit Name"),
-        content: TextField(
-          controller: controller,
-          decoration: const InputDecoration(
-            labelText: "New Name",
-            border: OutlineInputBorder(),
+  context: context,
+  builder: (context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return AlertDialog(
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      title: Text(
+        "Edit Name",
+        style: TextStyle(
+          color: Theme.of(context).colorScheme.onSurface,
+        ),
+      ),
+      content: TextField(
+        controller: controller,
+        style: TextStyle(
+          color: Theme.of(context).colorScheme.onSurface, // اللون في دارك/لايت
+        ),
+        decoration: InputDecoration(
+          labelText: "New Name",
+          labelStyle: TextStyle(
+            color: Theme.of(context).colorScheme.onSurfaceVariant, // لون اللابل
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Theme.of(context).colorScheme.outline,
+            ),
+          ),
+          
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Theme.of(context).colorScheme.primary,
+              width: 1.5,
+            ),
           ),
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text("Cancel"),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text(
+            "Cancel",
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.primary,
+            ),
           ),
+        ),
 
-          ElevatedButton(
-            onPressed: () {
-              String newName = controller.text.trim();
-              if (newName.isEmpty) return;
+        ElevatedButton(
+          onPressed: () {
+            String newName = controller.text.trim();
+            if (newName.isEmpty) return;
 
-              // ناديل الكيوبت ليعمل update
-              context.read<PersonalizationCubit>().updateName(newName);
-
-              Navigator.pop(context);
-            },
-            child: const Text("Save"),
+            context.read<PersonalizationCubit>().updateName(newName);
+            Navigator.pop(context);
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            foregroundColor: Theme.of(context).colorScheme.onPrimary,
           ),
-        ],
-      );
-    },
-  );
+          child: const Text("Save"),
+        ),
+      ],
+    );
+  },
+);
+
 }

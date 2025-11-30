@@ -42,6 +42,7 @@ Future<void> updateName(String newName) async {
         .update({"name": newName});
 
     // تحميل الداتا من جديد
+    
     await loadUserData();
 
     emit(PersonalizationSuccess("Name updated"));

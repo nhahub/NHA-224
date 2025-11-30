@@ -14,23 +14,33 @@ class Inputfield extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return TextFormField(
       controller: controller,
       validator: validator,
+
+      style: TextStyle(
+        color: theme.colorScheme.onSurface, // لون النص في الدارك و اللايت
+        fontSize: 16,
+      ),
+
       decoration: InputDecoration(
-        hintText: hintText,
-        hintStyle: TextStyle(
-          color: Colors.grey[500],
-          fontSize: 14,
-        ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide.none,
-        ),
+        labelText: hintText,
+        labelStyle: theme.inputDecorationTheme.labelStyle,
+
         filled: true,
-        fillColor: Colors.grey[200],
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        fillColor: theme.inputDecorationTheme.fillColor, // نفس الدروب داون
+
+        border: theme.inputDecorationTheme.border,
+        enabledBorder: theme.inputDecorationTheme.enabledBorder,
+        focusedBorder: theme.inputDecorationTheme.focusedBorder,
+        errorBorder: theme.inputDecorationTheme.errorBorder,
+
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 14,
+        ),
       ),
     );
   }

@@ -4,16 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:depi_final_project/core/theme/colors.dart';
 import 'package:depi_final_project/core/widgets/app_bar_widget.dart';
 import 'package:depi_final_project/features/personalization/ui/screens/addAddress.dart';
-import 'package:depi_final_project/features/personalization/ui/widget/adressWidget.dart';
 
 class AddressPage extends StatelessWidget {
   const AddressPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final userId = FirebaseAuth.instance.currentUser!.uid;
+
     return Scaffold(
-      appBar: CustomAppBar(title: "Address",),
+      appBar: CustomAppBar(title: "Address"),
 
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -34,8 +35,12 @@ class AddressPage extends StatelessWidget {
                   }
 
                   if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                    return const Center(child: Text("No Addresses Added Yet",style: TextStyle(color:AppColors.lightPrimary,
-),));
+                    return const Center(
+                      child: Text(
+                        "No Addresses Added Yet",
+                        style: TextStyle(color: AppColors.lightPrimary),
+                      ),
+                    );
                   }
 
                   final docs = snapshot.data!.docs;
@@ -44,6 +49,7 @@ class AddressPage extends StatelessWidget {
                     itemCount: docs.length,
                     itemBuilder: (context, index) {
                       final address = docs[index];
+
                       final id = address.id;
                       final street = address["street"];
                       final city = address["city"];
@@ -59,16 +65,32 @@ class AddressPage extends StatelessWidget {
                         child: TextField(
                           controller: controller,
                           readOnly: true,
+
+                          style: TextStyle(
+                            color: theme.colorScheme.onSurface,
+                            fontSize: 16,
+                          ),
+
                           decoration: InputDecoration(
                             filled: true,
-                            fillColor: Colors.grey.shade200,
+                            fillColor: theme.inputDecorationTheme.fillColor,
+
+                            border: theme.inputDecorationTheme.border,
+                            enabledBorder: theme.inputDecorationTheme.enabledBorder,
+                            focusedBorder: theme.inputDecorationTheme.focusedBorder,
+
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 14,
+                            ),
+
                             suffixIcon: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 IconButton(
-                                  icon: const Icon(
+                                  icon: Icon(
                                     Icons.edit,
-                                    color: AppColors.lightPrimary,
+                                    color: theme.colorScheme.primary,
                                   ),
                                   onPressed: () {
                                     Navigator.push(
@@ -85,6 +107,7 @@ class AddressPage extends StatelessWidget {
                                     );
                                   },
                                 ),
+
                                 IconButton(
                                   icon: const Icon(
                                     Icons.delete,
@@ -95,6 +118,9 @@ class AddressPage extends StatelessWidget {
                                       context: context,
                                       builder: (context) {
                                         return AlertDialog(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(20),
+                                          ),
                                           title: const Text("Confirm Delete"),
                                           content: const Text(
                                             "Are you sure you want to delete this address?",
@@ -102,18 +128,13 @@ class AddressPage extends StatelessWidget {
                                           actions: [
                                             TextButton(
                                               onPressed: () {
-                                                Navigator.pop(
-                                                  context,
-                                                );
+                                                Navigator.pop(context);
                                               },
                                               child: const Text("No"),
                                             ),
-
                                             TextButton(
                                               onPressed: () async {
-                                                Navigator.pop(
-                                                  context,
-                                                ); 
+                                                Navigator.pop(context);
 
                                                 await FirebaseFirestore.instance
                                                     .collection("users")
@@ -124,9 +145,7 @@ class AddressPage extends StatelessWidget {
                                               },
                                               child: const Text(
                                                 "Yes",
-                                                style: TextStyle(
-                                                  color: Colors.red,
-                                                ),
+                                                style: TextStyle(color: Colors.red),
                                               ),
                                             ),
                                           ],
@@ -136,9 +155,6 @@ class AddressPage extends StatelessWidget {
                                   },
                                 ),
                               ],
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
                             ),
                           ),
                         ),

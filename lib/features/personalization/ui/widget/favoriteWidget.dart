@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:depi_final_project/core/theme/text_style.dart';
-import 'package:depi_final_project/core/theme/spacing.dart';
 
 class FavouriteWidget extends StatelessWidget {
   final String image;
   final String title;
   final String price;
   final String? oldPrice;
-  final VoidCallback? onFavoriteTap;
+  final VoidCallback onFavoriteTap;
   final bool isFavorite;
 
   const FavouriteWidget({
@@ -16,25 +14,16 @@ class FavouriteWidget extends StatelessWidget {
     required this.title,
     required this.price,
     this.oldPrice,
-    this.onFavoriteTap,
+    required this.onFavoriteTap,
     this.isFavorite = true,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: double.infinity,
-      width: double.infinity,
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surfaceVariant,
-        borderRadius: BorderRadius.circular(Spacing.lgRadius),
-        boxShadow: [
-          BoxShadow(
-            color: Theme.of(context).colorScheme.shadow.withOpacity(0.1),
-            blurRadius: 6,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,37 +31,35 @@ class FavouriteWidget extends StatelessWidget {
           Stack(
             children: [
               ClipRRect(
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(Spacing.lgRadius),
-                ),
-                child: Image.asset(
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                child: Image.network(
                   image,
-                  height: 160,
+                  height: 300,
                   width: double.infinity,
                   fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Container(
-                      height: 160,
-                      color: Colors.grey[300],
-                      child: const Icon(Icons.image_not_supported, size: 40),
-                    );
-                  },
+                  errorBuilder: (context, error, stackTrace) => Container(
+                    height: 300,
+                    color: Colors.grey,
+                    child: const Icon(Icons.image_not_supported, size: 40),
+                  ),
                 ),
               ),
+
+              /// زرار القلب
               Positioned(
-                top: Spacing.sm,
-                right: Spacing.sm,
+                top: 8,
+                right: 8,
                 child: GestureDetector(
                   onTap: onFavoriteTap,
                   child: Container(
-                    padding: EdgeInsets.all(Spacing.xs),
+                    padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       color: Colors.white.withOpacity(0.8),
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
                       isFavorite ? Icons.favorite : Icons.favorite_border,
-                      color: isFavorite ? Colors.red : Colors.grey,
+                      color: Colors.red,
                       size: 22,
                     ),
                   ),
@@ -80,38 +67,41 @@ class FavouriteWidget extends StatelessWidget {
               ),
             ],
           ),
+
+          /// الاسم
           Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: Spacing.sm,
-              vertical: Spacing.xs,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
             child: Text(
               title,
-              style: AppTextStyles.bodyMedium.copyWith(
+              maxLines: 2,
+              style: TextStyle(
+                fontSize: 14,
                 color: Theme.of(context).colorScheme.onSurface,
                 fontWeight: FontWeight.w500,
               ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
             ),
           ),
+
+          /// السعر والقديم
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: Spacing.sm),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Row(
               children: [
                 Text(
-                  price,
-                  style: AppTextStyles.bodyMedium.copyWith(
+                  "$price",
+                  style: TextStyle(
+                    fontSize: 14,
                     color: Theme.of(context).colorScheme.primary,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 if (oldPrice != null) ...[
-                  SizedBox(width: Spacing.sm),
+                  const SizedBox(width: 8),
                   Text(
                     oldPrice!,
-                    style: AppTextStyles.bodySmall.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey,
                       decoration: TextDecoration.lineThrough,
                     ),
                   ),
@@ -119,7 +109,8 @@ class FavouriteWidget extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: Spacing.sm),
+
+          const SizedBox(height: 8),
         ],
       ),
     );

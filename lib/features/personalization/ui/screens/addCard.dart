@@ -35,8 +35,18 @@ class _AddcardState extends State<Addcard> {
   );
 
   List<String> months = [
-    "01","02","03","04","05","06",
-    "07","08","09","10","11","12",
+    "01",
+    "02",
+    "03",
+    "04",
+    "05",
+    "06",
+    "07",
+    "08",
+    "09",
+    "10",
+    "11",
+    "12",
   ];
 
   final formKey = GlobalKey<FormState>();
@@ -83,13 +93,13 @@ class _AddcardState extends State<Addcard> {
 
       Navigator.pop(context);
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Card Saved Successfully")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Card Saved Successfully")));
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error: $e")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error: $e")));
     }
   }
 
@@ -118,9 +128,9 @@ class _AddcardState extends State<Addcard> {
         const SnackBar(content: Text("Card Updated Successfully")),
       );
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error: $e")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error: $e")));
     }
   }
 
@@ -166,9 +176,7 @@ class _AddcardState extends State<Addcard> {
     final bool isEditing = widget.id != null;
 
     return Scaffold(
-      appBar: CustomAppBar(
-        title: isEditing ? "Card Details" : "Add Card",
-      ),
+      appBar: CustomAppBar(title: isEditing ? "Card Details" : "Add Card"),
 
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -200,39 +208,131 @@ class _AddcardState extends State<Addcard> {
                       children: [
                         Expanded(
                           child: DropdownButtonFormField<String>(
-                            decoration: const InputDecoration(
-                              labelText: "Month",
-                              border: OutlineInputBorder(),
-                            ),
+                            isExpanded: true,
                             value: selectedMonth,
-                            items: months
-                                .map((m) => DropdownMenuItem(
-                                      value: m,
-                                      child: Text(m),
-                                    ))
-                                .toList(),
-                            onChanged: (v) => setState(() {
-                              selectedMonth = v;
-                            }),
+
+                            decoration: InputDecoration(
+                              labelText: "Month",
+                              filled: true,
+                              fillColor: Theme.of(
+                                context,
+                              ).inputDecorationTheme.fillColor,
+                              labelStyle: Theme.of(
+                                context,
+                              ).inputDecorationTheme.labelStyle,
+                              border: Theme.of(
+                                context,
+                              ).inputDecorationTheme.border,
+                              enabledBorder: Theme.of(
+                                context,
+                              ).inputDecorationTheme.enabledBorder,
+                              focusedBorder: Theme.of(
+                                context,
+                              ).inputDecorationTheme.focusedBorder,
+                              errorBorder: Theme.of(
+                                context,
+                              ).inputDecorationTheme.errorBorder,
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 16,
+                              ),
+                            ),
+
+                            dropdownColor: Theme.of(
+                              context,
+                            ).colorScheme.surface, // زي القايمة اللي بتفتح
+                            iconEnabledColor: Theme.of(
+                              context,
+                            ).colorScheme.onSurface, // لون السهم
+
+                            style: TextStyle(
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onSurface, // لون النص
+                              fontSize: 16,
+                            ),
+
+                            items: months.map((m) {
+                              return DropdownMenuItem(
+                                value: m,
+                                child: Text(
+                                  m,
+                                  style: TextStyle(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurface, // نص القائمة
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+
+                            onChanged: (value) {
+                              setState(() => selectedMonth = value);
+                            },
                           ),
                         ),
                         const SizedBox(width: 12),
                         Expanded(
                           child: DropdownButtonFormField<String>(
-                            decoration: const InputDecoration(
-                              labelText: "Year",
-                              border: OutlineInputBorder(),
-                            ),
+                            isExpanded: true,
                             value: selectedYear,
-                            items: years
-                                .map((y) => DropdownMenuItem(
-                                      value: y,
-                                      child: Text(y),
-                                    ))
-                                .toList(),
-                            onChanged: (v) => setState(() {
-                              selectedYear = v;
-                            }),
+
+                            decoration: InputDecoration(
+                              labelText: "Year",
+                              filled: true,
+                              fillColor: Theme.of(
+                                context,
+                              ).inputDecorationTheme.fillColor,
+                              labelStyle: Theme.of(
+                                context,
+                              ).inputDecorationTheme.labelStyle,
+                              border: Theme.of(
+                                context,
+                              ).inputDecorationTheme.border,
+                              enabledBorder: Theme.of(
+                                context,
+                              ).inputDecorationTheme.enabledBorder,
+                              focusedBorder: Theme.of(
+                                context,
+                              ).inputDecorationTheme.focusedBorder,
+                              errorBorder: Theme.of(
+                                context,
+                              ).inputDecorationTheme.errorBorder,
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 16,
+                              ),
+                            ),
+
+                            dropdownColor: Theme.of(
+                              context,
+                            ).colorScheme.surface,
+                            iconEnabledColor: Theme.of(
+                              context,
+                            ).colorScheme.onSurface,
+
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSurface,
+                              fontSize: 16,
+                            ),
+
+                            items: years.map((y) {
+                              return DropdownMenuItem(
+                                value: y,
+                                child: Text(
+                                  y,
+                                  style: TextStyle(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurface,
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+
+                            onChanged: (value) {
+                              setState(() => selectedYear = value);
+                            },
                           ),
                         ),
                       ],
