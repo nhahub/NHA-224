@@ -22,7 +22,7 @@ import 'package:depi_final_project/data/repos/home_repo_implementation.dart';
 import 'package:depi_final_project/core/services/shared_preferences_service.dart';
 import 'package:depi_final_project/features/personalization/cubit/personalization_cubit.dart';
 // import 'package:flutter_dotenv/flutter_dotenv.dart';
-
+  
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);

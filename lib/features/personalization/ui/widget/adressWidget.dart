@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:depi_final_project/core/theme/colors.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Adresswidget extends StatelessWidget {
@@ -20,15 +22,17 @@ class Adresswidget extends StatelessWidget {
           Expanded(
             child: Text(address, style: const TextStyle(fontSize: 14)),
           ),
-          TextButton(
-            onPressed: () {},
-            child: const Text("Edit", style: TextStyle(color: AppColors.lightPrimary, fontSize: 11, fontWeight: FontWeight.w600)),
-          ),
-          TextButton(
-            onPressed: () {},
-            child: const Text("Delete", style: TextStyle(color: Colors.red, fontSize: 11, fontWeight: FontWeight.w600)),
-          ),
-          // IconButton(onPressed: (){}, icon: Icon(Icons.delete, color: AppColors.lightPrimary, size: 16,))
+          // TextButton(
+          //   onPressed: () {},
+          //   child: const Text("Edit", style: TextStyle(color: AppColors.lightPrimary, fontSize: 11, fontWeight: FontWeight.w600)),
+          // ),
+          // TextButton(
+          //   onPressed: () async{
+          //   },
+          //   child: const Text("Delete", style: TextStyle(color: Colors.red, fontSize: 11, fontWeight: FontWeight.w600)),
+          // ),
+          IconButton(onPressed: (){}, icon: Icon(Icons.edit, color: AppColors.grey, size: 16,)),
+          IconButton(onPressed: (){}, icon: Icon(Icons.delete, color: AppColors.lightPrimary, size: 16,))
         ],
       ),
     );

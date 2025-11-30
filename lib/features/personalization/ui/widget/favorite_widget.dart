@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:depi_final_project/core/theme/text_style.dart';
 import 'package:depi_final_project/core/theme/spacing.dart';
 
-class FavoriteWidget extends StatelessWidget {
+class FavouriteWidget extends StatelessWidget {
   final String image;
   final String title;
   final String price;
@@ -10,7 +10,7 @@ class FavoriteWidget extends StatelessWidget {
   final VoidCallback? onFavoriteTap;
   final bool isFavorite;
 
-  const FavoriteWidget({
+  const FavouriteWidget({
     super.key,
     required this.image,
     required this.title,

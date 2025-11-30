@@ -27,6 +27,7 @@ class _ProfileState extends State<Profile> {
   void initState() {
     // TODO: implement initState
     context.read<PersonalizationCubit>().loadUserImage();
+    context.read<PersonalizationCubit>().loadUserData();
     super.initState();
   }
 
@@ -95,23 +96,24 @@ class _ProfileState extends State<Profile> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "Gilbert Jones",
+                                state is PersonalizationLoadedd
+                                    ? state.name
+                                    : "Loading...",
                                 style: AppTextStyles.headline6.copyWith(
-                                  color: Theme.of(context).colorScheme.onSurface,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurface,
                                 ),
                               ),
                               SizedBox(height: Spacing.xs),
                               Text(
-                                "gilbertjones001@gmail.com",
+                                state is PersonalizationLoadedd
+                                    ? state.email
+                                    : "",
                                 style: AppTextStyles.bodySmall.copyWith(
-                                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                                ),
-                              ),
-                              SizedBox(height: Spacing.xs),
-                              Text(
-                                "+1 212-555-1234",
-                                style: AppTextStyles.bodySmall.copyWith(
-                                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurfaceVariant,
                                 ),
                               ),
                             ],
@@ -121,7 +123,7 @@ class _ProfileState extends State<Profile> {
                         TextButton(
                           onPressed: () {},
                           child: Text(
-                            "Edit Profile",
+                            "Edit",
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.primary,
                               fontWeight: FontWeight.w600,
@@ -140,7 +142,9 @@ class _ProfileState extends State<Profile> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (_) => const SettingsScreen()),
+                        MaterialPageRoute(
+                          builder: (_) => const SettingsScreen(),
+                        ),
                       );
                     },
                   ),
@@ -174,8 +178,6 @@ class _ProfileState extends State<Profile> {
                       );
                     },
                   ),
-                  Menuitem(context: context, title: "Help Center", onTap: () {}),
-                  Menuitem(context: context, title: "Support", onTap: () {}),
 
                   const SizedBox(height: 20),
 
