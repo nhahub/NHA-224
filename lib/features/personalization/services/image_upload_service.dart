@@ -4,11 +4,25 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ImageUploadService {
-  static const String cloudName = "dp9lb4oie";
-  static const String uploadPreset = "profile_preset";
+  // Default fallback values
+  static const String defaultCloudName = "dp9lb4oie";
+  static const String defaultUploadPreset = "profile_preset";
+  static const String defaultFolder = "profile_images";
+
   String? imageUrl;
+
+  // Get Cloudinary configuration from SharedPreferences (admin settings)
+  Future<Map<String, String>> _getCloudinaryConfig() async {
+    final prefs = await SharedPreferences.getInstance();
+    return {
+      'cloudName': prefs.getString('cloudinary_cloud_name') ?? defaultCloudName,
+      'uploadPreset': prefs.getString('cloudinary_upload_preset') ?? defaultUploadPreset,
+      'folder': prefs.getString('cloudinary_folder') ?? defaultFolder,
+    };
+  }
 
   Future<String> uploadImage() async {
     final ImagePicker picker = ImagePicker();
@@ -17,19 +31,20 @@ class ImageUploadService {
       return "https://imgs.search.brave.com/r8_rpLtbGMxU9_hP_eV66IWtpYYaUuj62TaONvbGyA8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly91cy4x/MjNyZi5jb20vNDUw/d20vYmxpbmtibGlu/azEvYmxpbmtibGlu/azEyMDA1L2JsaW5r/YmxpbmsxMjAwNTAw/MDE1LzE0Njk3OTQ2/NC1hdmF0YXItbWFu/bi1zeW1ib2wuanBn/P3Zlcj02";
 
     try {
+      final config = await _getCloudinaryConfig();
       final bytes = await image.readAsBytes();
 
-      //cloud url
+      // Cloudinary upload URL
       final url = Uri.parse(
-        "https://api.cloudinary.com/v1_1/$cloudName/image/upload",
+        "https://api.cloudinary.com/v1_1/${config['cloudName']}/image/upload",
       );
 
-      //multi part request
+      // Multi part request
       final request = http.MultipartRequest('POST', url);
-      request.fields['upload_preset'] = uploadPreset;
+      request.fields['upload_preset'] = config['uploadPreset']!;
 
-      //optional
-      request.fields['folder'] = "my_app_folder";
+      // Optional folder
+      request.fields['folder'] = config['folder']!;
 
       request.files.add(
         http.MultipartFile.fromBytes(
@@ -50,14 +65,11 @@ class ImageUploadService {
         final Map<String, dynamic> err = (respStr.isNotEmpty
             ? json.decode(respStr)
             : null);
-        final message = err['error'] != null
-            ? err['error']['message']
-            : 'uploaded file status: ${response.statusCode}';
-        return message;
+        final message = err?['error']?['message'] ?? 'Upload failed: ${response.statusCode}';
+        throw Exception(message);
       }
     } catch (e) {
-      // Debug: error occurred during image upload
-      return e.toString();
+      throw Exception('Image upload failed: $e');
     }
   }
 
@@ -78,7 +90,7 @@ class ImageUploadService {
         .get();
     if (snapshot.exists) {
       final imageUrl = snapshot.data()?["profileImageUrl"];
-      return imageUrl;
+      return imageUrl ?? "https://imgs.search.brave.com/r8_rpLtbGMxU9_hP_eV66IWtpYYaUuj62TaONvbGyA8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly91cy4x/MjNyZi5jb20vNDUw/d20vYmxpbmtibGlu/azEvYmxpbmtibGlu/azEyMDA1L2JsaW5r/YmxpbmsxMjAwNTAw/MDE1LzE0Njk3OTQ2/NC1hdmF0YXItbWFu/bi1zeW1ib2wuanBn/P3Zlcj02";
     }
 
     return "https://imgs.search.brave.com/r8_rpLtbGMxU9_hP_eV66IWtpYYaUuj62TaONvbGyA8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly91cy4x/MjNyZi5jb20vNDUw/d20vYmxpbmtibGlu/azEvYmxpbmtibGlu/azEyMDA1L2JsaW5r/YmxpbmsxMjAwNTAw/MDE1LzE0Njk3OTQ2/NC1hdmF0YXItbWFu/bi1zeW1ib2wuanBn/P3Zlcj02";
