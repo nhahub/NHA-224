@@ -1,3 +1,5 @@
+import 'package:depi_final_project/core/routes/app_routes.dart';
+import 'package:depi_final_project/features/personalization/ui/screens/orders_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -17,43 +19,65 @@ class SuccessfulOrder extends StatelessWidget {
               height: MediaQuery.of(context).size.height * 0.5,
               width: double.infinity,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16) ),
-                color: Color(0xffF4F4F4)
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(16),
+                  topRight: Radius.circular(16),
+                ),
+                color: Color(0xffF4F4F4),
               ),
               child: Padding(
                 padding: const EdgeInsets.all(20),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SizedBox(height: 20,),
+                    SizedBox(height: 20),
                     Column(
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text("Order placed\nSuccessfully", style: GoogleFonts.gabarito(textStyle: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 32
-                        )),),
-                        SizedBox(height: 10,),
-                        Text("You will receive an email confirmation", style: TextStyle(
-                          fontSize: 16,
-                          color: Color.fromARGB(124, 39, 39, 128)
-                        ),),
+                        Text(
+                          "Order placed\nSuccessfully",
+                          style: GoogleFonts.gabarito(
+                            textStyle: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 32,
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          "You will receive an email confirmation",
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Color.fromARGB(124, 39, 39, 128),
+                          ),
+                        ),
                       ],
                     ),
-                
+
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xff8E6CEF),
-                    foregroundColor: Colors.white,
-                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                    textStyle: TextStyle(fontSize: 16)),
-                        onPressed: (){},
-                        child: Text("See order details")),
+                          backgroundColor: Color(0xff8E6CEF),
+                          foregroundColor: Colors.white,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 24,
+                            vertical: 16,
+                          ),
+                          textStyle: TextStyle(fontSize: 16),
+                        ),
+                        onPressed: () {
+                          // الذهاب لصفحة المنتجات
+                          Navigator.pushNamed(context, AppRoutes.orders);
+
+                          // أو لو عايز توديه للـ Shop By Category (الأقسام)
+                          // Navigator.pushNamed(context, AppRoutes.shopByCategory);
+                        },
+                        child: Text("See order details"),
+                      ),
                     ),
-                    SizedBox(height: 20,)
+                    SizedBox(height: 20),
                   ],
                 ),
               ),

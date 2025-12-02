@@ -1,4 +1,5 @@
 import 'package:depi_final_project/data/models/product_model.dart';
+import 'package:depi_final_project/features/personalization/ui/screens/orders_screen.dart';
 import 'package:depi_final_project/features/store/screens/cart.dart';
 import 'package:depi_final_project/features/store/screens/checkout_screen.dart';
 import 'package:depi_final_project/features/store/screens/product_page.dart';
@@ -42,6 +43,7 @@ class AppRoutes {
   static const String allNewIn = '/allNewIn';
   static const String profile = '/profile';
   static const String checkout = '/checkout';
+  static const String orders = '/orders';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -111,6 +113,8 @@ class AppRoutes {
           builder: (_) => CheckoutScreen(),
           settings: settings,
         );
+      case orders:
+        return MaterialPageRoute(builder: (_) => const OrdersScreen());
       default:
         return _errorRoute("Route not found: ${settings.name}");
     }

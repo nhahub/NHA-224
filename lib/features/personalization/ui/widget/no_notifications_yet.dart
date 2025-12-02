@@ -1,8 +1,8 @@
+import 'package:depi_final_project/core/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:depi_final_project/core/theme/text_style.dart';
 import 'package:depi_final_project/core/theme/spacing.dart';
 import 'package:depi_final_project/features/personalization/ui/widget/button.dart';
-
 
 class NoNotificationsYet extends StatelessWidget {
   const NoNotificationsYet({super.key});
@@ -26,7 +26,16 @@ class NoNotificationsYet extends StatelessWidget {
             ),
           ),
           SizedBox(height: Spacing.lg),
-          Button(text: "Explore Categories"),
+          Button(
+            text: "Explore Categories",
+            onPressed: () {
+              // الذهاب لصفحة المنتجات
+              Navigator.pushNamed(context, AppRoutes.productsByCategory);
+
+              // أو لو عايز توديه للـ Shop By Category (الأقسام)
+              // Navigator.pushNamed(context, AppRoutes.shopByCategory);
+            },
+          ),
         ],
       ),
     );

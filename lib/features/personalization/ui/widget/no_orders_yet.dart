@@ -1,6 +1,6 @@
+import 'package:depi_final_project/core/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:depi_final_project/features/personalization/ui/widget/button.dart';
-
 
 class NoOrdersYet extends StatelessWidget {
   const NoOrdersYet({super.key});
@@ -18,7 +18,16 @@ class NoOrdersYet extends StatelessWidget {
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
           ),
           const SizedBox(height: 16),
-          Button(text: "Explore Categories"),
+          Button(
+            text: "Explore Categories",
+            onPressed: () {
+              // الذهاب لصفحة المنتجات
+              Navigator.pushNamed(context, AppRoutes.productsByCategory);
+
+              // أو لو عايز توديه للـ Shop By Category (الأقسام)
+              // Navigator.pushNamed(context, AppRoutes.shopByCategory);
+            },
+          ),
         ],
       ),
     );

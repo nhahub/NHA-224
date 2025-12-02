@@ -1,3 +1,4 @@
+import 'package:depi_final_project/features/store/screens/successful_order.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -107,7 +108,7 @@ class CheckoutScreen extends StatelessWidget {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const OrderSuccessScreen(),
+                            builder: (context) => const SuccessfulOrder(),
                           ),
                         );
                       }
