@@ -278,7 +278,7 @@ class _HomeViewState extends State<HomeView> {
                             Navigator.pushNamed(context, AppRoutes.allNewIn),
                       ),
                       verticalSpacing(12),
-                      TopSellingList(
+                      NewInList(
                         products: filteredProducts.skip(3).take(3).toList(),
                       ),
                       // Add bottom padding for better UX
