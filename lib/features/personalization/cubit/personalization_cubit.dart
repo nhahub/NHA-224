@@ -1,6 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:depi_final_project/features/personalization/cubit/personalization_state.dart';
 import 'package:depi_final_project/features/personalization/services/image_upload_service.dart';
 
@@ -19,7 +19,7 @@ class PersonalizationCubit extends Cubit<PersonalizationState> {
     await FirebaseFirestore.instance
         .collection("users")
         .doc(uid)
-        .update({"imageUrl": imageUrl});
+        .update({"profileImageUrl": imageUrl});
 
     emit(PersonalizationSuccess(imageUrl));
   } catch (e) {
@@ -78,6 +78,33 @@ Future<void> updateName(String newName) async {
     emit(PersonalizationFailure(  e.toString()));
   }
 }
+
+  Future<void> loadCompleteUserData() async {
+    emit(PersonalizationLoading());
+
+    try {
+      final uid = FirebaseAuth.instance.currentUser!.uid;
+
+      final snap = await FirebaseFirestore.instance
+          .collection("users")
+          .doc(uid)
+          .get();
+
+      if (snap.exists) {
+        final data = snap.data() as Map<String, dynamic>;
+
+        emit(PersonalizationDataLoaded(
+          name: data["name"] ?? "",
+          email: data["email"] ?? "",
+          imageUrl: data["profileImageUrl"],
+        ));
+      } else {
+        emit(PersonalizationFailure("User data not found"));
+      }
+    } catch (e) {
+      emit(PersonalizationFailure(e.toString()));
+    }
+  }
 
 
 }
