@@ -24,7 +24,7 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   String selectedGender =
-      'Unspecified'; // Default to show all products initially
+      'All'; // Default to show all products initially
 
   @override
   Widget build(BuildContext context) {
@@ -46,8 +46,12 @@ class _HomeViewState extends State<HomeView> {
               child: Skeletonizer(
                 enabled: true,
                 effect: ShimmerEffect(
-                  highlightColor: isDarkTheme ? Colors.grey.shade700 : Colors.white,
-                  baseColor: isDarkTheme ? Colors.grey.shade800 : Colors.grey.shade300,
+                  highlightColor: isDarkTheme
+                      ? Colors.grey.shade700
+                      : Colors.white,
+                  baseColor: isDarkTheme
+                      ? Colors.grey.shade800
+                      : Colors.grey.shade300,
                 ),
                 child: SingleChildScrollView(
                   padding: const EdgeInsets.all(16),
@@ -59,7 +63,9 @@ class _HomeViewState extends State<HomeView> {
                         children: [
                           CircleAvatar(
                             radius: 22,
-                            backgroundColor: isDarkTheme ? theme.secondary.withOpacity(0.8) : theme.secondary,
+                            backgroundColor: isDarkTheme
+                                ? theme.secondary.withOpacity(0.8)
+                                : theme.secondary,
                           ),
                           Container(
                             height: 40,
@@ -207,11 +213,13 @@ class _HomeViewState extends State<HomeView> {
           // Simple filtering by gender - in a real app, this might be server-side
           final filteredProducts = state.products
               .where(
-                (product) => selectedGender == 'Men'
-                    ? product.gender != 'Women'
+                (product) => selectedGender == 'All'
+                    ? true // Show all products
+                    : selectedGender == 'Men'
+                    ? product.gender == 'Men'
                     : selectedGender == 'Women'
                     ? product.gender == 'Women'
-                    : true, // Unspecified shows all
+                    : false, // Should not happen with current options
               )
               .toList();
 
@@ -317,7 +325,9 @@ class _HomeHeaderState extends State<_HomeHeader> {
           child: CircleAvatar(
             backgroundImage: profileImageUrl.isNotEmpty
                 ? NetworkImage(profileImageUrl)
-                : NetworkImage("https://imgs.search.brave.com/r8_rpLtbGMxU9_hP_eV66IWtpYYaUuj62TaONvbGyA8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly91cy4x/MjNyZi5jb20vNDUw/d20vYmxpbmtibGlu/azEvYmxpbmtibGlu/azEyMDA1L2JsaW5r/YmxpbmsxMjAwNTAw/MDE1LzE0Njk3OTQ2/NC1hdmF0YXItbWFu/bi1zeW1ib2wuanBn/P3Zlcj02"),
+                : NetworkImage(
+                    "https://imgs.search.brave.com/r8_rpLtbGMxU9_hP_eV66IWtpYYaUuj62TaONvbGyA8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly91cy4x/MjNyZi5jb20vNDUw/d20vYmxpbmtibGlu/azEvYmxpbmtibGlu/azEyMDA1L2JsaW5r/YmxpbmsxMjAwNTAw/MDE1LzE0Njk3OTQ2/NC1hdmF0YXItbWFu/bi1zeW1ib2wuanBn/P3Zlcj02",
+                  ),
             radius: 22,
             onBackgroundImageError: (exception, stackTrace) {
               // Fallback to asset image if network image fails
@@ -341,7 +351,7 @@ class _GenderSelector extends StatefulWidget {
 }
 
 class _GenderSelectorState extends State<_GenderSelector> {
-  String selectedValue = 'Men';
+  String selectedValue = 'All';
 
   @override
   Widget build(BuildContext context) {
@@ -405,9 +415,9 @@ class _GenderSelectorState extends State<_GenderSelector> {
                 .dy,
       ),
       items: [
-        const PopupMenuItem(value: 'Men', child: Text('Men')),
+        const PopupMenuItem(value: 'All', child: Text('All')),
         const PopupMenuItem(value: 'Women', child: Text('Women')),
-        const PopupMenuItem(value: 'Unspecified', child: Text('Neutral')),
+        const PopupMenuItem(value: 'Men', child: Text('Men')),
       ],
     );
 
@@ -450,33 +460,37 @@ class _SearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(context, AppRoutes.search);
-      },
-      child: SizedBox(
-        height: 50,
-        width: double.infinity,
-        child: TextField(
-          enabled: false,
-          decoration: InputDecoration(
-            filled: true,
-            fillColor: Theme.of(context).colorScheme.secondary,
-            prefixIcon: Icon(
-              Icons.search,
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-            ),
-            hintText: 'Search',
-            hintStyle: TextStyle(
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-              fontWeight: FontWeight.w600,
-              fontSize: 14,
-            ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(30),
-              borderSide: BorderSide.none,
-            ),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+    return SizedBox(
+      height: 50,
+      width: double.infinity,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(30),
+        onTap: () {
+          // Navigate immediately to Search page on tap
+          Navigator.pushNamed(context, AppRoutes.search);
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.secondary,
+            borderRadius: BorderRadius.circular(30),
+          ),
+          child: Row(
+            children: [
+              Icon(
+                Icons.search,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+              const SizedBox(width: 12),
+              Text(
+                'Search products',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14,
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -488,11 +502,7 @@ class SectionHeaderSkeleton extends StatelessWidget {
   final double? titleWidth;
   final Color? titleColor;
 
-  const SectionHeaderSkeleton({
-    super.key,
-    this.titleWidth,
-    this.titleColor,
-  });
+  const SectionHeaderSkeleton({super.key, this.titleWidth, this.titleColor});
 
   @override
   Widget build(BuildContext context) {
