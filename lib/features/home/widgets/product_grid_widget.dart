@@ -10,6 +10,7 @@ class ProductGridWidget extends StatelessWidget {
   final String? oldPrice;
   final bool isFavorite;
   final VoidCallback? onTap;
+  final VoidCallback? onFavoritePressed;
 
   const ProductGridWidget({
     super.key,
@@ -19,6 +20,7 @@ class ProductGridWidget extends StatelessWidget {
     this.oldPrice,
     this.isFavorite = false,
     this.onTap,
+    this.onFavoritePressed,
   });
 
   @override
@@ -73,9 +75,7 @@ class ProductGridWidget extends StatelessWidget {
                     radius: 16,
                     backgroundColor: Theme.of(context).colorScheme.surface.withOpacity(0.8),
                     child: IconButton(
-                      onPressed: () {
-                        // TODO: Handle favorite toggle
-                      },
+                      onPressed: onFavoritePressed,
                       icon: Icon(
                         isFavorite ? Icons.favorite : Icons.favorite_border,
                         color: isFavorite ? AppColors.figmaPrimary : Theme.of(context).colorScheme.onSurface,

@@ -63,7 +63,7 @@ class ProductWidget extends StatelessWidget {
                     backgroundColor: Theme.of(
                       context,
                     ).colorScheme.surface.withOpacity(0.8),
-                      child: IconButton(
+                    child: IconButton(
                       onPressed: onFavoritePressed,
                       icon: Icon(
                         isFavorite ? Icons.favorite : Icons.favorite_border,

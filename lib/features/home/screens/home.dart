@@ -14,6 +14,7 @@ import 'package:depi_final_project/features/home/widgets/categories_list.dart';
 import 'package:depi_final_project/features/home/cubit/home_cubit_states.dart';
 import 'package:depi_final_project/features/home/widgets/top_selling_List.dart';
 import 'package:depi_final_project/core/services/shared_preferences_service.dart';
+import 'package:depi_final_project/features/personalization/services/image_upload_service.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -309,12 +310,30 @@ class _HomeHeader extends StatefulWidget {
 }
 
 class _HomeHeaderState extends State<_HomeHeader> {
-  final SharedPreferencesService _prefs = SharedPreferencesService();
+  String? profileImageUrl;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadProfileImage();
+  }
+
+  Future<void> _loadProfileImage() async {
+    try {
+      final imageService = ImageUploadService();
+      final imageUrl = await imageService.fetchUserImage();
+      if (mounted) {
+        setState(() {
+          profileImageUrl = imageUrl.isNotEmpty ? imageUrl : null;
+        });
+      }
+    } catch (e) {
+      // Keep null if error occurs
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final profileImageUrl = _prefs.profileImageUrl;
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -323,8 +342,8 @@ class _HomeHeaderState extends State<_HomeHeader> {
             Navigator.pushNamed(context, AppRoutes.profile);
           },
           child: CircleAvatar(
-            backgroundImage: profileImageUrl.isNotEmpty
-                ? NetworkImage(profileImageUrl)
+            backgroundImage: profileImageUrl != null
+                ? NetworkImage(profileImageUrl!)
                 : NetworkImage(
                     "https://imgs.search.brave.com/r8_rpLtbGMxU9_hP_eV66IWtpYYaUuj62TaONvbGyA8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly91cy4x/MjNyZi5jb20vNDUw/d20vYmxpbmtibGlu/azEvYmxpbmtibGlu/azEyMDA1L2JsaW5r/YmxpbmsxMjAwNTAw/MDE1LzE0Njk3OTQ2/NC1hdmF0YXItbWFu/bi1zeW1ib2wuanBn/P3Zlcj02",
                   ),
