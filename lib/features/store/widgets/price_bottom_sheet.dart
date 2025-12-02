@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:depi_final_project/features/store/cubit/store_cubit.dart';
 
 class PriceBottomSheet extends StatefulWidget {
@@ -13,33 +14,44 @@ class PriceBottomSheet extends StatefulWidget {
 class _PriceBottomSheetState extends State<PriceBottomSheet> {
   final TextEditingController minController = TextEditingController();
   final TextEditingController maxController = TextEditingController();
+  late double? originalMinPrice;
+  late double? originalMaxPrice;
 
   @override
   void initState() {
     super.initState();
     final cubit = context.read<StoreCubit>();
-    minController.text = cubit.minPriceSel?.toString() ?? '';
-    maxController.text = cubit.maxPriceSel?.toString() ?? '';
+    originalMinPrice = cubit.minPriceSel;
+    originalMaxPrice = cubit.maxPriceSel;
+    minController.text = originalMinPrice?.toString() ?? '';
+    maxController.text = originalMaxPrice?.toString() ?? '';
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 300,
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        color: Colors.white,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+    final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+
+    return SingleChildScrollView(
+      child: Container(
+        padding: EdgeInsets.only(
+          left: 16.w,
+          right: 16.w,
+          top: 16.h,
+          bottom: keyboardHeight + 16.h,
+        ),
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          color: Colors.white,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 TextButton(
                   onPressed: () {
+                    // Clear: Reset to null and apply filters
                     setState(() {
                       minController.clear();
                       maxController.clear();
@@ -49,10 +61,10 @@ class _PriceBottomSheetState extends State<PriceBottomSheet> {
                   },
                   child: const Text("Clear"),
                 ),
-                const Text(
+                Text(
                   "Price",
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 18.sp,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -60,71 +72,81 @@ class _PriceBottomSheetState extends State<PriceBottomSheet> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     IconButton(
-                      onPressed: () => Navigator.pop(context),
+                      onPressed: () {
+                        // Checkmark: Apply the price filter
+                        _applyPrice();
+                        Navigator.pop(context);
+                      },
                       icon: const Icon(Icons.check, size: 20),
                     ),
                     IconButton(
-                      onPressed: () => Navigator.pop(context),
+                      onPressed: () {
+                        // X: Discard changes and keep old filters
+                        Navigator.pop(context);
+                      },
                       icon: const Icon(Icons.close, size: 20),
                     ),
                   ],
                 ),
               ],
             ),
-          const SizedBox(height: 30),
-          Expanded(
-            child: Column(
+            SizedBox(height: 30.h),
+            Row(
               children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text("Min"),
-                          TextField(
-                            controller: minController,
-                            keyboardType: TextInputType.number,
-                            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                            decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              hintText: '0',
-                            ),
-                          ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Min", style: TextStyle(fontSize: 12.sp)),
+                      TextField(
+                        controller: minController,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
                         ],
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          hintText: '0',
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text("Max"),
-                          TextField(
-                            controller: maxController,
-                            keyboardType: TextInputType.number,
-                            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                            decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              hintText: '1000',
-                            ),
-                          ),
+                    ],
+                  ),
+                ),
+                SizedBox(width: 16.w),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Max", style: TextStyle(fontSize: 12.sp)),
+                      TextField(
+                        controller: maxController,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
                         ],
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          hintText: '1000',
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ],
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
   void _applyPrice() {
-    final min = minController.text.isEmpty ? null : double.tryParse(minController.text);
-    final max = maxController.text.isEmpty ? null : double.tryParse(maxController.text);
+    final min = minController.text.isEmpty
+        ? null
+        : double.tryParse(minController.text);
+    final max = maxController.text.isEmpty
+        ? null
+        : double.tryParse(maxController.text);
     context.read<StoreCubit>().updatePrice(min, max);
   }
 
@@ -132,7 +154,7 @@ class _PriceBottomSheetState extends State<PriceBottomSheet> {
   void dispose() {
     minController.dispose();
     maxController.dispose();
-    _applyPrice();
+    // _applyPrice is called on explicit Confirm (check) button; keep dispose safe
     super.dispose();
   }
 }

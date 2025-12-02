@@ -1,16 +1,6 @@
-import 'package:depi_final_project/data/repos/home_repo_implementation.dart';
-import 'package:depi_final_project/data/sources/firebase_service.dart';
-import 'package:depi_final_project/features/personalization/cubit/notifications_cubit.dart';
-import 'package:depi_final_project/features/personalization/cubit/orders_cubit.dart';
-import 'package:depi_final_project/features/personalization/cubit/personalization_cubit.dart';
-import 'package:depi_final_project/features/store/cubit/cart_cubit.dart';
-import 'package:depi_final_project/features/store/cubit/fave_cubit.dart';
-import 'package:depi_final_project/features/store/cubit/review_cubit.dart';
-import 'package:depi_final_project/features/store/cubit/store_cubit.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:depi_final_project/firebase_options.dart';
 import 'package:depi_final_project/core/theme/colors.dart';
@@ -19,14 +9,25 @@ import 'package:depi_final_project/core/theme/app_theme.dart';
 import 'package:depi_final_project/core/routes/app_routes.dart';
 import 'package:depi_final_project/core/theme/bloc/theme_bloc.dart';
 import 'package:depi_final_project/data/sources/firebase_service.dart';
+import 'package:depi_final_project/data/sources/firebase_service.dart';
+import 'package:depi_final_project/core/navigation/route_observer.dart';
 import 'package:depi_final_project/features/Auth/cubit/auth_cubit.dart';
 import 'package:depi_final_project/features/home/cubit/home_cubit.dart';
+import 'package:depi_final_project/features/store/cubit/cart_cubit.dart';
+import 'package:depi_final_project/features/store/cubit/fave_cubit.dart';
 import 'package:depi_final_project/features/store/cubit/store_cubit.dart';
+import 'package:depi_final_project/features/store/cubit/store_cubit.dart';
+import 'package:depi_final_project/features/store/cubit/review_cubit.dart';
+import 'package:depi_final_project/data/repos/home_repo_implementation.dart';
 import 'package:depi_final_project/data/repos/home_repo_implementation.dart';
 import 'package:depi_final_project/core/services/shared_preferences_service.dart';
+import 'package:depi_final_project/features/personalization/cubit/orders_cubit.dart';
+import 'package:depi_final_project/features/personalization/cubit/notifications_cubit.dart';
 import 'package:depi_final_project/features/personalization/cubit/personalization_cubit.dart';
+import 'package:depi_final_project/features/personalization/cubit/personalization_cubit.dart';
+
 // import 'package:flutter_dotenv/flutter_dotenv.dart';
-  
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -59,7 +60,6 @@ class _MyAppState extends State<MyApp> {
               firebaseService: FirebaseService(),
             ),
           ),
-
         ),
         BlocProvider(create: (context) => CartCubit()),
         BlocProvider(create: (context) => ReviewCubit()),
@@ -105,6 +105,7 @@ class _MyAppState extends State<MyApp> {
                 theme: appThemeData[AppTheme.light]!,
                 darkTheme: appThemeData[AppTheme.dark]!,
                 themeMode: themeMode,
+                navigatorObservers: [routeObserver],
                 initialRoute: AppRoutes.splash,
                 onGenerateRoute: AppRoutes.generateRoute,
               );

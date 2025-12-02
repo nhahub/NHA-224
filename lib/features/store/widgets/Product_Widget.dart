@@ -1,7 +1,5 @@
-import 'package:depi_final_project/data/models/product_model.dart';
 import 'package:flutter/material.dart';
-import 'package:depi_final_project/core/theme/colors.dart';
-import 'package:depi_final_project/core/theme/text_style.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ProductWidgetSearch extends StatelessWidget {
   final String imageUrl;
@@ -14,7 +12,7 @@ class ProductWidgetSearch extends StatelessWidget {
     required this.imageUrl,
     required this.title,
     required this.price,
-    this.oldPrice, 
+    this.oldPrice,
     required this.onTap,
   });
 
@@ -22,67 +20,80 @@ class ProductWidgetSearch extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.only(right: 16),
-        child: Container(
-          width: 159,
-          height: 281,
-          decoration: BoxDecoration(
-            color: AppColors.darkSecondary,
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ClipRRect(
-                borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(16),
-                ),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surfaceVariant,
+          borderRadius: BorderRadius.circular(12.r),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 4.r,
+              offset: Offset(0, 2.h),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(12.r)),
+              child: AspectRatio(
+                aspectRatio: 0.8,
                 child: Image.network(
                   imageUrl,
-                  height: 180,
                   width: double.infinity,
                   fit: BoxFit.cover,
                   errorBuilder: (context, error, stackTrace) => Container(
-                    color: Colors.grey,
-                    height: 180,
-                  ), // لو الصورة ما ظهرتش
+                    color: Theme.of(context).colorScheme.outlineVariant,
+                  ),
                 ),
               ),
-      
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                child: Text(
-                  title,
-                  style: AppTextStyles.font17WiteRegular.copyWith(fontSize: 14),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: Row(
-                  children: [
-                    Text(
-                      price,
-                      style: AppTextStyles.font17WiteRegular.copyWith(
-                        fontSize: 14,
-                      ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(10.r),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 13.sp,
+                      fontWeight: FontWeight.w500,
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
-                    if (oldPrice != null) ...[
-                      const SizedBox(width: 8),
+                  ),
+                  Row(
+                    children: [
                       Text(
-                        oldPrice!,
-                        style: AppTextStyles.font17WiteRegular.copyWith(
-                          color: Colors.white38,
-                          fontSize: 13,
-                          decoration: TextDecoration.lineThrough,
+                        price,
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w700,
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                       ),
+                      if (oldPrice != null) ...[
+                        SizedBox(width: 6.w),
+                        Text(
+                          oldPrice!,
+                          style: TextStyle(
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant,
+                            fontSize: 12.sp,
+                            decoration: TextDecoration.lineThrough,
+                          ),
+                        ),
+                      ],
                     ],
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
