@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:depi_final_project/data/repos/home_repo.dart';
 import 'package:depi_final_project/data/models/product_model.dart';
@@ -16,8 +17,6 @@ class StoreCubit extends Cubit<StoreState> {
   double? _minPriceSel;
   double? _maxPriceSel;
   List<String> _selectedGenders = [];
-  bool _onSale = false;
-  bool _freeShipping = false;
   String _sort =
       'Recommended'; // "Recommended" أو "Newest" أو "Lowest Price" أو "Highest Price"
 
@@ -25,8 +24,6 @@ class StoreCubit extends Cubit<StoreState> {
   double? get minPriceSel => _minPriceSel;
   double? get maxPriceSel => _maxPriceSel;
   List<String> get selectedGenders => _selectedGenders;
-  bool get onSale => _onSale;
-  bool get freeShipping => _freeShipping;
   String? get sort => _sort;
 
   StoreCubit(this.homeRepo) : super(StoreInitial());
@@ -48,6 +45,7 @@ class StoreCubit extends Cubit<StoreState> {
 
   // جلب جميع المنتجات للبحث
   Future<void> fetchAllProducts() async {
+    emit(StoreLoading());
     final result = await homeRepo.fetchProducts();
     result.fold(
       (failure) {
@@ -55,6 +53,8 @@ class StoreCubit extends Cubit<StoreState> {
       },
       (products) {
         _allProducts = products;
+        // initialize filtered products with all products on first fetch
+        applyAll();
       },
     );
   }
@@ -74,32 +74,58 @@ class StoreCubit extends Cubit<StoreState> {
     );
   }
 
-  // تطبيق البحث والفلاتر
+  /// Apply search and filters together
+  /// Handles null safety and empty results
   void _applySearchAndFilters() {
-    if (_lastQuery.isEmpty) {
-      emit(StoreCategoriesLoaded(_categories));
-      return;
-    }
-    _filteredProducts = _allProducts.where((p) {
-      final matchQuery = p.name.toLowerCase().contains(
-        _lastQuery.toLowerCase(),
-      );
-      return matchQuery && _matchesFilters(p);
-    }).toList();
+    try {
+      // If no search query, show categories or apply filters only
+      if (_lastQuery.isEmpty) {
+        if (!_hasActiveFilters()) {
+          emit(StoreCategoriesLoaded(_categories));
+        } else {
+          _applyFilters();
+        }
+        return;
+      }
 
-    _sortProducts();
-    emit(StoreProductsLoaded(_filteredProducts));
+      // Filter products by search query and active filters
+      _filteredProducts = _allProducts.where((p) {
+        try {
+          final matchQuery = p.name.toLowerCase().contains(
+            _lastQuery.toLowerCase(),
+          );
+          return matchQuery && _matchesFilters(p);
+        } catch (e) {
+          debugPrint('Error filtering product ${p.id}: $e');
+          return false;
+        }
+      }).toList();
+
+      _sortProducts();
+      emit(StoreProductsLoaded(_filteredProducts));
+    } catch (e) {
+      debugPrint('Error in _applySearchAndFilters: $e');
+      emit(StoreError('Failed to apply search: ${e.toString()}'));
+    }
   }
 
-  // البحث
-  void searchProducts(String query) {
-    if (query.isEmpty) {
-      _lastQuery = query;
-      _applySearchAndFilters();
-      return;
+  /// Search for products by query
+  /// Handles cases where products need to be fetched first
+  Future<void> searchProducts(String query) async {
+    try {
+      _lastQuery = query.trim();
+
+      // If products not loaded yet, fetch them first (fetchAllProducts will emit loading)
+      if (_allProducts.isEmpty) {
+        await fetchAllProducts();
+      } else {
+        // Products already loaded, apply search
+        _applySearchAndFilters();
+      }
+    } catch (e) {
+      debugPrint('Error in searchProducts: $e');
+      emit(StoreError('Search failed: ${e.toString()}'));
     }
-    _lastQuery = query;
-    _applySearchAndFilters();
   }
 
   // تحديث الفلاتر
@@ -115,11 +141,31 @@ class StoreCubit extends Cubit<StoreState> {
     }
   }
 
-  // تطبيق الفلاتر على المنتجات بدون بحث
+  /// Apply filters only (no search query)
   void _applyFilters() {
-    _filteredProducts = _allProducts.where(_matchesFilters).toList();
-    _sortProducts();
-    emit(StoreProductsLoaded(_filteredProducts));
+    try {
+      _filteredProducts = _allProducts.where((p) {
+        try {
+          return _matchesFilters(p);
+        } catch (e) {
+          debugPrint('Error filtering product ${p.id}: $e');
+          return false;
+        }
+      }).toList();
+
+      _sortProducts();
+      emit(StoreProductsLoaded(_filteredProducts));
+    } catch (e) {
+      debugPrint('Error in _applyFilters: $e');
+      emit(StoreError('Failed to apply filters: ${e.toString()}'));
+    }
+  }
+
+  bool _hasActiveFilters() {
+    return _sort != 'Recommended' ||
+        _selectedGenders.isNotEmpty ||
+        _minPriceSel != null ||
+        _maxPriceSel != null;
   }
 
   // getters for backward compatibility
@@ -127,35 +173,89 @@ class StoreCubit extends Cubit<StoreState> {
   double get maxPrice => _maxPriceSel ?? double.infinity;
   String get gender => _selectedGenders.join(', ');
 
-  // تحقق من الفلاتر لكل منتج
+  /// Check if product matches all active filters
+  /// Safely handles null values and type conversions
   bool _matchesFilters(ProductModel p) {
-    bool matches = true;
-    if (_selectedGenders.isNotEmpty && !_selectedGenders.contains(p.gender))
-      matches = false;
-    if (_onSale && !(p.oldPrice != null && p.price < p.oldPrice!))
-      matches = false;
-    // if (_freeShipping) matches = false; // assume not for now
-    if (_minPriceSel != null) matches &= p.price >= _minPriceSel!;
-    if (_maxPriceSel != null) matches &= p.price <= _maxPriceSel!;
-    return matches;
+    try {
+      // Gender filter - case insensitive
+      if (_selectedGenders.isNotEmpty) {
+        final productGender = p.gender.toLowerCase().trim();
+        final hasMatchingGender = _selectedGenders.any(
+          (g) => g.toLowerCase().trim() == productGender,
+        );
+        if (!hasMatchingGender) return false;
+      }
+
+      // Price filter - minimum
+      if (_minPriceSel != null && _minPriceSel! > 0) {
+        try {
+          if (p.price < _minPriceSel!) return false;
+        } catch (e) {
+          debugPrint('Error comparing min price: $e');
+          return false;
+        }
+      }
+
+      // Price filter - maximum
+      if (_maxPriceSel != null && _maxPriceSel! > 0) {
+        try {
+          if (p.price > _maxPriceSel!) return false;
+        } catch (e) {
+          debugPrint('Error comparing max price: $e');
+          return false;
+        }
+      }
+
+      return true;
+    } catch (e) {
+      debugPrint('Error in _matchesFilters: $e');
+      return false;
+    }
   }
 
-  // ترتيب المنتجات
+  /// Sort filtered products based on current sort preference
+  /// Handles null safety for dates and prices
   void _sortProducts() {
-    switch (_sort) {
-      case 'Newest':
-        _filteredProducts.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-        break;
-      case 'Lowest Price':
-        _filteredProducts.sort((a, b) => a.price.compareTo(b.price));
-        break;
-      case 'Highest Price':
-        _filteredProducts.sort((a, b) => b.price.compareTo(a.price));
-        break;
-      case 'Recommended':
-      default:
-        // no sort
-        break;
+    try {
+      if (_filteredProducts.isEmpty) return;
+
+      switch (_sort) {
+        case 'Newest':
+          try {
+            _filteredProducts.sort((a, b) {
+              final dateA = a.createdAt;
+              final dateB = b.createdAt;
+              if (dateA == null || dateB == null) return 0;
+              return dateB.compareTo(dateA);
+            });
+          } catch (e) {
+            debugPrint('Error sorting by newest: $e');
+          }
+          break;
+
+        case 'Lowest Price':
+          try {
+            _filteredProducts.sort((a, b) => a.price.compareTo(b.price));
+          } catch (e) {
+            debugPrint('Error sorting by lowest price: $e');
+          }
+          break;
+
+        case 'Highest Price':
+          try {
+            _filteredProducts.sort((a, b) => b.price.compareTo(a.price));
+          } catch (e) {
+            debugPrint('Error sorting by highest price: $e');
+          }
+          break;
+
+        case 'Recommended':
+        default:
+          // No sorting applied
+          break;
+      }
+    } catch (e) {
+      debugPrint('Error in _sortProducts: $e');
     }
   }
 
@@ -170,19 +270,28 @@ class StoreCubit extends Cubit<StoreState> {
     applyAll();
   }
 
-  void updateDeals(bool onSale, bool freeShipping) {
-    _onSale = onSale;
-    _freeShipping = freeShipping;
-    applyAll();
-  }
-
   void updatePrice(double? min, double? max) {
     _minPriceSel = min;
     _maxPriceSel = max;
     applyAll();
   }
 
+  /// Apply all filters and search together
+  /// Main entry point for filter updates
   void applyAll() {
-    _lastQuery.isEmpty ? _applyFilters() : _applySearchAndFilters();
+    try {
+      if (_lastQuery.isEmpty) {
+        if (!_hasActiveFilters()) {
+          emit(StoreCategoriesLoaded(_categories));
+        } else {
+          _applyFilters();
+        }
+      } else {
+        _applySearchAndFilters();
+      }
+    } catch (e) {
+      debugPrint('Error in applyAll: $e');
+      emit(StoreError('Failed to apply filters: ${e.toString()}'));
+    }
   }
 }
