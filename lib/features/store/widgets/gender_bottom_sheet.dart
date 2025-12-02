@@ -44,10 +44,7 @@ class _GenderBottomSheetState extends State<GenderBottomSheet> {
               ),
               const Text(
                 "Gender",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               Row(
                 mainAxisSize: MainAxisSize.min,
@@ -68,9 +65,8 @@ class _GenderBottomSheetState extends State<GenderBottomSheet> {
           Expanded(
             child: ListView(
               children: [
-                _buildGenderOption("Men"),
                 _buildGenderOption("Women"),
-                _buildGenderOption("Kids"),
+                _buildGenderOption("Men"),
               ],
             ),
           ),
@@ -90,10 +86,8 @@ class _GenderBottomSheetState extends State<GenderBottomSheet> {
             selectedGenders.add(option);
           }
         });
-        // تم تحديث المنطق لتطبيق الفوري، لكن المهمة تقول apply عند tap outside أو X
-        // انتظر، في المهمة "يمكن اختيار رجال ونساء معاً"، ولكن الclear يمسح الكل.
-        // سأجعل التطبيق عند الضغط خارج أو X.
-        // لذا، في onTap، فقط toggle، والتطبيق في على الclose.
+        // Apply immediately so UI updates as soon as the user toggles
+        context.read<StoreCubit>().updateGenders(List.from(selectedGenders));
       },
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),
@@ -121,7 +115,8 @@ class _GenderBottomSheetState extends State<GenderBottomSheet> {
 
   @override
   void dispose() {
-    context.read<StoreCubit>().updateGenders(selectedGenders);
+    // ensure final state is applied on dispose
+    context.read<StoreCubit>().updateGenders(List.from(selectedGenders));
     super.dispose();
   }
 }

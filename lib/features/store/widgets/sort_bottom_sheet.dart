@@ -44,10 +44,7 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
               ),
               const Text(
                 "Sort by",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               Row(
                 mainAxisSize: MainAxisSize.min,
@@ -68,10 +65,10 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
           Expanded(
             child: ListView(
               children: [
-                _buildSortOption("Recommended"),
-                _buildSortOption("Newest"),
-                _buildSortOption("Lowest - Highest Price"),
-                _buildSortOption("Highest - Lowest Price"),
+                _buildSortOption("Recommended", "Recommended"),
+                _buildSortOption("Newest", "Newest"),
+                _buildSortOption("Lowest - Highest Price", "Lowest Price"),
+                _buildSortOption("Highest - Lowest Price", "Highest Price"),
               ],
             ),
           ),
@@ -80,12 +77,12 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
     );
   }
 
-  Widget _buildSortOption(String option) {
-    final isSelected = selectedSort == option;
+  Widget _buildSortOption(String label, String value) {
+    final isSelected = selectedSort == value;
     return GestureDetector(
       onTap: () {
-        setState(() => selectedSort = option);
-        context.read<StoreCubit>().updateSort(option);
+        setState(() => selectedSort = value);
+        context.read<StoreCubit>().updateSort(value);
         Navigator.pop(context);
       },
       child: Container(
@@ -99,7 +96,7 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              option,
+              label,
               style: TextStyle(
                 fontSize: 16,
                 color: isSelected ? Colors.white : Colors.black,
