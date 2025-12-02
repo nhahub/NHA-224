@@ -39,13 +39,18 @@ class SearchWidget extends StatelessWidget {
           const SizedBox(width: 4),
           Expanded(
             child: SizedBox(
-              height: 40,
+              height: 40.h,
               width: double.infinity,
               child: TextField(
                 controller: controller,
                 enabled: true,
                 onChanged: onChanged,
                 decoration: InputDecoration(
+                  labelStyle: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                  ),
                   filled: true,
                   fillColor: Theme.of(context).colorScheme.secondary,
                   prefixIcon: Icon(
@@ -67,7 +72,9 @@ class SearchWidget extends StatelessWidget {
                       ? IconButton(
                           icon: Icon(
                             Icons.clear,
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant,
                           ),
                           onPressed: onClear,
                         )
