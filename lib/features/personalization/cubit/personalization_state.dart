@@ -22,6 +22,18 @@ class PersonalizationLoadedd extends PersonalizationState {
   });
 }
 
+class PersonalizationDataLoaded extends PersonalizationState {
+  final String name;
+  final String email;
+  final String? imageUrl;
+
+  PersonalizationDataLoaded({
+    required this.name,
+    required this.email,
+    this.imageUrl,
+  });
+}
+
 
 
 class PersonalizationSuccess extends PersonalizationState{

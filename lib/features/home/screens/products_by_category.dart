@@ -4,8 +4,11 @@ import 'package:depi_final_project/core/theme/colors.dart';
 import 'package:depi_final_project/core/theme/spacing.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:depi_final_project/core/theme/text_style.dart';
+import 'package:depi_final_project/data/models/product_model.dart';
 import 'package:depi_final_project/core/widgets/app_bar_widget.dart';
 import 'package:depi_final_project/features/home/cubit/home_cubit.dart';
+import 'package:depi_final_project/features/store/cubit/fave_cubit.dart';
+import 'package:depi_final_project/features/store/cubit/fave_state.dart';
 import 'package:depi_final_project/features/store/screens/product_page.dart';
 import 'package:depi_final_project/features/home/cubit/home_cubit_states.dart';
 import 'package:depi_final_project/features/home/widgets/product_grid_widget.dart';
@@ -76,26 +79,7 @@ class ProductsByCategory extends StatelessWidget {
                                 ),
                             itemBuilder: (context, index) {
                               final product = products[index];
-                              return ProductGridWidget(
-                                image: product.imageUrl.isNotEmpty
-                                    ? product.imageUrl[0]
-                                    : '',
-                                title: product.name,
-                                price: '\$${product.price.toStringAsFixed(2)}',
-                                oldPrice: product.oldPrice != null
-                                    ? '\$${product.oldPrice!.toStringAsFixed(2)}'
-                                    : null,
-                                isFavorite: false,
-                                onTap: () {
-                                  // Navigate to product details
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ProductPage(product: product),
-                                    ),
-                                  );
-                                },
-                              );
+                              return _FavouriteGridItem(product: product);
                             },
                           )
                         : const Center(child: Text('No products available')),
@@ -110,6 +94,67 @@ class ProductsByCategory extends StatelessWidget {
           body: Center(child: Text('Error loading products')),
         );
       },
+    );
+  }
+}
+
+class _FavouriteGridItem extends StatefulWidget {
+  const _FavouriteGridItem({required this.product});
+
+  final ProductModel product;
+
+  @override
+  State<_FavouriteGridItem> createState() => _FavouriteGridItemState();
+}
+
+class _FavouriteGridItemState extends State<_FavouriteGridItem> {
+  late bool isFav;
+
+  @override
+  void initState() {
+    super.initState();
+    isFav = false;
+    _loadFavouriteStatus();
+  }
+
+  Future<void> _loadFavouriteStatus() async {
+    try {
+      final fav = await context.read<FaveCubit>().isProductFavored(widget.product.id);
+      if (mounted) {
+        setState(() => isFav = fav);
+      }
+    } catch (e) {
+      // Handle error, keep default false
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<FaveCubit, FaveState>(
+      listener: (context, state) {
+        if (state is FaveToggled && state.product.id == widget.product.id) {
+          setState(() => isFav = state.isFavored);
+        }
+      },
+      child: ProductGridWidget(
+        image: widget.product.imageUrl.isNotEmpty ? widget.product.imageUrl[0] : '',
+        title: widget.product.name,
+        price: '\$${widget.product.price.toStringAsFixed(2)}',
+        oldPrice: widget.product.oldPrice != null
+            ? '\$${widget.product.oldPrice!.toStringAsFixed(2)}'
+            : null,
+        isFavorite: isFav,
+        onFavoritePressed: () {
+          context.read<FaveCubit>().toggleFavoriteStatus(widget.product);
+        },
+        onTap: () {
+          // Navigate to product details
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ProductPage(product: widget.product)),
+          );
+        },
+      ),
     );
   }
 }

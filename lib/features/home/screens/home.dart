@@ -3,17 +3,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:depi_final_project/core/theme/colors.dart';
 import 'package:depi_final_project/core/theme/spacing.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:depi_final_project/core/routes/app_routes.dart';
 import 'package:depi_final_project/features/store/screens/cart.dart';
 import 'package:depi_final_project/core/widgets/product_skeleton.dart';
 import 'package:depi_final_project/features/home/cubit/home_cubit.dart';
+import 'package:depi_final_project/features/store/cubit/cart_cubit.dart';
+import 'package:depi_final_project/features/store/cubit/cart_state.dart';
 import 'package:depi_final_project/features/home/widgets/new_in_list.dart';
 import 'package:depi_final_project/features/home/widgets/section_header.dart';
 import 'package:depi_final_project/features/home/widgets/categories_list.dart';
 import 'package:depi_final_project/features/home/cubit/home_cubit_states.dart';
 import 'package:depi_final_project/features/home/widgets/top_selling_List.dart';
-import 'package:depi_final_project/core/services/shared_preferences_service.dart';
+import 'package:depi_final_project/features/personalization/services/image_upload_service.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -23,8 +24,15 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  String selectedGender =
-      'All'; // Default to show all products initially
+  String selectedGender = 'All'; // Default to show all products initially
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<CartCubit>().loadProducts();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -309,12 +317,30 @@ class _HomeHeader extends StatefulWidget {
 }
 
 class _HomeHeaderState extends State<_HomeHeader> {
-  final SharedPreferencesService _prefs = SharedPreferencesService();
+  String? profileImageUrl;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadProfileImage();
+  }
+
+  Future<void> _loadProfileImage() async {
+    try {
+      final imageService = ImageUploadService();
+      final imageUrl = await imageService.fetchUserImage();
+      if (mounted) {
+        setState(() {
+          profileImageUrl = imageUrl.isNotEmpty ? imageUrl : null;
+        });
+      }
+    } catch (e) {
+      // Keep null if error occurs
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final profileImageUrl = _prefs.profileImageUrl;
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -323,8 +349,8 @@ class _HomeHeaderState extends State<_HomeHeader> {
             Navigator.pushNamed(context, AppRoutes.profile);
           },
           child: CircleAvatar(
-            backgroundImage: profileImageUrl.isNotEmpty
-                ? NetworkImage(profileImageUrl)
+            backgroundImage: profileImageUrl != null
+                ? NetworkImage(profileImageUrl!)
                 : NetworkImage(
                     "https://imgs.search.brave.com/r8_rpLtbGMxU9_hP_eV66IWtpYYaUuj62TaONvbGyA8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly91cy4x/MjNyZi5jb20vNDUw/d20vYmxpbmtibGlu/azEvYmxpbmtibGlu/azEyMDA1L2JsaW5r/YmxpbmsxMjAwNTAw/MDE1LzE0Njk3OTQ2/NC1hdmF0YXItbWFu/bi1zeW1ib2wuanBn/P3Zlcj02",
                   ),
@@ -435,22 +461,67 @@ class _CartButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => Cart()),
+    return BlocBuilder<CartCubit, CartState>(
+      builder: (context, state) {
+        int totalCount = 0;
+        if (state is CartLoaded) {
+          totalCount = state.cartWithDetails.length;
+        }
+        return GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Cart()),
+            );
+          },
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Container(
+                height: 40,
+                width: 40,
+                decoration: const BoxDecoration(
+                  color: AppColors.figmaPrimary,
+                  borderRadius: BorderRadius.all(Radius.circular(30)),
+                ),
+                child: const Icon(Icons.shopping_bag, color: Colors.white),
+              ),
+              if (totalCount > 0)
+                Positioned(
+                  right: -4,
+                  top: -4,
+                  child: Container(
+                    padding: const EdgeInsets.all(2),
+                    decoration: const BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 2,
+                          offset: const Offset(0, 1),
+                        ),
+                      ],
+                    ),
+                    constraints: const BoxConstraints(
+                      minWidth: 16,
+                      minHeight: 16,
+                    ),
+                    child: Text(
+                      totalCount > 99 ? '99+' : '$totalCount',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+            ],
+          ),
         );
       },
-      child: Container(
-        height: 40,
-        width: 40,
-        decoration: BoxDecoration(
-          color: AppColors.figmaPrimary,
-          borderRadius: BorderRadius.circular(30),
-        ),
-        child: const Icon(Icons.shopping_bag, color: Colors.white),
-      ),
     );
   }
 }

@@ -1,24 +1,25 @@
-import 'package:depi_final_project/data/models/cart_product.dart';
-import 'package:depi_final_project/data/repos/cart_repo.dart';
-import 'package:depi_final_project/features/store/cubit/cart_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:depi_final_project/data/repos/cart_repo.dart';
+import 'package:depi_final_project/data/models/cart_product.dart';
+import 'package:depi_final_project/features/store/cubit/cart_state.dart';
 
 class CartCubit extends Cubit<CartState>{
   CartCubit(): super(CartInitial());
 
   final CartRepo repo = CartRepo();
 
-  void addProductToCart(CartProduct product){
+  Future<void> addProductToCart(CartProduct product) async {
     emit(CartLoading());
-    try{
-      repo.addToUserCart(product);
+    try {
+      await repo.addToUserCart(product);
+      await loadProducts(); // Update immediately
       emit(CartSuccess());
-    }catch(e){
-      emit(CartError(e.toString()));  
-   }
+    } catch(e) {
+      emit(CartError(e.toString()));
+    }
   }
 
-  void loadProducts() async{
+  Future<void> loadProducts() async{
     emit(CartLoading());
     try{
     final cartProducts = await  repo.loadCartProducts();
@@ -29,10 +30,10 @@ class CartCubit extends Cubit<CartState>{
   }
 
 
-  void removeAllCartProducts()async{
+  Future<void> removeAllCartProducts()async{
     emit(CartLoading());
     try{
-      repo.removeAllCartProduct();
+      await repo.removeAllCartProduct();
       emit(RemoveAllSuccess());
     }catch(e){
       emit(CartError(e.toString()));
@@ -40,28 +41,25 @@ class CartCubit extends Cubit<CartState>{
   }
 
 
-void editProductQuantity(String productId, int quantity, int stock) async{
+Future<void> editProductQuantity(String productId, String size, String color, int quantity) async{
   emit(CartLoading());
   try{
-    repo.editProductQuantity(productId, quantity, stock);
-    final cartProducts = await  repo.loadCartProducts();
+    await repo.editCartItemQuantity(productId, size, color, quantity);
+    final cartProducts = await repo.loadCartProducts();
     emit(CartLoaded(cartProducts));
   }catch(e){
     emit(CartError(e.toString()));
   }
 }
 
-void deleteProduct(String productId)async{
+Future<void> deleteProduct(String productId, String size, String color)async{
   emit(CartLoading());
   try{
-    repo.deleteProduct(productId);
-    final cartProducts = await  repo.loadCartProducts();
+    await repo.deleteCartItem(productId, size, color);
+    final cartProducts = await repo.loadCartProducts();
     emit(CartLoaded(cartProducts));
   }catch(e){
     emit(CartError(e.toString()));
   }
 }
-
-
-  }
-
+}
