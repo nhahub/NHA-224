@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:depi_final_project/core/theme/colors.dart';
 import 'package:depi_final_project/core/theme/spacing.dart';
@@ -157,7 +158,8 @@ class _ProductPageState extends State<ProductPage> {
           ),
         ),
 
-        floatingActionButton: BlocConsumer<CartCubit, CartState>(
+        floatingActionButton: FirebaseAuth.instance.currentUser != null
+            ? BlocConsumer<CartCubit, CartState>(
           listener: (context, state) {
             if (state is CartError) {
               ScaffoldMessenger.of(
@@ -231,7 +233,8 @@ class _ProductPageState extends State<ProductPage> {
               ),
             ),
           ),
-        ),
+        )
+            : null,
       ),
     );
   }

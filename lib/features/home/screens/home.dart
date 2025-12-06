@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:depi_final_project/core/theme/colors.dart';
 import 'package:depi_final_project/core/theme/spacing.dart';
@@ -30,7 +31,10 @@ class _HomeViewState extends State<HomeView> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<CartCubit>().loadProducts();
+      // Only load cart products if user is logged in
+      if (FirebaseAuth.instance.currentUser != null) {
+        context.read<CartCubit>().loadProducts();
+      }
     });
   }
 

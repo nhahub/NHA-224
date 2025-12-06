@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:depi_final_project/core/theme/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:depi_final_project/core/routes/app_routes.dart';
@@ -24,7 +25,10 @@ class _CartState extends State<Cart> {
   @override
   void initState() {
     super.initState();
-    context.read<CartCubit>().loadProducts();
+    // Only load cart products if user is logged in
+    if (FirebaseAuth.instance.currentUser != null) {
+      context.read<CartCubit>().loadProducts();
+    }
   }
 
   @override

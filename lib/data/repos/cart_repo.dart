@@ -6,7 +6,13 @@ import 'package:depi_final_project/features/store/screens/cart.dart';
 import 'package:depi_final_project/data/repos/cart_with_details.dart';
 
 class CartRepo {
-  final String userId = FirebaseAuth.instance.currentUser!.uid;
+  String get userId {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw Exception("User not logged in. Cannot access cart.");
+    }
+    return user.uid;
+  }
 
   String _getDocId(String productId, String size, String color) {
     return '${productId}_${size}_${color}';
