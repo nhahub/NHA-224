@@ -1,19 +1,45 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:depi_final_project/data/models/cart_product.dart';
 import 'package:depi_final_project/data/models/product_model.dart';
-import 'package:depi_final_project/data/repos/cart_with_details.dart';
 import 'package:depi_final_project/features/store/screens/cart.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:depi_final_project/data/repos/cart_with_details.dart';
 
 class CartRepo {
   final String userId = FirebaseAuth.instance.currentUser!.uid;
-  void addToUserCart(CartProduct cartProduct) {
-    FirebaseFirestore.instance
+
+  String _getDocId(String productId, String size, String color) {
+    return '${productId}_${size}_${color}';
+  }
+
+  Future<void> addToUserCart(CartProduct newProduct) async {
+    final docId = _getDocId(newProduct.productId, newProduct.selectedSize, newProduct.selectedColor);
+    final docRef = FirebaseFirestore.instance
         .collection("users")
         .doc(userId)
         .collection("cart")
-        .doc(cartProduct.productId)
-        .set(cartProduct.toFirestore());
+        .doc(docId);
+    
+    final docSnap = await docRef.get();
+    
+    if (docSnap.exists) {
+      final data = docSnap.data()!;
+      final updatedQuantity = data['quantity'] + newProduct.quantity;
+      await docRef.set({
+        'productId': newProduct.productId,
+        'selectedSize': newProduct.selectedSize,
+        'selectedColor': newProduct.selectedColor,
+        'quantity': updatedQuantity,
+      });
+    } else {
+      await docRef.set(newProduct.toFirestore());
+    }
+
+    // Update product stock
+    final productRef = FirebaseFirestore.instance.collection('products').doc(newProduct.productId);
+    await productRef.update({
+      'stock': FieldValue.increment(-newProduct.quantity)
+    });
   }
 
   Future<List<CartProduct>> loadCartItems() async {
@@ -61,26 +87,23 @@ class CartRepo {
     }
   }
 
-  void editProductQuantity(String productId, int quantity, int stock) async {
-    print("userId: $userId");
-    print("productId: $productId");
-
-    if (quantity > 0 && quantity < stock) {
-      await FirebaseFirestore.instance
-          .collection("users")
-          .doc(userId)
-          .collection('cart')
-          .doc(productId)
-          .set({"quantity": quantity}, SetOptions(merge: true));
-    }
+  Future<void> editCartItemQuantity(String productId, String size, String color, int quantity) async {
+    final docId = _getDocId(productId, size, color);
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(userId)
+        .collection('cart')
+        .doc(docId)
+        .set({"quantity": quantity}, SetOptions(merge: true));
   }
 
-  void deleteProduct(String productId) {
-    FirebaseFirestore.instance
+  Future<void> deleteCartItem(String productId, String size, String color) async {
+    final docId = _getDocId(productId, size, color);
+    await FirebaseFirestore.instance
         .collection("users")
         .doc(userId)
         .collection("cart")
-        .doc(productId)
+        .doc(docId)
         .delete();
   }
 }

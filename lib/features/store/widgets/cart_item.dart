@@ -107,37 +107,8 @@ class CartItem extends StatelessWidget {
             ),
           ),
           Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (onDelete != null)
-                GestureDetector(
-                  onTap: onDelete,
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 12.r, vertical: 8.r),
-                    decoration: BoxDecoration(
-                      color: Colors.red.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(12.r),
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.delete,
-                          color: Colors.red,
-                          size: 20.r,
-                        ),
-                        SizedBox(width: 6.w),
-                        Text(
-                          "Delete",
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12.sp,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
               Row(
                 children: [
                   GestureDetector(

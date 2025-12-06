@@ -76,6 +76,7 @@ class _FavouriteProductItemState extends State<_FavouriteProductItem> {
             ? '\$${widget.product.oldPrice!.toStringAsFixed(2)}'
             : null,
         isFavorite: isFav,
+        rating: widget.product.rating,
         onFavoritePressed: () {
           context.read<FaveCubit>().toggleFavoriteStatus(widget.product);
         },

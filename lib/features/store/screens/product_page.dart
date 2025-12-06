@@ -14,7 +14,6 @@ import 'package:depi_final_project/core/widgets/progress_hud_widget.dart';
 import 'package:depi_final_project/features/store/cubit/review_cubit.dart';
 import 'package:depi_final_project/features/store/cubit/review_state.dart';
 
-
 class ProductPage extends StatefulWidget {
   final ProductModel product;
   const ProductPage({super.key, required this.product});
@@ -161,13 +160,30 @@ class _ProductPageState extends State<ProductPage> {
         floatingActionButton: BlocConsumer<CartCubit, CartState>(
           listener: (context, state) {
             if (state is CartError) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(state.message)),
-              );
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(state.message)));
             }
 
             if (state is CartSuccess) {
-              Navigator.pushNamed(context, '/cart');
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.shopping_bag, color: Colors.white, size: 20),
+                      SizedBox(width: 12),
+                      Text('Product added to cart successfully!'),
+                    ],
+                  ),
+                  backgroundColor: Colors.green,
+                  behavior: SnackBarBehavior.floating,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  duration: Duration(seconds: 2),
+                ),
+              );
             }
           },
           builder: (context, state) => Container(
@@ -263,7 +279,9 @@ class _ProductPageState extends State<ProductPage> {
                     },
                     errorBuilder: (context, error, stackTrace) {
                       return Container(
-                        color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.surfaceContainerHighest,
                         child: const Icon(Icons.image_not_supported, size: 50),
                       );
                     },
@@ -431,7 +449,9 @@ class _ProductPageState extends State<ProductPage> {
                           backgroundColor: Theme.of(
                             context,
                           ).colorScheme.surface,
-                          selectedColor: AppColors.figmaPrimary.withValues(alpha: 0.2),
+                          selectedColor: AppColors.figmaPrimary.withValues(
+                            alpha: 0.2,
+                          ),
                           checkmarkColor: AppColors.figmaPrimary,
                         );
                       }).toList(),
@@ -490,7 +510,9 @@ class _ProductPageState extends State<ProductPage> {
                           backgroundColor: Theme.of(
                             context,
                           ).colorScheme.surface,
-                          selectedColor: AppColors.figmaPrimary.withValues(alpha: 0.2),
+                          selectedColor: AppColors.figmaPrimary.withValues(
+                            alpha: 0.2,
+                          ),
                           checkmarkColor: AppColors.figmaPrimary,
                         );
                       }).toList(),
@@ -796,11 +818,15 @@ class _ProductPageState extends State<ProductPage> {
                   itemCount: reviews.length > 3 ? 3 : reviews.length,
                   itemBuilder: (context, index) {
                     final review = reviews[index];
-                    final currentUserId = context.read<ReviewCubit>().getCurrentUserId();
+                    final currentUserId = context
+                        .read<ReviewCubit>()
+                        .getCurrentUserId();
                     final isCurrentUser = review.userId == currentUserId;
 
                     // For current user's review, show "me" and get current profile image
-                    final displayName = isCurrentUser ? "me" : review.reviewerName;
+                    final displayName = isCurrentUser
+                        ? "me"
+                        : review.reviewerName;
 
                     return Card(
                       elevation: 1,
@@ -814,7 +840,9 @@ class _ProductPageState extends State<ProductPage> {
                               children: [
                                 isCurrentUser
                                     ? FutureBuilder<String>(
-                                        future: context.read<ReviewCubit>().getCurrentUserImage(),
+                                        future: context
+                                            .read<ReviewCubit>()
+                                            .getCurrentUserImage(),
                                         builder: (context, snapshot) {
                                           final imageUrl = snapshot.data ?? "";
                                           return CircleAvatar(
@@ -822,13 +850,17 @@ class _ProductPageState extends State<ProductPage> {
                                                 ? NetworkImage(imageUrl)
                                                 : null,
                                             child: imageUrl.isEmpty
-                                                ? Text(displayName[0].toUpperCase())
+                                                ? Text(
+                                                    displayName[0]
+                                                        .toUpperCase(),
+                                                  )
                                                 : null,
                                           );
                                         },
                                       )
                                     : CircleAvatar(
-                                        backgroundImage: review.userImage.isNotEmpty
+                                        backgroundImage:
+                                            review.userImage.isNotEmpty
                                             ? NetworkImage(review.userImage)
                                             : null,
                                         child: review.userImage.isEmpty
@@ -845,7 +877,9 @@ class _ProductPageState extends State<ProductPage> {
                                         displayName,
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          color: Theme.of(context).colorScheme.onSurface,
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.onSurface,
                                         ),
                                       ),
                                       Text(
@@ -950,7 +984,9 @@ class _ProductPageState extends State<ProductPage> {
                         },
                         child: Icon(
                           index < modalRating ? Icons.star : Icons.star_border,
-                          color: index < modalRating ? Colors.amber : Colors.grey.shade300,
+                          color: index < modalRating
+                              ? Colors.amber
+                              : Colors.grey.shade300,
                           size: 32,
                         ),
                       );
@@ -1018,7 +1054,9 @@ class _ProductPageState extends State<ProductPage> {
                               color: Theme.of(context).colorScheme.onPrimary,
                             ),
                           ),
-                          backgroundColor: Theme.of(context).colorScheme.primary,
+                          backgroundColor: Theme.of(
+                            context,
+                          ).colorScheme.primary,
                           behavior: SnackBarBehavior.floating,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),

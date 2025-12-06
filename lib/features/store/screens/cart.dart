@@ -197,7 +197,8 @@ class _CartState extends State<Cart> {
                                             ),
                                           ),
                                           ElevatedButton(
-                                            onPressed: () => Navigator.pop(context),
+                                            onPressed: () =>
+                                                Navigator.pop(context),
                                             style: ElevatedButton.styleFrom(
                                               backgroundColor: theme.primary,
                                               foregroundColor: theme.onPrimary,
