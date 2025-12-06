@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:depi_final_project/core/theme/colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:depi_final_project/core/theme/spacing.dart';
 import 'package:depi_final_project/core/theme/text_style.dart';
 
@@ -79,12 +79,16 @@ class ProductWidget extends StatelessWidget {
                   right: Spacing.sm,
                   child: CircleAvatar(
                     radius: 16,
-                    backgroundColor: Theme.of(context).colorScheme.surface.withOpacity(0.8),
+                    backgroundColor: Theme.of(
+                      context,
+                    ).colorScheme.surface.withOpacity(0.8),
                     child: IconButton(
                       onPressed: onFavoritePressed,
                       icon: Icon(
                         isFavorite ? Icons.favorite : Icons.favorite_border,
-                        color: isFavorite ? Colors.purple : Theme.of(context).colorScheme.onSurface,
+                        color: isFavorite
+                            ? Colors.purple
+                            : Theme.of(context).colorScheme.onSurface,
                         size: 16,
                       ),
                       padding: EdgeInsets.zero,
@@ -94,17 +98,19 @@ class ProductWidget extends StatelessWidget {
                 ),
               ],
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: Spacing.md,
-                vertical: Spacing.sm,
-              ),
-              child: Text(
+            Flexible(
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: Spacing.md,
+                  vertical: Spacing.sm,
+                ),
+                child: Text(
                 title,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: AppTextStyles.bodyMedium.copyWith(
                   color: Theme.of(context).colorScheme.onSurface,
+                ),
                 ),
               ),
             ),
@@ -135,12 +141,13 @@ class ProductWidget extends StatelessWidget {
             if (stars != null)
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: Spacing.md),
-                child: Row(
-                  children: stars,
-                ),
+                child: Row(children: stars),
               ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: Spacing.md, vertical: 8),
+              padding: EdgeInsets.symmetric(
+                horizontal: Spacing.md,
+                vertical: 4,
+              ),
               child: SizedBox(
                 width: double.infinity,
                 child: Material(
@@ -149,7 +156,7 @@ class ProductWidget extends StatelessWidget {
                     onTap: onTap,
                     borderRadius: BorderRadius.circular(12),
                     child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 12),
+                      padding: EdgeInsets.symmetric(vertical: 8),
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [

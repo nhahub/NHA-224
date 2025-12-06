@@ -138,11 +138,7 @@ class CartItem extends StatelessWidget {
                     child: CircleAvatar(
                       radius: 12.r,
                       backgroundColor: theme.primary,
-                      child: Icon(
-                        Icons.add,
-                        size: 24.r,
-                        color: theme.surface,
-                      ),
+                      child: Icon(Icons.add, size: 24.r, color: theme.surface),
                     ),
                   ),
                 ],
