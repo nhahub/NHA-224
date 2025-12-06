@@ -1,20 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:depi_final_project/core/theme/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:depi_final_project/core/theme/text_style.dart';
 import 'package:depi_final_project/core/routes/app_routes.dart';
-import 'package:depi_final_project/data/models/product_model.dart';
 import 'package:depi_final_project/core/widgets/cart_skeleton.dart';
 import 'package:depi_final_project/core/widgets/app_bar_widget.dart';
 import 'package:depi_final_project/features/store/cubit/cart_cubit.dart';
 import 'package:depi_final_project/features/store/cubit/cart_state.dart';
 import 'package:depi_final_project/features/store/widgets/cart_item.dart';
 import 'package:depi_final_project/core/widgets/progress_hud_widget.dart';
-import 'package:depi_final_project/features/store/widgets/counter_btn.dart';
-import 'package:depi_final_project/features/store/widgets/coupon_card.dart';
 import 'package:depi_final_project/features/store/widgets/price_detail.dart';
 
 class Cart extends StatefulWidget {
@@ -88,42 +82,40 @@ class _CartState extends State<Cart> {
                         Align(
                           alignment: Alignment.centerRight,
                           child: TextButton(
-                            onPressed: () => {
-                              showDialog(
-                                context: context,
-                                builder: (_) {
-                                  return AlertDialog(
-                                    title: const Text("Remove all product"),
-                                    content: const Text(
-                                      "Are you sure you want to delete all your cart items",
+                            onPressed: () => showDialog(
+                              context: context,
+                              builder: (_) {
+                                return AlertDialog(
+                                  title: const Text("Remove all product"),
+                                  content: const Text(
+                                    "Are you sure you want to delete all your cart items",
+                                  ),
+                                  actions: [
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        cubit.removeAllCartProducts();
+                                        Navigator.pop(context);
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.red,
+                                      ),
+                                      child: const Text(
+                                        "Yes",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
                                     ),
-                                    actions: [
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          cubit.removeAllCartProducts();
-                                          Navigator.pop(context);
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.red,
-                                        ),
-                                        child: const Text(
-                                          "Yes",
-                                          style: TextStyle(color: Colors.white),
-                                        ),
+                                    ElevatedButton(
+                                      onPressed: () => Navigator.pop(context),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: theme.primary,
+                                        foregroundColor: theme.onPrimary,
                                       ),
-                                      ElevatedButton(
-                                        onPressed: () => Navigator.pop(context),
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: theme.primary,
-                                          foregroundColor: theme.onPrimary,
-                                        ),
-                                        child: const Text("No"),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              ),
-                            },
+                                      child: const Text("No"),
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
                             child: Text(
                               "Remove all",
                               style: TextStyle(
@@ -142,7 +134,40 @@ class _CartState extends State<Cart> {
                             return Padding(
                               padding: EdgeInsets.only(bottom: 10.h),
                               child: CartItem(
-                                onLongTab: () {
+                                image: item.product.imageUrl[0],
+                                price: item.product.price,
+                                size: item.cartDetails.selectedSize,
+                                color: item.cartDetails.selectedColor,
+                                title: item.product.name,
+                                quantity: item.cartDetails.quantity,
+                                onIncrement: () {
+                                  if (item.cartDetails.quantity <
+                                      item.product.stock) {
+                                    cubit.editProductQuantity(
+                                      item.product.id,
+                                      item.cartDetails.selectedSize,
+                                      item.cartDetails.selectedColor,
+                                      item.cartDetails.quantity + 1,
+                                    );
+                                  }
+                                },
+                                onDecrement: () {
+                                  if (item.cartDetails.quantity > 1) {
+                                    cubit.editProductQuantity(
+                                      item.product.id,
+                                      item.cartDetails.selectedSize,
+                                      item.cartDetails.selectedColor,
+                                      item.cartDetails.quantity - 1,
+                                    );
+                                  } else if (item.cartDetails.quantity == 1) {
+                                    cubit.deleteProduct(
+                                      item.product.id,
+                                      item.cartDetails.selectedSize,
+                                      item.cartDetails.selectedColor,
+                                    );
+                                  }
+                                },
+                                onDelete: () {
                                   showDialog(
                                     context: context,
                                     builder: (_) {
@@ -156,6 +181,8 @@ class _CartState extends State<Cart> {
                                             onPressed: () {
                                               cubit.deleteProduct(
                                                 item.product.id,
+                                                item.cartDetails.selectedSize,
+                                                item.cartDetails.selectedColor,
                                               );
                                               Navigator.pop(context);
                                             },
@@ -170,9 +197,7 @@ class _CartState extends State<Cart> {
                                             ),
                                           ),
                                           ElevatedButton(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
+                                            onPressed: () => Navigator.pop(context),
                                             style: ElevatedButton.styleFrom(
                                               backgroundColor: theme.primary,
                                               foregroundColor: theme.onPrimary,
@@ -183,31 +208,6 @@ class _CartState extends State<Cart> {
                                       );
                                     },
                                   );
-                                },
-                                image: item.product.imageUrl[0],
-                                price: item.product.price,
-                                size: item.cartDetails.selectedSize,
-                                color: item.cartDetails.selectedColor,
-                                title: item.product.name,
-                                quantity: item.cartDetails.quantity,
-                                onIncrement: () {
-                                  if (item.cartDetails.quantity <
-                                      item.product.stock) {
-                                    cubit.editProductQuantity(
-                                      item.product.id,
-                                      item.cartDetails.quantity + 1,
-                                      item.product.stock,
-                                    );
-                                  }
-                                },
-                                onDecrement: () {
-                                  if (item.cartDetails.quantity > 1) {
-                                    cubit.editProductQuantity(
-                                      item.product.id,
-                                      item.cartDetails.quantity - 1,
-                                      item.product.stock,
-                                    );
-                                  }
                                 },
                               ),
                             );
@@ -368,7 +368,7 @@ class _CartState extends State<Cart> {
     double? shippingCost,
     double? tax,
     double? total,
-    required int itemCount, // 4. استقبال العدد هنا
+    required int itemCount,
   }) {
     return Column(
       children: [
@@ -377,12 +377,10 @@ class _CartState extends State<Cart> {
         PriceDetail(title: "Tax", price: tax ?? 0),
         PriceDetail(title: "Total", price: total ?? 0, isPriceBolded: true),
         SizedBox(height: 12.h),
-        const CouponCard(),
         SizedBox(height: 20.h),
         SizedBox(
           width: double.infinity,
           child: ElevatedButton(
-            // 5. تعديل الزر لإرسال البيانات
             onPressed: () {
               Navigator.pushNamed(
                 context,

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:depi_final_project/core/theme/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CartItem extends StatelessWidget {
@@ -13,7 +12,7 @@ class CartItem extends StatelessWidget {
     required this.quantity,
     required this.onIncrement,
     required this.onDecrement,
-    this.onLongTab,
+    this.onDelete,
   });
 
   final String image;
@@ -24,7 +23,7 @@ class CartItem extends StatelessWidget {
   final int quantity;
   final void Function() onIncrement;
   final void Function() onDecrement;
-  final void Function()? onLongTab;
+  final void Function()? onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -110,26 +109,46 @@ class CartItem extends StatelessWidget {
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              InkWell(
-                onLongPress: onLongTab,
-                child: Icon(
-                  Icons.delete_outline,
-                  color: theme.onSurface,
-                  size: 20.r,
+              if (onDelete != null)
+                GestureDetector(
+                  onTap: onDelete,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 12.r, vertical: 8.r),
+                    decoration: BoxDecoration(
+                      color: Colors.red.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(12.r),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.delete,
+                          color: Colors.red,
+                          size: 20.r,
+                        ),
+                        SizedBox(width: 6.w),
+                        Text(
+                          "Delete",
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12.sp,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-              SizedBox(height: 30.h),
               Row(
                 children: [
                   GestureDetector(
                     onTap: onDecrement,
                     child: CircleAvatar(
                       radius: 12.r,
-                      backgroundColor: AppColors.darkPrimary,
+                      backgroundColor: theme.primary,
                       child: Icon(
                         Icons.remove,
                         size: 24.r,
-                        color: Theme.of(context).colorScheme.surface,
+                        color: theme.surface,
                       ),
                     ),
                   ),
@@ -147,11 +166,11 @@ class CartItem extends StatelessWidget {
                     onTap: onIncrement,
                     child: CircleAvatar(
                       radius: 12.r,
-                      backgroundColor: AppColors.darkPrimary,
+                      backgroundColor: theme.primary,
                       child: Icon(
                         Icons.add,
                         size: 24.r,
-                        color: Theme.of(context).colorScheme.surface,
+                        color: theme.surface,
                       ),
                     ),
                   ),
