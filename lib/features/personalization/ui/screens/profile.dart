@@ -84,10 +84,10 @@ class _ProfileState extends State<Profile> {
                           },
                           child: CircleAvatar(
                             radius: 50,
-                            backgroundImage: state is PersonalizationDataLoaded && state.imageUrl != null
+                            backgroundImage: state is PersonalizationLoaded && state.imageUrl != null
                                 ? NetworkImage(state.imageUrl!)
                                 : state is PersonalizationLoaded
-                                ? NetworkImage(state.imageUrl)
+                                ? NetworkImage(state.imageUrl!)
                                 : state is PersonalizationSuccess
                                 ? NetworkImage(state.imageUrl)
                                 : NetworkImage(
@@ -146,10 +146,8 @@ class _ProfileState extends State<Profile> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                state is PersonalizationDataLoaded
-                                    ? state.name
-                                    : state is PersonalizationLoadedd
-                                    ? state.name
+                                state is PersonalizationLoaded
+                                    ? state.name ?? ""
                                     : "Loading...",
                                 style: AppTextStyles.headline6.copyWith(
                                   color: Theme.of(context).colorScheme.onSurface,
@@ -157,10 +155,8 @@ class _ProfileState extends State<Profile> {
                               ),
                               SizedBox(height: Spacing.xs),
                               Text(
-                                state is PersonalizationDataLoaded
-                                    ? state.email
-                                    : state is PersonalizationLoadedd
-                                    ? state.email
+                                state is PersonalizationLoaded
+                                    ? state.email ?? ""
                                     : "",
                                 style: AppTextStyles.bodySmall.copyWith(
                                   color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -172,11 +168,10 @@ class _ProfileState extends State<Profile> {
                         TextButton(
                           onPressed: () {
                             String currentName = "";
-                            if (state is PersonalizationDataLoaded) {
-                              currentName = state.name;
-                            } else if (state is PersonalizationLoadedd) {
-                              currentName = state.name;
+                            if (state is PersonalizationLoaded) {
+                              currentName = state.name ?? "";
                             }
+
                             if (currentName.isNotEmpty) {
                               showEditNameDialog(context, currentName);
                             }
@@ -265,7 +260,7 @@ class _ProfileState extends State<Profile> {
   void _showImagePreview(BuildContext context, PersonalizationState state) {
     String? imageUrl;
 
-    if (state is PersonalizationDataLoaded && state.imageUrl != null) {
+    if (state is PersonalizationLoaded && state.imageUrl != null) {
       imageUrl = state.imageUrl;
     } else if (state is PersonalizationLoaded) {
       imageUrl = state.imageUrl;

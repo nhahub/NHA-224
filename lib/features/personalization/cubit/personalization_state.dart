@@ -7,29 +7,29 @@ class PersonalizationState extends Equatable{
 
 class PersonalizationInitial extends PersonalizationState{}
 class PersonalizationLoading extends PersonalizationState{}
-class PersonalizationLoaded extends PersonalizationState{
-  final String imageUrl;
-  PersonalizationLoaded(this.imageUrl);
-}
+// class PersonalizationLoaded extends PersonalizationState{
+//   final String imageUrl;
+//   PersonalizationLoaded(this.imageUrl);
+// }
 
-class PersonalizationLoadedd extends PersonalizationState {
-  final String name;
-  final String email;
+// class PersonalizationLoadedd extends PersonalizationState {
+//   final String name;
+//   final String email;
 
-  PersonalizationLoadedd({
-    required this.name,
-    required this.email,
-  });
-}
+//   PersonalizationLoadedd({
+//     required this.name,
+//     required this.email,
+//   });
+// }
 
-class PersonalizationDataLoaded extends PersonalizationState {
-  final String name;
-  final String email;
+class PersonalizationLoaded extends PersonalizationState {
+  final String? name;
+  final String? email;
   final String? imageUrl;
 
-  PersonalizationDataLoaded({
-    required this.name,
-    required this.email,
+  PersonalizationLoaded({
+    this.name,
+    this.email,
     this.imageUrl,
   });
 }
