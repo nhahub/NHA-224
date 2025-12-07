@@ -52,7 +52,7 @@ Future<void> updateName(String newName) async {
     emit(PersonalizationLoading());
     try {
       final String imageUrl = await imageService.fetchUserImage();
-      emit(PersonalizationLoaded(imageUrl));
+      emit(PersonalizationLoaded(imageUrl: imageUrl));
     } catch (e) {
       emit(PersonalizationFailure(e.toString()));
     }
@@ -70,8 +70,8 @@ Future<void> updateName(String newName) async {
 
     final data = snap.data() as Map<String, dynamic>;
 
-    emit(PersonalizationLoadedd(
-      name: data["name"] ?? "",
+    emit(PersonalizationLoaded(
+     name: data["name"] ?? "",
       email: data["email"] ?? "",
     ));
   } catch (e) {
@@ -93,7 +93,7 @@ Future<void> updateName(String newName) async {
       if (snap.exists) {
         final data = snap.data() as Map<String, dynamic>;
 
-        emit(PersonalizationDataLoaded(
+        emit(PersonalizationLoaded(
           name: data["name"] ?? "",
           email: data["email"] ?? "",
           imageUrl: data["profileImageUrl"],

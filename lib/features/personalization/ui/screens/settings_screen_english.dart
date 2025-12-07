@@ -191,9 +191,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 String name = "Loading...";
                 String email = "";
 
-                if (state is PersonalizationDataLoaded) {
-                  name = state.name;
-                  email = state.email;
+                if (state is PersonalizationLoaded) {
+                  name = state.name ?? name;
+                  email = state.email ?? email;
                   imageUrl = state.imageUrl;
                 } else if (state is PersonalizationLoaded) {
                   imageUrl = state.imageUrl;
@@ -201,9 +201,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   imageUrl = state.imageUrl;
                 }
 
-                if (state is PersonalizationLoadedd) {
-                  name = state.name;
-                  email = state.email;
+                if (state is PersonalizationLoaded) {
+                  name = state.name ?? "";
+                  email = state.email ?? "";
                 }
 
                 return Row(
@@ -423,7 +423,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   void _showEditProfileDialog(BuildContext context, PersonalizationState state) {
     final TextEditingController nameController = TextEditingController(
-      text: state is PersonalizationLoadedd ? state.name : "",
+      text: state is PersonalizationLoaded ? state.name ?? "" : "",
     );
 
     showDialog(
